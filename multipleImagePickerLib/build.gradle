@@ -3,8 +3,8 @@ apply plugin: 'com.android.library'
 ext {
     libraryDescription  = 'A library to select and crop multiple images from gallery and camera'
 
-    siteUrl             = 'https://github.com/rahulr4/MultiImagePickerCropper'
-    gitUrl              = 'https://github.com/rahulr4/MultiImagePickerCropper.git'
+    siteUrl             = 'https://github.com/rahulr4/MultiImagePickerCropper2'
+    gitUrl              = 'https://github.com/rahulr4/MultiImagePickerCropper2.git'
 
     publishedGroupId    = 'com.cropper.multiple'
     artifact            = 'multipleImagePickerLib'
