@@ -1,5 +1,31 @@
 apply plugin: 'com.android.library'
 
+ext {
+    libraryDescription  = 'A library to select and crop multiple images from gallery and camera'
+
+    siteUrl             = 'https://github.com/rahulr4/MultiImagePickerCropper'
+    gitUrl              = 'https://github.com/rahulr4/MultiImagePickerCropper.git'
+
+    publishedGroupId    = 'com.cropper.multiple'
+    artifact            = 'multipleImagePickerLib'
+
+    libraryName         = 'multipleImagePickerLib'
+
+    licenseName         = 'The Apache Software License, Version 2.0'
+    licenseUrl          = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+
+    developerId         = 'rahul-r4'
+    developerName       = 'Rahul Gupta'
+    developerEmail      = 'rahul.r4@gmail.com'
+
+    libraryVersion      = '1.0.0'
+
+    allLicenses         = ["Apache-2.0"]
+
+    bintrayRepo         = 'maven'
+    bintrayName         = 'multipleImagePickerLib2'
+}
+
 android {
     compileSdkVersion 22
     buildToolsVersion "21.1.2"
