@@ -2,19 +2,10 @@
 Multiple image picker cropper is a library to pick and crop multiple images from gallery or camera.
 
 # Version
-1.0.0
-
-# Installation
-
-To use this library in your android project, just simply add the following dependency into your build.gradle
-
-```sh
-dependencies {
-    compile 'com.crop.multiple:multipleImagePickerLib:1.0.0'
-}
-```
+1.0.3
 
 # Usage
+I am currently setting up the jcenter repository so for now, download the library and add it as a dependency to your module.
 To pick single image from gallery, camera :-
 
 ```java

@@ -6,7 +6,7 @@ ext {
     siteUrl             = 'https://github.com/rahulr4/MultiImagePickerCropper2'
     gitUrl              = 'https://github.com/rahulr4/MultiImagePickerCropper2.git'
 
-    publishedGroupId    = 'com.cropper.multiple'
+    publishedGroupId    = 'com.crop.multiple'
     artifact            = 'multipleImagePickerLib'
 
     libraryName         = 'multipleImagePickerLib'
@@ -23,7 +23,7 @@ ext {
     allLicenses         = ["Apache-2.0"]
 
     bintrayRepo         = 'maven'
-    bintrayName         = 'multipleImagePickerLib2'
+    bintrayName         = 'ImageCropperPickerLib3'
 }
 
 android {

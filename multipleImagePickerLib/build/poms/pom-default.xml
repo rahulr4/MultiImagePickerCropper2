@@ -2,13 +2,13 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.multipickcrop</groupId>
-  <artifactId>image-crop</artifactId>
+  <groupId>com.crop.multiple</groupId>
+  <artifactId>multipleImagePickerLib</artifactId>
   <version>1.0.0</version>
   <packaging>aar</packaging>
-  <name>multiple-image-cropper-library</name>
+  <name>multipleImagePickerLib</name>
   <description>A library to select and crop multiple images from gallery and camera</description>
-  <url>'https://github.com/rahulr4/MultiImagePickerCropper'</url>
+  <url>https://github.com/rahulr4/MultiImagePickerCropper2</url>
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
@@ -23,9 +23,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>'https://github.com/rahulr4/MultiImagePickerCropper.git'</connection>
-    <developerConnection>'https://github.com/rahulr4/MultiImagePickerCropper.git'</developerConnection>
-    <url>'https://github.com/rahulr4/MultiImagePickerCropper'</url>
+    <connection>https://github.com/rahulr4/MultiImagePickerCropper2.git</connection>
+    <developerConnection>https://github.com/rahulr4/MultiImagePickerCropper2.git</developerConnection>
+    <url>https://github.com/rahulr4/MultiImagePickerCropper2</url>
   </scm>
   <dependencies>
     <dependency>
