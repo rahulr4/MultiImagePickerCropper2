@@ -28,7 +28,7 @@ startActivityForResult(intent, GALLERY_APP);
 //From Camera
 Intent intent = new Intent(MainActivity.this, CameraPickActivity.class);
 intent.setAction(Action.ACTION_PICK);
-startActivityForResult(intent, GALLERY_APP);
+startActivityForResult(intent, CAMERA_APP);
 ```
 
 To pick multiple images from gallery, camera :-
@@ -44,7 +44,7 @@ startActivityForResult(intent, GALLERY_APP);
 //From Camera
 Intent intent = new Intent(MainActivity.this, CameraPickActivity.class);
 intent.setAction(Action.ACTION_MULTIPLE_PICK);
-startActivityForResult(intent, GALLERY_APP);
+startActivityForResult(intent, CAMERA_APP);
 ```
 
 And to get the images, you have to add this piece of code to Activity's `onActivityResult` in your app.
