@@ -68,8 +68,10 @@ public class ImageListRecycleAdapter extends RecyclerView.Adapter<ImageListRecyc
     @Override
     public void onBindViewHolder(VerticalItemHolder itemHolder, int position) {
         CustomGallery item = mItems.get(position);
-
-        itemHolder.setImage(item.sdcardPath);
+        if (item.bitmap != null) {
+            itemHolder.imageView.setImageBitmap(item.bitmap);
+        } else
+            itemHolder.setImage(item.sdcardPath);
     }
 
     @Override
@@ -97,7 +99,6 @@ public class ImageListRecycleAdapter extends RecyclerView.Adapter<ImageListRecyc
             itemView.setOnClickListener(this);
 
             mAdapter = adapter;
-
             imageView = (ImageView) itemView.findViewById(R.id.strip_image);
         }
 

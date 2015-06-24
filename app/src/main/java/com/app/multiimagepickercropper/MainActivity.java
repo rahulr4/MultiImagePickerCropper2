@@ -1,6 +1,5 @@
 package com.app.multiimagepickercropper;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -10,10 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ListView;
 
-import com.luminous.pick.Action;
-import com.luminous.pick.CameraPickActivity;
 import com.luminous.pick.CustomGallery;
-import com.luminous.pick.MultipleImagePreviewActivity;
+import com.luminous.pick.controller.MediaFactory;
 
 import java.util.HashMap;
 
@@ -23,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int GALLERY_APP = 111;
     private static final int CAMERA_APP = 222;
     private ImageAdapter mImageAdapter;
+    private MediaFactory mediaFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +55,11 @@ public class MainActivity extends AppCompatActivity {
 
                     public void onClick(DialogInterface dialog, int id) {
 
-                        Intent intent = new Intent(MainActivity.this, MultipleImagePreviewActivity.class);
-                        intent.setAction(Action.ACTION_PICK);
-                        startActivityForResult(intent, GALLERY_APP);
+                        MediaFactory.MediaBuilder mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
+                                .takeVideo().fromGallery()
+                                .doCropping();
+                        mediaFactory = MediaFactory.create().start(mediaBuilder);
+
                     }
                 });
 
@@ -68,9 +68,11 @@ public class MainActivity extends AppCompatActivity {
 
                     public void onClick(DialogInterface dialog, int id) {
 
-                        Intent intent = new Intent(MainActivity.this, CameraPickActivity.class);
-                        intent.setAction(Action.ACTION_PICK);
-                        startActivityForResult(intent, CAMERA_APP);
+                        MediaFactory.MediaBuilder mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
+                                .takeVideo().fromCamera()
+                                .doCropping();
+                        mediaFactory = MediaFactory.create().start(mediaBuilder);
+
                     }
                 });
         alertDialog.show();
@@ -86,9 +88,11 @@ public class MainActivity extends AppCompatActivity {
 
                     public void onClick(DialogInterface dialog, int id) {
 
-                        Intent intent = new Intent(MainActivity.this, MultipleImagePreviewActivity.class);
-                        intent.setAction(Action.ACTION_MULTIPLE_PICK);
-                        startActivityForResult(intent, GALLERY_APP);
+                        MediaFactory.MediaBuilder mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
+                                .getMultipleImages().fromGallery()
+                                .doCropping();
+                        mediaFactory = MediaFactory.create().start(mediaBuilder);
+
                     }
                 });
 
@@ -97,9 +101,10 @@ public class MainActivity extends AppCompatActivity {
 
                     public void onClick(DialogInterface dialog, int id) {
 
-                        Intent intent = new Intent(MainActivity.this, CameraPickActivity.class);
-                        intent.setAction(Action.ACTION_MULTIPLE_PICK);
-                        startActivityForResult(intent, CAMERA_APP);
+                        MediaFactory.MediaBuilder mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
+                                .getMultipleImages().fromCamera()
+                                .doCropping();
+                        mediaFactory = MediaFactory.create().start(mediaBuilder);
                     }
                 });
         alertDialog.show();
@@ -108,24 +113,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == GALLERY_APP || requestCode == CAMERA_APP) {
-                String[] all_path = data.getStringArrayExtra("all_path");
+        String[] all_path = mediaFactory.onActivityResult(requestCode, resultCode, data);
+        for (String string : all_path) {
+            CustomGallery item = new CustomGallery();
+            item.sdcardPath = string;
+            item.sdCardUri = Uri.parse(string);
 
-                for (String string : all_path) {
-                    CustomGallery item = new CustomGallery();
-                    item.sdcardPath = string;
-                    item.sdCardUri = Uri.parse(string);
-
-                    MediaBean bean = new MediaBean();
-                    bean.setImage(true);
-                    bean.setImagePath(item.sdcardPath);
-                    bean.setImageUri(item.sdCardUri);
-                    mMediaPathArrayList.put(item.sdcardPath, bean);
-                }
-                mImageAdapter.customNotify(mMediaPathArrayList);
-            }
+            MediaBean bean = new MediaBean();
+            bean.setImage(true);
+            bean.setImagePath(item.sdcardPath);
+            bean.setImageUri(item.sdCardUri);
+            mMediaPathArrayList.put(item.sdcardPath, bean);
         }
+        mImageAdapter.customNotify(mMediaPathArrayList);
     }
 
     private HashMap<String, MediaBean> mMediaPathArrayList;

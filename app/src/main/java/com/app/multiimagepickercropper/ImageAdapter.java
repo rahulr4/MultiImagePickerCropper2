@@ -1,6 +1,7 @@
 package com.app.multiimagepickercropper;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +11,10 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,7 +22,6 @@ public class ImageAdapter extends BaseAdapter {
     private final LayoutInflater mInflater;
     ArrayList<MediaBean> mMediaPathArrayList2;
     private ImageLoader imageLoader;
-    private ViewHolder holder;
 
     public ArrayList<MediaBean> getmMediaPathArrayList2() {
         return mMediaPathArrayList2;
@@ -52,6 +54,7 @@ public class ImageAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
+        final ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.adapter_create_tikkrr_images,
@@ -60,6 +63,8 @@ public class ImageAdapter extends BaseAdapter {
                     .findViewById(R.id.image);
             holder.imagePathTv = (TextView) convertView
                     .findViewById(R.id.image_path);
+            holder.imageSize = (TextView) convertView
+                    .findViewById(R.id.image_size);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -67,13 +72,37 @@ public class ImageAdapter extends BaseAdapter {
 
         holder.imagePathTv.setText(mMediaPathArrayList2.get(position).getImagePath());
         imageLoader.displayImage("file://" + mMediaPathArrayList2.get(position).getImagePath(),
-                holder.imageView, new SimpleImageLoadingListener() {
+                holder.imageView, new ImageLoadingListener() {
                     @Override
                     public void onLoadingStarted(String imageUri, View view) {
                         holder.imageView
                                 .setImageResource(com.luminous.pick.R.drawable.placeholder_470x352);
-                        super.onLoadingStarted(imageUri, view);
                     }
+
+                    @Override
+                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+                    }
+
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+
+                        File file = new File(mMediaPathArrayList2.get(position).getImagePath());
+                        long length = file.length() / 1024; // Size in KB
+
+                        holder.imageSize.setText("Image Size :- " + length);
+                    }
+
+                    @Override
+                    public void onLoadingCancelled(String imageUri, View view) {
+
+                    }
+                    /*@Override
+                    public void onLoadingStarted(String imageUri, View view) {
+                        holder.imageView
+                                .setImageResource(com.luminous.pick.R.drawable.placeholder_470x352);
+                        super.onLoadingStarted(imageUri, view);
+                    }*/
                 });
 
         return convertView;
@@ -88,7 +117,7 @@ public class ImageAdapter extends BaseAdapter {
 
     static class ViewHolder {
         ImageView imageView;
-        TextView imagePathTv;
+        TextView imagePathTv, imageSize;
     }
 
 }
