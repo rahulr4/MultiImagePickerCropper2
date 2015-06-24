@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:padding="8dp"
+    android:background="@android:color/black"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="Video"
+            android:padding="10dp"
+            android:textColor="@android:color/white"
+            android:layout_centerInParent="true"
+            android:textSize="20sp"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_photo"
+            android:padding="10dp"
+            android:layout_toLeftOf="@+id/navigate_crop"
+            android:layout_centerVertical="true"
+            android:id="@+id/add_image_navigate" />
+
+        <ImageView
+            android:id="@+id/navigate_crop"
+            android:layout_width="wrap_content"
+            android:src="@drawable/crop_icon"
+            android:layout_alignParentRight="true"
+            android:padding="10dp"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <com.luminous.pick.utils.ViewPagerSwipeLess
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_margin="5dp"
+        android:background="@android:color/white" />
+
+    <!--<com.luminous.pick.hlistview.HListView
+        android:id="@+id/image_hlistview"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center_vertical"
+        android:choiceMode="singleChoice"
+        android:layout_marginLeft="5dp"
+        app:dividerWidth="2dp"
+        android:layout_marginRight="5dp"
+        android:background="@android:color/transparent"
+        android:visibility="visible" />-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/image_hlistview"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+
+    <include
+        android:id="@+id/llBottomContainer"
+        layout="@layout/crop__layout_done_cancel" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar" />
+</LinearLayout><!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/layout/activity_video_preview.xml --><!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/bundles/debug/res/layout/activity_video_preview.xml -->
