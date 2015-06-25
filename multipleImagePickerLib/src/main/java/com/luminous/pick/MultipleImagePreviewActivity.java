@@ -50,7 +50,6 @@ public class MultipleImagePreviewActivity extends Activity {
     private HashMap<String, CustomGallery> dataT;
     private CustomPagerAdapter adapter;
     private ImageListRecycleAdapter mImageListAdapter;
-    private RecyclerView mRecycleView;
 
     public static void showAlertDialog(Context mContext, String text) {
 
@@ -93,7 +92,7 @@ public class MultipleImagePreviewActivity extends Activity {
         });
         mImageListAdapter = new ImageListRecycleAdapter(this, dataT);
 
-        mRecycleView = (RecyclerView) findViewById(R.id.image_hlistview);
+        RecyclerView mRecycleView = (RecyclerView) findViewById(R.id.image_hlistview);
         mRecycleView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mRecycleView.setAdapter(mImageListAdapter);
         mImageListAdapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -102,16 +101,6 @@ public class MultipleImagePreviewActivity extends Activity {
                 mPager.setCurrentItem(position);
             }
         });
-//        hListView = (HListView) findViewById(R.id.image_hlistview);
-//        hListView.setSelector(R.drawable.list_selector);
-
-//        hListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                mPager.setCurrentItem(position);
-//            }
-//        });
-//        hListView.setAdapter(mImageListAdapter);
 
         findViewById(R.id.navigate_crop).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,6 +150,17 @@ public class MultipleImagePreviewActivity extends Activity {
                 }
             }
         });
+
+        try {
+            boolean isCrop = getIntent().getExtras().getBoolean("crop");
+            if (isCrop)
+                findViewById(R.id.navigate_crop).setVisibility(View.VISIBLE);
+            else
+                findViewById(R.id.navigate_crop).setVisibility(View.GONE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         Intent i = new Intent(this,
                 CustomGalleryActivity.class);
 

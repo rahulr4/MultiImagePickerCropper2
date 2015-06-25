@@ -1,59 +1,55 @@
 # MultiImagePickerCropper
 Multiple image picker cropper is a library to pick and crop multiple images from gallery or camera.
+Added support of picking single and multiple videos.
 
 # Version
-1.0.0
+1.0.2
 
 # Installation
 
 To use this library in your android project, just simply add the following dependency into your build.gradle
 
-```sh
+```java
 dependencies {
-    compile 'com.crop.multiple:multipleImagePickerLib:1.0.0'
+    compile 'com.crop.multiple:multipleImagePickerLib:1.0.2'
 }
 ```
 
 # Usage
-To pick single image from gallery, camera :-
+We support various features using a builder pattern
 
 ```java
-//From Gallery
-Intent intent = new Intent(MainActivity.this, MultipleImagePreviewActivity.class);
-intent.setAction(Action.ACTION_PICK);
-startActivityForResult(intent, GALLERY_APP);
+
+MediaFactory.MediaBuilder mediaBuilder = 
+    new MediaFactory.MediaBuilder(MainActivity.this)
+    .getSingleMediaFiles() // Method to pick single media file
+    .takeVideo() //Method to take a video. Default is image
+    .setVideoDuration(10) // Works with video capture from camera. Duration in seconds
+    .setVideoSize(3) // Works with video capture from camera. Size in MB 
+    .fromGallery(); // Location Specific method. Gallery or camera
+mediaFactory = MediaFactory.create().start(mediaBuilder);
+
 ```
 
+MediaBuilder Specifications :-
 ```java
 //From Camera
-Intent intent = new Intent(MainActivity.this, CameraPickActivity.class);
-intent.setAction(Action.ACTION_PICK);
-startActivityForResult(intent, CAMERA_APP);
-```
+    takeVideo() // Takes a video. Default is image
+    setVideoSize(int size) // Sets the size of video in MBs for camera. Default is -1
+    setVideoDuration(long seconds)// Sets the duration of video in seconds for camera. Default is -1
+    fromGallery() // Picks media file from gallery
+    fromCamera() //Captures media file from camera. Default is gallery
+    doCropping() // Cropping functionality for images only. Default is false
+    getSingleMediaFiles() // Picks single media from said location
+    getMultipleMediaFiles()// Picks multiple media from said location. Default is Single Media
+    
+    MediaFactory start(MediaBuilder mediaBuilder) // Takes the builder object and starts the media capturing process
 
-To pick multiple images from gallery, camera :-
-
-```java
-//From Gallery
-Intent intent = new Intent(MainActivity.this, MultipleImagePreviewActivity.class);
-intent.setAction(Action.ACTION_MULTIPLE_PICK);
-startActivityForResult(intent, GALLERY_APP);
-```
-
-```java
-//From Camera
-Intent intent = new Intent(MainActivity.this, CameraPickActivity.class);
-intent.setAction(Action.ACTION_MULTIPLE_PICK);
-startActivityForResult(intent, CAMERA_APP);
 ```
 
 And to get the images, you have to add this piece of code to Activity's `onActivityResult` in your app.
 ```java
-if (requestCode == GALLERY_APP || requestCode == CAMERA_APP) {
-String[] all_path = data.getStringArrayExtra("all_path");
-for (String string : all_path) {
-  // Do something with image path
-}
+String[] all_path = mediaFactory.onActivityResult(requestCode, resultCode, data);
 ```
 
 # License

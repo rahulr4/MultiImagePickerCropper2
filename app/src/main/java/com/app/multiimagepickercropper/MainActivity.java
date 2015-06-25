@@ -43,6 +43,88 @@ public class MainActivity extends AppCompatActivity {
                 showMultipleImageChooserDialog();
             }
         });
+        findViewById(R.id.vid_single_pick).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSingleVideoChooserDialog();
+            }
+        });
+        findViewById(R.id.vid_multiple_pick).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMultipleVideoChooserDialog();
+            }
+        });
+    }
+
+    private void showSingleVideoChooserDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("Single Video");
+        alertDialog.setMessage("Select video source.");
+        alertDialog.setIcon(R.drawable.ic_launcher);
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Gallery",
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        MediaFactory.MediaBuilder mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
+                                .getSingleMediaFiles()
+                                .takeVideo()
+                                .fromGallery();
+                        mediaFactory = MediaFactory.create().start(mediaBuilder);
+
+                    }
+                });
+
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Camera",
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        MediaFactory.MediaBuilder mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
+                                .getSingleMediaFiles()
+                                .fromCamera()
+                                .setVideoDuration(10)
+                                .setVideoSize(3)
+                                .takeVideo();
+                        mediaFactory = MediaFactory.create().start(mediaBuilder);
+
+                    }
+                });
+        alertDialog.show();
+    }
+
+    private void showMultipleVideoChooserDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("Multiple Video");
+        alertDialog.setMessage("Select video source.");
+        alertDialog.setIcon(R.drawable.ic_launcher);
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Gallery",
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        MediaFactory.MediaBuilder mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
+                                .getMultipleMediaFiles().fromGallery()
+                                .takeVideo();
+                        mediaFactory = MediaFactory.create().start(mediaBuilder);
+
+                    }
+                });
+
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Camera",
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        MediaFactory.MediaBuilder mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
+                                .getMultipleMediaFiles().fromCamera()
+                                .setVideoSize(2)
+                                .takeVideo();
+                        mediaFactory = MediaFactory.create().start(mediaBuilder);
+                    }
+                });
+        alertDialog.show();
     }
 
     private void showSingleImageChooserDialog() {
@@ -56,8 +138,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
 
                         MediaFactory.MediaBuilder mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
-                                .takeVideo().fromGallery()
-                                .doCropping();
+                                .getSingleMediaFiles()
+                                .fromGallery();
                         mediaFactory = MediaFactory.create().start(mediaBuilder);
 
                     }
@@ -69,7 +151,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
 
                         MediaFactory.MediaBuilder mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
-                                .takeVideo().fromCamera()
+                                .getSingleMediaFiles()
+                                .fromCamera()
                                 .doCropping();
                         mediaFactory = MediaFactory.create().start(mediaBuilder);
 
@@ -89,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
 
                         MediaFactory.MediaBuilder mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
-                                .getMultipleImages().fromGallery()
+                                .getMultipleMediaFiles().fromGallery()
                                 .doCropping();
                         mediaFactory = MediaFactory.create().start(mediaBuilder);
 
@@ -102,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
 
                         MediaFactory.MediaBuilder mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
-                                .getMultipleImages().fromCamera()
+                                .getMultipleMediaFiles().fromCamera()
                                 .doCropping();
                         mediaFactory = MediaFactory.create().start(mediaBuilder);
                     }

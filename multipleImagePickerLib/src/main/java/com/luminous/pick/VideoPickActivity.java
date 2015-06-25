@@ -2,6 +2,8 @@ package com.luminous.pick;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,8 +27,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,8 +45,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import crop.Crop;
-
 /**
  * Created by rahul on 22/5/15.
  */
@@ -58,6 +58,9 @@ public class VideoPickActivity extends Activity {
     private HashMap<String, CustomGallery> dataT;
     private CustomPagerAdapter adapter;
     private ImageListRecycleAdapter mImageListAdapter;
+    private long videoSize;
+    private int videoDuration;
+            
 
     public static void showAlertDialog(Context mContext, String text) {
 
@@ -77,6 +80,9 @@ public class VideoPickActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_preview);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please wait ...");
+        progressDialog.setCancelable(false);
         initImageLoader();
         mPager = (ViewPagerSwipeLess) findViewById(R.id.pager);
         dataT = new HashMap<String, CustomGallery>();
@@ -93,21 +99,24 @@ public class VideoPickActivity extends Activity {
             }
         });
 
-        findViewById(R.id.navigate_crop).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.add_image_navigate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showVideoChooserDialog();
+            }
+        });
+
+        findViewById(R.id.delete_video).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (adapter != null && adapter.getCount() > 0) {
                     String imagePath = mImageListAdapter.mItems.get(mPager.getCurrentItem()).sdcardPath;
-                    Crop.of((Uri.parse("file://" + imagePath)), (Uri.parse("file://" + imagePath))).
-                            asSquare().start(VideoPickActivity.this);
+                    CustomGallery customGallery = dataT.remove(imagePath);
+                    if (customGallery != null) {
+                        mImageListAdapter.customNotify(dataT);
+                        adapter.customNotify(dataT);
+                    }
                 }
-            }
-        });
-
-        findViewById(R.id.add_image_navigate).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openVideoFromGallery();
             }
         });
 
@@ -138,15 +147,42 @@ public class VideoPickActivity extends Activity {
                 }
             }
         });
-        findViewById(R.id.navigate_crop).setVisibility(View.GONE);
-
         if (getIntent().getAction() != null)
             action = getIntent().getAction();
 
+        try {
+            videoSize = getIntent().getExtras().getLong("videoSize");
+            videoDuration = (int) getIntent().getExtras().getLong("videoDuration");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (getIntent().getExtras().getBoolean("from"))
             openVideoFromGallery();
         else
             openVideoFromCamera();
+    }
+
+    private void showVideoChooserDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle("Select Video");
+        alertDialog.setMessage("Select video source.");
+        alertDialog.setIcon(R.drawable.ic_launcher);
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Gallery",
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int id) {
+                        openVideoFromGallery();
+                    }
+                });
+
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Camera",
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int id) {
+                        openVideoFromCamera();
+                    }
+                });
+        alertDialog.show();
     }
 
     public void openVideoFromCamera() {
@@ -159,6 +195,11 @@ public class VideoPickActivity extends Activity {
                     MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
             Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
+            if (videoSize != -1)
+                intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, videoSize);
+            if (videoDuration != -1)
+                intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, videoDuration);
+
             startActivityForResult(intent, ACTION_REQUEST_VIDEO_FROM_CAMERA);
         } catch (Exception e) {
             e.printStackTrace();
@@ -181,9 +222,10 @@ public class VideoPickActivity extends Activity {
     }
 
     Bitmap thumbnail = null;
+    ProgressDialog progressDialog;
 
-    Bitmap getBitmapFromPath(final CustomGallery item) {
-
+    void getBitmapFromPath(final CustomGallery item) {
+        progressDialog.show();
         try {
             final Handler mHandler = new Handler();
             mHandler.post(new Runnable() {
@@ -196,17 +238,19 @@ public class VideoPickActivity extends Activity {
                         dataT.put(item.sdcardPath, item);
                         mImageListAdapter.customNotify(dataT);
                         adapter.customNotify(dataT);
+                        progressDialog.dismiss();
 
                     } catch (Exception e) {
+                        progressDialog.dismiss();
                         e.printStackTrace();
                     }
                 }
             });
-            Log.w("imagePath", item.sdcardPath);
+            Log.w("videoPath", item.sdcardPath);
         } catch (Exception e) {
+            progressDialog.dismiss();
             e.printStackTrace();
         }
-        return thumbnail;
     }
 
 
@@ -214,33 +258,18 @@ public class VideoPickActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-
+            String videoUriFromCamera = "";
+            if (action.equals(Action.ACTION_PICK)) {
+                dataT.clear();
+            }
             if (requestCode == ACTION_REQUEST_VIDEO_FROM_CAMERA) {
 
-                if (action.equals(Action.ACTION_PICK)) {
-                    dataT.clear();
-                }
                 String[] projection = {MediaStore.Video.Media.DATA};
-                @SuppressWarnings("deprecation")
                 Cursor cursor = managedQuery(data.getData(), projection, null, null, null);
                 int column_index_data = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
                 cursor.moveToFirst();
-                String videoUriFromCamera = cursor.getString(column_index_data);
+                videoUriFromCamera = cursor.getString(column_index_data);
 
-                String[] allPath = {videoUriFromCamera};
-
-                Intent data2 = new Intent().putExtra("all_path", allPath);
-                setResult(RESULT_OK, data2);
-                finish();
-                
-                /*if (videoUriFromCamera != null) {
-                    CustomGallery item = new CustomGallery();
-                    item.sdcardPath = videoUriFromCamera;
-                    item.sdCardUri = Uri.parse(videoUriFromCamera);
-                    
-//                    getBitmapFromPath(item);
-
-                }*/
 
             } else if (requestCode == ACTION_REQUEST_VIDEO_FROM_GALLERY) {
                 Cursor cursor = getContentResolver().query(
@@ -248,19 +277,18 @@ public class VideoPickActivity extends Activity {
                         new String[]{MediaStore.Video.Media.DATA, MediaStore.Video.Media.DURATION,
                                 MediaStore.Video.Media.SIZE}, null, null, null);
                 cursor.moveToFirst();
-                String mVideoPath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
-                if (mVideoPath == null)
-                    mVideoPath = getPath(data.getData(), VideoPickActivity.this);
-
-                String[] allPath = {mVideoPath};
-
-                Intent data2 = new Intent().putExtra("all_path", allPath);
-                setResult(RESULT_OK, data2);
-                finish();
+                videoUriFromCamera = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
+                if (videoUriFromCamera == null)
+                    videoUriFromCamera = getPath(data.getData(), VideoPickActivity.this);
+            }
+            if (videoUriFromCamera != null) {
+                CustomGallery item = new CustomGallery();
+                item.sdcardPath = videoUriFromCamera;
+                item.sdCardUri = Uri.parse(videoUriFromCamera);
+                getBitmapFromPath(item);
             }
         } else {
-            if (dataT != null && dataT.size() > 0) {
-            } else {
+            if (dataT == null || dataT.size() == 0) {
                 Intent data2 = new Intent();
                 setResult(RESULT_CANCELED, data2);
                 finish();
@@ -295,10 +323,12 @@ public class VideoPickActivity extends Activity {
             int column_index = cursor
                     .getColumnIndex(MediaStore.Video.Media.DATA);
             cursor.moveToFirst();
-            path = cursor.getString(column_index).toString();
-            cursor.close();
+            path = cursor.getString(column_index);
         } catch (NullPointerException e) {
             e.printStackTrace();
+        } finally {
+            if (cursor != null)
+                cursor.close();
         }
         return path;
     }
@@ -353,7 +383,7 @@ public class VideoPickActivity extends Activity {
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
-            return view == ((LinearLayout) object);
+            return view == ((FrameLayout) object);
         }
 
         @Override
@@ -362,8 +392,8 @@ public class VideoPickActivity extends Activity {
         }
 
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            View itemView = mLayoutInflater.inflate(R.layout.image_pager_item, container, false);
+        public Object instantiateItem(ViewGroup container, final int position) {
+            View itemView = mLayoutInflater.inflate(R.layout.video_image_pager_item, container, false);
 
             final ImageView imageView = (ImageView) itemView.findViewById(R.id.full_screen_image);
             if (dataT.get(position).bitmap != null) {
@@ -378,14 +408,44 @@ public class VideoPickActivity extends Activity {
                                 super.onLoadingStarted(imageUri, view);
                             }
                         });
-                container.addView(itemView);
             }
+            container.addView(itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.parse(dataT.get(position).sdcardPath), "video/*");
+                        startActivity(Intent.createChooser(intent, "Complete action using .."));
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        if (e instanceof ActivityNotFoundException) {
+                            showAlertDialog(VideoPickActivity.this, "Video Player not found");
+                        }
+
+                    }
+                }
+            });
             return itemView;
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((LinearLayout) object);
+            container.removeView((FrameLayout) object);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dataT != null && dataT.size() > 0) {
+            ArrayList<CustomGallery> dataT2 = new ArrayList<CustomGallery>(dataT.values());
+            for (int i = 0; i < dataT2.size(); i++) {
+                if (null != dataT2.get(i).bitmap) {
+                    dataT2.get(i).bitmap.recycle();
+                }
+            }
         }
     }
 }

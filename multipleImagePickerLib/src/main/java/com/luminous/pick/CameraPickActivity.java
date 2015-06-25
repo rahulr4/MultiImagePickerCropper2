@@ -50,13 +50,11 @@ public class CameraPickActivity extends Activity {
     private static AlertDialog alertDialog;
     String action = Action.ACTION_PICK;
     private ImageLoader imageLoader;
-    //    private HListView hListView;
     private ViewPagerSwipeLess mPager;
     private HashMap<String, CustomGallery> dataT;
     private CustomPagerAdapter adapter;
     private ImageListRecycleAdapter mImageListAdapter;
     private Uri userPhotoUri;
-    private RecyclerView mRecycleView;
 
     public static void showAlertDialog(Context mContext, String text) {
 
@@ -82,7 +80,7 @@ public class CameraPickActivity extends Activity {
         adapter = new CustomPagerAdapter(dataT);
         mPager.setAdapter(adapter);
         mImageListAdapter = new ImageListRecycleAdapter(this, dataT);
-        mRecycleView = (RecyclerView) findViewById(R.id.image_hlistview);
+        RecyclerView mRecycleView = (RecyclerView) findViewById(R.id.image_hlistview);
         mRecycleView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mRecycleView.setAdapter(mImageListAdapter);
         mImageListAdapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -91,16 +89,6 @@ public class CameraPickActivity extends Activity {
                 mPager.setCurrentItem(position);
             }
         });
-//        hListView = (HListView) findViewById(R.id.image_hlistview);
-//        hListView.setSelector(R.drawable.list_selector);
-
-//        hListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                mPager.setCurrentItem(position);
-//            }
-//        });
-//        hListView.setAdapter(mImageListAdapter);
 
         findViewById(R.id.navigate_crop).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,6 +136,16 @@ public class CameraPickActivity extends Activity {
             }
         });
 
+        try {
+            boolean isCrop = getIntent().getExtras().getBoolean("crop");
+            if (isCrop)
+                findViewById(R.id.navigate_crop).setVisibility(View.VISIBLE);
+            else
+                findViewById(R.id.navigate_crop).setVisibility(View.GONE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         if (getIntent().getAction() != null)
             action = getIntent().getAction();
         openCamera();

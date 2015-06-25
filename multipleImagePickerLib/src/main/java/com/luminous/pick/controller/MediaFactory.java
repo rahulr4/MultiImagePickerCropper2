@@ -3,6 +3,7 @@ package com.luminous.pick.controller;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.luminous.pick.Action;
 import com.luminous.pick.CameraPickActivity;
@@ -10,6 +11,7 @@ import com.luminous.pick.MultipleImagePreviewActivity;
 import com.luminous.pick.VideoPickActivity;
 
 /**
+ * Class to initiate media picker
  * Created by rahul on 24/6/15.
  */
 public class MediaFactory {
@@ -33,58 +35,125 @@ public class MediaFactory {
         boolean isCrop = false;
         boolean fromGallery = true;
         boolean takeVideo = false;
+        long videoSize = -1;
+        long videoDuration = -1;
         private final Context mContext;
 
         public MediaBuilder(Context mContext) {
             this.mContext = mContext;
         }
 
+        /**
+         * Sets type of media to be video
+         *
+         * @return current instance of MediaBuilder
+         */
         public MediaBuilder takeVideo() {
             takeVideo = true;
             return this;
         }
 
+        /**
+         * Sets the size of video.
+         * Will work only for camera videos
+         * @param size Size of video in MB
+         * @return current instance of MediaBuilder
+         */
+        public MediaBuilder setVideoSize(int size) {
+            videoSize = size * 1000000L;
+            return this;
+        }
+
+        /**
+         * Sets the duration of video
+         * Will work only for camera videos
+         * @param seconds Duration of the video in seconds
+         * @return current instance of MediaBuilder
+         */
+        public MediaBuilder setVideoDuration(long seconds) {
+            videoDuration = seconds;
+            return this;
+        }
+
+        /**
+         * Sets type of media to be taken from gallery
+         *
+         * @return current instance of MediaBuilder
+         */
         public MediaBuilder fromGallery() {
             this.fromGallery = true;
             return this;
         }
 
+        /**
+         * Sets type of media to be taken from camera
+         *
+         * @return current instance of MediaBuilder
+         */
         public MediaBuilder fromCamera() {
             this.fromGallery = false;
             return this;
         }
 
+        /**
+         * Sets the cropping feature enabled or disabled.
+         * Works only for image
+         *
+         * @return current instance of MediaBuilder
+         */
         public MediaBuilder doCropping() {
             this.isCrop = true;
             return this;
         }
 
-        public MediaBuilder getSingleImage() {
+        /**
+         * Flag to select only one media.
+         *
+         * @return current instance of MediaBuilder
+         */
+        public MediaBuilder getSingleMediaFiles() {
             this.action = Action.ACTION_PICK;
             return this;
         }
 
-        public MediaBuilder getMultipleImages() {
+        /**
+         * Flag to select only multiple media files.
+         *
+         * @return current instance of MediaBuilder
+         */
+        public MediaBuilder getMultipleMediaFiles() {
             this.action = Action.ACTION_MULTIPLE_PICK;
             return this;
         }
     }
 
+    /**
+     * Starts the media picking functionality
+     * @param mediaBuilder MediaBuilder object
+     * @return current instance of MediaFactory
+     */
+
     public MediaFactory start(MediaBuilder mediaBuilder) {
+        Intent intent;
+        Bundle bundle = new Bundle();
         if (mediaBuilder.takeVideo) {
-            Intent intent = new Intent(mediaBuilder.mContext, VideoPickActivity.class);
-            //TODO Give support of multiple video pick
-            intent.setAction(Action.ACTION_PICK);
+            intent = new Intent(mediaBuilder.mContext, VideoPickActivity.class);
+            intent.setAction(mediaBuilder.action);
             intent.putExtra("from", mediaBuilder.fromGallery);
+            intent.putExtra("videoSize", mediaBuilder.videoSize);
+            intent.putExtra("videoDuration", mediaBuilder.videoDuration);
             ((Activity) mediaBuilder.mContext).startActivityForResult(intent, GALLERY_APP);
         } else {
+            bundle.putBoolean("crop", mediaBuilder.isCrop);
             if (mediaBuilder.fromGallery) {
-                Intent intent = new Intent(mediaBuilder.mContext, MultipleImagePreviewActivity.class);
+                intent = new Intent(mediaBuilder.mContext, MultipleImagePreviewActivity.class);
                 intent.setAction(mediaBuilder.action);
+                intent.putExtras(bundle);
                 ((Activity) mediaBuilder.mContext).startActivityForResult(intent, GALLERY_APP);
             } else {
-                Intent intent = new Intent(mediaBuilder.mContext, CameraPickActivity.class);
+                intent = new Intent(mediaBuilder.mContext, CameraPickActivity.class);
                 intent.setAction(Action.ACTION_PICK);
+                intent.putExtras(bundle);
                 ((Activity) mediaBuilder.mContext).startActivityForResult(intent, CAMERA_APP);
             }
         }

@@ -71,6 +71,11 @@ public class ImageAdapter extends BaseAdapter {
         }
 
         holder.imagePathTv.setText(mMediaPathArrayList2.get(position).getImagePath());
+
+        File file = new File(mMediaPathArrayList2.get(position).getImagePath());
+        long length = file.length() / 1024; // Size in KB
+
+        holder.imageSize.setText("Size :- " + length +" KB");
         imageLoader.displayImage("file://" + mMediaPathArrayList2.get(position).getImagePath(),
                 holder.imageView, new ImageLoadingListener() {
                     @Override
@@ -87,10 +92,6 @@ public class ImageAdapter extends BaseAdapter {
                     @Override
                     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
-                        File file = new File(mMediaPathArrayList2.get(position).getImagePath());
-                        long length = file.length() / 1024; // Size in KB
-
-                        holder.imageSize.setText("Image Size :- " + length);
                     }
 
                     @Override
