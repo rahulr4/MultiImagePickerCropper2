@@ -33,7 +33,6 @@ mediaFactory = MediaFactory.create().start(mediaBuilder);
 
 MediaBuilder Specifications :-
 ```java
-//From Camera
     takeVideo() // Takes a video. Default is image
     setVideoSize(int size) // Sets the size of video in MBs for camera. Default is -1
     setVideoDuration(long seconds)// Sets the duration of video in seconds for camera. Default is -1
