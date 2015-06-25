@@ -1774,7 +1774,7 @@ containing a value of this type.
         public static int hlv_overscroll_glow=0x7f02004a;
         public static int ic_action_photo=0x7f02004b;
         public static int ic_launcher=0x7f02004c;
-        public static int light_black_=0x7f020054;
+        public static int light_black_=0x7f020055;
         public static int list_selector=0x7f02004d;
         public static int no_media=0x7f02004e;
         public static int on_focus_checkbox=0x7f02004f;
@@ -1782,6 +1782,7 @@ containing a value of this type.
         public static int table_border=0x7f020051;
         public static int table_without_bg=0x7f020052;
         public static int top_bar=0x7f020053;
+        public static int video_play=0x7f020054;
     }
     public static final class id {
         public static int action_bar=0x7f080043;
@@ -1798,54 +1799,55 @@ containing a value of this type.
         public static int action_mode_bar_stub=0x7f08003f;
         public static int action_mode_close_button=0x7f080028;
         public static int activity_chooser_view_content=0x7f080029;
-        public static int add_image_navigate=0x7f080053;
+        public static int add_image_navigate=0x7f080052;
         public static int alertTitle=0x7f080033;
         public static int always=0x7f080015;
         public static int alwaysScroll=0x7f080009;
         public static int beginning=0x7f080018;
-        public static int btnGalleryPick=0x7f080066;
-        public static int btnGalleryPickMul=0x7f080067;
-        public static int btn_cancel=0x7f08005a;
-        public static int btn_done=0x7f08005b;
-        public static int btn_done_text=0x7f08005c;
+        public static int btnGalleryPick=0x7f080067;
+        public static int btnGalleryPickMul=0x7f080068;
+        public static int btn_cancel=0x7f08005b;
+        public static int btn_done=0x7f08005c;
+        public static int btn_done_text=0x7f08005d;
         public static int buttonPanel=0x7f080039;
         public static int changing=0x7f080016;
         public static int checkbox=0x7f08003b;
         public static int collapseActionView=0x7f08001b;
         public static int contentPanel=0x7f080034;
-        public static int crop_image=0x7f080058;
+        public static int crop_image=0x7f080059;
         public static int custom=0x7f080038;
         public static int customPanel=0x7f080037;
         public static int decor_content_parent=0x7f080041;
         public static int default_activity_button=0x7f08002c;
+        public static int delete_video=0x7f080058;
         public static int dialog=0x7f08001e;
         public static int disableHome=0x7f08000e;
         public static int disabled=0x7f08000a;
-        public static int done_cancel_bar=0x7f080059;
+        public static int done_cancel_bar=0x7f08005a;
         public static int dropdown=0x7f08001f;
         public static int edit_query=0x7f080045;
         public static int end=0x7f080019;
         public static int expand_activities_button=0x7f08002a;
         public static int expanded_menu=0x7f08003a;
-        public static int frmQueue=0x7f08005f;
-        public static int full_screen_image=0x7f080062;
-        public static int gridGallery=0x7f08005d;
+        public static int frmQueue=0x7f080060;
+        public static int full_screen_image=0x7f080063;
+        public static int gridGallery=0x7f08005e;
         public static int home=0x7f080004;
         public static int homeAsUp=0x7f08000f;
         public static int icon=0x7f08002e;
         public static int ifRoom=0x7f08001c;
         public static int image=0x7f08002b;
         public static int image_hlistview=0x7f080055;
-        public static int imgNoMedia=0x7f08005e;
-        public static int imgQueue=0x7f080060;
-        public static int imgQueueMultiSelected=0x7f080061;
-        public static int imgSinglePick=0x7f080065;
+        public static int imgNoMedia=0x7f08005f;
+        public static int imgQueue=0x7f080061;
+        public static int imgQueueMultiSelected=0x7f080062;
+        public static int imgSinglePick=0x7f080066;
         public static int listMode=0x7f08000c;
         public static int list_item=0x7f08002d;
         public static int llBottomContainer=0x7f080056;
         public static int middle=0x7f08001a;
         public static int multiply=0x7f080021;
-        public static int navigate_crop=0x7f080052;
+        public static int navigate_crop=0x7f080053;
         public static int never=0x7f080017;
         public static int none=0x7f080010;
         public static int normal=0x7f08000b;
@@ -1876,7 +1878,7 @@ containing a value of this type.
         public static int src_atop=0x7f080023;
         public static int src_in=0x7f080024;
         public static int src_over=0x7f080025;
-        public static int strip_image=0x7f080063;
+        public static int strip_image=0x7f080064;
         public static int submit_area=0x7f08004e;
         public static int tabMode=0x7f08000d;
         public static int textSpacerNoButtons=0x7f080036;
@@ -1885,7 +1887,7 @@ containing a value of this type.
         public static int topPanel=0x7f080031;
         public static int up=0x7f080008;
         public static int useLogo=0x7f080014;
-        public static int viewSwitcher=0x7f080064;
+        public static int viewSwitcher=0x7f080065;
         public static int withText=0x7f08001d;
         public static int wrap_content=0x7f080020;
     }
@@ -1934,6 +1936,7 @@ containing a value of this type.
         public static int select_dialog_multichoice_material=0x7f030024;
         public static int select_dialog_singlechoice_material=0x7f030025;
         public static int support_simple_spinner_dropdown_item=0x7f030026;
+        public static int video_image_pager_item=0x7f030027;
     }
     public static final class string {
         public static int abc_action_bar_home_description=0x7f0a0000;

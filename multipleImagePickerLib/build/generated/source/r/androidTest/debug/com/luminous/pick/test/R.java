@@ -1774,7 +1774,7 @@ containing a value of this type.
         public static final int hlv_overscroll_glow=0x7f02004a;
         public static final int ic_action_photo=0x7f02004b;
         public static final int ic_launcher=0x7f02004c;
-        public static final int light_black_=0x7f020054;
+        public static final int light_black_=0x7f020055;
         public static final int list_selector=0x7f02004d;
         public static final int no_media=0x7f02004e;
         public static final int on_focus_checkbox=0x7f02004f;
@@ -1782,6 +1782,7 @@ containing a value of this type.
         public static final int table_border=0x7f020051;
         public static final int table_without_bg=0x7f020052;
         public static final int top_bar=0x7f020053;
+        public static final int video_play=0x7f020054;
     }
     public static final class id {
         public static final int action_bar=0x7f080043;
@@ -1798,54 +1799,55 @@ containing a value of this type.
         public static final int action_mode_bar_stub=0x7f08003f;
         public static final int action_mode_close_button=0x7f080028;
         public static final int activity_chooser_view_content=0x7f080029;
-        public static final int add_image_navigate=0x7f080053;
+        public static final int add_image_navigate=0x7f080052;
         public static final int alertTitle=0x7f080033;
         public static final int always=0x7f080015;
         public static final int alwaysScroll=0x7f080009;
         public static final int beginning=0x7f080018;
-        public static final int btnGalleryPick=0x7f080066;
-        public static final int btnGalleryPickMul=0x7f080067;
-        public static final int btn_cancel=0x7f08005a;
-        public static final int btn_done=0x7f08005b;
-        public static final int btn_done_text=0x7f08005c;
+        public static final int btnGalleryPick=0x7f080067;
+        public static final int btnGalleryPickMul=0x7f080068;
+        public static final int btn_cancel=0x7f08005b;
+        public static final int btn_done=0x7f08005c;
+        public static final int btn_done_text=0x7f08005d;
         public static final int buttonPanel=0x7f080039;
         public static final int changing=0x7f080016;
         public static final int checkbox=0x7f08003b;
         public static final int collapseActionView=0x7f08001b;
         public static final int contentPanel=0x7f080034;
-        public static final int crop_image=0x7f080058;
+        public static final int crop_image=0x7f080059;
         public static final int custom=0x7f080038;
         public static final int customPanel=0x7f080037;
         public static final int decor_content_parent=0x7f080041;
         public static final int default_activity_button=0x7f08002c;
+        public static final int delete_video=0x7f080058;
         public static final int dialog=0x7f08001e;
         public static final int disableHome=0x7f08000e;
         public static final int disabled=0x7f08000a;
-        public static final int done_cancel_bar=0x7f080059;
+        public static final int done_cancel_bar=0x7f08005a;
         public static final int dropdown=0x7f08001f;
         public static final int edit_query=0x7f080045;
         public static final int end=0x7f080019;
         public static final int expand_activities_button=0x7f08002a;
         public static final int expanded_menu=0x7f08003a;
-        public static final int frmQueue=0x7f08005f;
-        public static final int full_screen_image=0x7f080062;
-        public static final int gridGallery=0x7f08005d;
+        public static final int frmQueue=0x7f080060;
+        public static final int full_screen_image=0x7f080063;
+        public static final int gridGallery=0x7f08005e;
         public static final int home=0x7f080004;
         public static final int homeAsUp=0x7f08000f;
         public static final int icon=0x7f08002e;
         public static final int ifRoom=0x7f08001c;
         public static final int image=0x7f08002b;
         public static final int image_hlistview=0x7f080055;
-        public static final int imgNoMedia=0x7f08005e;
-        public static final int imgQueue=0x7f080060;
-        public static final int imgQueueMultiSelected=0x7f080061;
-        public static final int imgSinglePick=0x7f080065;
+        public static final int imgNoMedia=0x7f08005f;
+        public static final int imgQueue=0x7f080061;
+        public static final int imgQueueMultiSelected=0x7f080062;
+        public static final int imgSinglePick=0x7f080066;
         public static final int listMode=0x7f08000c;
         public static final int list_item=0x7f08002d;
         public static final int llBottomContainer=0x7f080056;
         public static final int middle=0x7f08001a;
         public static final int multiply=0x7f080021;
-        public static final int navigate_crop=0x7f080052;
+        public static final int navigate_crop=0x7f080053;
         public static final int never=0x7f080017;
         public static final int none=0x7f080010;
         public static final int normal=0x7f08000b;
@@ -1876,7 +1878,7 @@ containing a value of this type.
         public static final int src_atop=0x7f080023;
         public static final int src_in=0x7f080024;
         public static final int src_over=0x7f080025;
-        public static final int strip_image=0x7f080063;
+        public static final int strip_image=0x7f080064;
         public static final int submit_area=0x7f08004e;
         public static final int tabMode=0x7f08000d;
         public static final int textSpacerNoButtons=0x7f080036;
@@ -1885,7 +1887,7 @@ containing a value of this type.
         public static final int topPanel=0x7f080031;
         public static final int up=0x7f080008;
         public static final int useLogo=0x7f080014;
-        public static final int viewSwitcher=0x7f080064;
+        public static final int viewSwitcher=0x7f080065;
         public static final int withText=0x7f08001d;
         public static final int wrap_content=0x7f080020;
     }
@@ -1934,6 +1936,7 @@ containing a value of this type.
         public static final int select_dialog_multichoice_material=0x7f030024;
         public static final int select_dialog_singlechoice_material=0x7f030025;
         public static final int support_simple_spinner_dropdown_item=0x7f030026;
+        public static final int video_image_pager_item=0x7f030027;
     }
     public static final class string {
         public static final int abc_action_bar_home_description=0x7f0a0000;

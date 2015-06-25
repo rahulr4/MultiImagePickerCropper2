@@ -19,23 +19,27 @@
             android:textSize="20sp"
             android:layout_height="wrap_content" />
 
-        <ImageView
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_photo"
-            android:padding="10dp"
-            android:layout_toLeftOf="@+id/navigate_crop"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:layout_centerVertical="true"
-            android:id="@+id/add_image_navigate" />
+            android:layout_alignParentRight="true">
 
-        <ImageView
-            android:id="@+id/navigate_crop"
-            android:layout_width="wrap_content"
-            android:src="@drawable/crop_icon"
-            android:layout_alignParentRight="true"
-            android:padding="10dp"
-            android:layout_centerVertical="true"
-            android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_photo"
+                android:padding="10dp"
+                android:id="@+id/add_image_navigate" />
+
+            <ImageView
+                android:id="@+id/navigate_crop"
+                android:layout_width="wrap_content"
+                android:src="@drawable/crop_icon"
+                android:padding="10dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
     </RelativeLayout>
 
     <com.luminous.pick.utils.ViewPagerSwipeLess
