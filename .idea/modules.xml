@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MultiImagePickerCropper.iml" filepath="$PROJECT_DIR$/MultiImagePickerCropper.iml" />
       <module fileurl="file://$PROJECT_DIR$/MultiImagePickerCropper2.iml" filepath="$PROJECT_DIR$/MultiImagePickerCropper2.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/multipleImagePickerLib/multipleImagePickerLib.iml" filepath="$PROJECT_DIR$/multipleImagePickerLib/multipleImagePickerLib.iml" />
     </modules>
   </component>
 </project>
-

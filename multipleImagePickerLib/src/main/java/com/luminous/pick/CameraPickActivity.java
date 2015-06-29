@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.luminous.pick.utils.CameraUtils;
 import com.luminous.pick.utils.ViewPagerSwipeLess;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -95,8 +96,15 @@ public class CameraPickActivity extends Activity {
             public void onClick(View v) {
                 if (adapter != null && adapter.getCount() > 0) {
                     String imagePath = mImageListAdapter.mItems.get(mPager.getCurrentItem()).sdcardPath;
-                    Crop.of((Uri.parse("file://" + imagePath)), (Uri.parse("file://" + imagePath))).
-                            asSquare().start(CameraPickActivity.this);
+
+                    Uri destination = null;
+                    try {
+                        destination = CameraUtils.createImageFile(CameraPickActivity.this);
+                        Crop.of((Uri.parse("file://" + imagePath)), destination).
+                                asSquare().start(CameraPickActivity.this);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -145,10 +153,17 @@ public class CameraPickActivity extends Activity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         if (getIntent().getAction() != null)
             action = getIntent().getAction();
         openCamera();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent data2 = new Intent();
+        setResult(RESULT_CANCELED, data2);
+        super.onBackPressed();
     }
 
     void openCamera() {
@@ -217,9 +232,6 @@ public class CameraPickActivity extends Activity {
                     item.sdCardUri = userPhotoUri;
                     dataT.put(item.sdcardPath, item);
                 }
-//                if (hListView.getCheckedItemCount() == 0) {
-//                    hListView.setItemChecked(0, true);
-//                }
 
                 adapter.customNotify(dataT);
                 mImageListAdapter.customNotify(dataT);
@@ -227,17 +239,21 @@ public class CameraPickActivity extends Activity {
             } else if (requestCode == Crop.REQUEST_CROP) {
                 try {
                     Uri mTargetImageUri = (Uri) data.getExtras().get(MediaStore.EXTRA_OUTPUT);
+                    if (mTargetImageUri != null) {
 
-                    CustomGallery item = new CustomGallery();
-                    item.sdcardPath = mTargetImageUri.getPath();
-                    item.sdCardUri = mTargetImageUri;
+                        String imagePath = mImageListAdapter.mItems.get(mPager.getCurrentItem()).sdcardPath;
 
-                    imageLoader.clearDiskCache();
-                    imageLoader.getDiskCache().remove("file://" + item.sdcardPath);
-                    imageLoader.getMemoryCache().remove("file://" + item.sdcardPath);
-                    dataT.put(mTargetImageUri.getPath(), item);
-                    adapter.customNotify(dataT);
-                    mImageListAdapter.customNotify(dataT);
+                        CustomGallery item = new CustomGallery();
+                        item.sdcardPath = mTargetImageUri.getPath();
+                        item.sdCardUri = mTargetImageUri;
+                        imageLoader.clearDiskCache();
+                        imageLoader.getDiskCache().remove("file://" + imagePath);
+                        imageLoader.getMemoryCache().remove("file://" + imagePath);
+                        dataT.remove(imagePath);
+                        dataT.put(mTargetImageUri.getPath(), item);
+                        adapter.customNotify(dataT);
+                        mImageListAdapter.customNotify(dataT);
+                    }
                 } catch (Exception e) {
                     String invalidImageText = (String) data.getExtras().get("invalid_image");
                     if (invalidImageText != null)
@@ -245,8 +261,7 @@ public class CameraPickActivity extends Activity {
                 }
             }
         } else {
-            if (dataT != null && dataT.size() > 0) {
-            } else {
+            if (dataT == null || dataT.size() == 0) {
                 Intent data2 = new Intent();
                 setResult(RESULT_CANCELED, data2);
                 finish();

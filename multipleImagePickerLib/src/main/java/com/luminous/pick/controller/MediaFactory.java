@@ -152,7 +152,7 @@ public class MediaFactory {
                 ((Activity) mediaBuilder.mContext).startActivityForResult(intent, GALLERY_APP);
             } else {
                 intent = new Intent(mediaBuilder.mContext, CameraPickActivity.class);
-                intent.setAction(Action.ACTION_PICK);
+                intent.setAction(mediaBuilder.action);
                 intent.putExtras(bundle);
                 ((Activity) mediaBuilder.mContext).startActivityForResult(intent, CAMERA_APP);
             }

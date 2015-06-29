@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.luminous.pick.utils.CameraUtils;
 import com.luminous.pick.utils.ViewPagerSwipeLess;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -32,6 +33,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -65,6 +67,13 @@ public class MultipleImagePreviewActivity extends Activity {
         alertDialog.show();
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent data2 = new Intent();
+        setResult(RESULT_CANCELED, data2);
+        super.onBackPressed();
+    }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,8 +116,15 @@ public class MultipleImagePreviewActivity extends Activity {
             public void onClick(View v) {
                 if (adapter != null && adapter.getCount() > 0) {
                     String imagePath = mImageListAdapter.mItems.get(mPager.getCurrentItem()).sdcardPath;
-                    Crop.of((Uri.parse("file://" + imagePath)), (Uri.parse("file://" + imagePath))).
-                            asSquare().start(MultipleImagePreviewActivity.this);
+
+                    Uri destination = null;
+                    try {
+                        destination = CameraUtils.createImageFile(MultipleImagePreviewActivity.this);
+                        Crop.of((Uri.parse("file://" + imagePath)), destination).
+                                asSquare().start(MultipleImagePreviewActivity.this);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -176,56 +192,42 @@ public class MultipleImagePreviewActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
 
-            if (requestCode == PICK_IMAGE && action.equals(Action.ACTION_MULTIPLE_PICK)) {
+            if (action.equals(Action.ACTION_PICK)) {
+                dataT.clear();
+            }
+            if (requestCode == PICK_IMAGE) {
                 String[] all_path = data.getStringArrayExtra("all_path");
 
-
-                for (String string : all_path) {
-                    if (string != null) {
-                        CustomGallery item = new CustomGallery();
-                        item.sdcardPath = string;
-                        item.sdCardUri = Uri.parse(string);
-                        dataT.put(string, item);
+                if (all_path != null) {
+                    for (String string : all_path) {
+                        if (string != null) {
+                            CustomGallery item = new CustomGallery();
+                            item.sdcardPath = string;
+                            item.sdCardUri = Uri.parse(string);
+                            dataT.put(string, item);
+                        }
                     }
                 }
-//                if (hListView.getCheckedItemCount() == 0) {
-//                    hListView.setItemChecked(0, true);
-//                }
-
-                adapter.customNotify(dataT);
-                mImageListAdapter.customNotify(dataT);
-
-            } else if (requestCode == PICK_IMAGE && action.equals(Action.ACTION_PICK)) {
-                String single_path = data.getExtras().getString("single_path");
-                dataT.clear();
-                if (single_path != null) {
-                    CustomGallery item = new CustomGallery();
-                    item.sdcardPath = single_path;
-                    item.sdCardUri = Uri.parse(single_path);
-                    dataT.put(single_path, item);
-                }
-
-//                if (hListView.getCheckedItemCount() == 0) {
-//                    hListView.setItemChecked(0, true);
-//                }
-
                 adapter.customNotify(dataT);
                 mImageListAdapter.customNotify(dataT);
 
             } else if (requestCode == Crop.REQUEST_CROP) {
                 try {
                     Uri mTargetImageUri = (Uri) data.getExtras().get(MediaStore.EXTRA_OUTPUT);
+                    if (mTargetImageUri != null) {
+                        String imagePath = mImageListAdapter.mItems.get(mPager.getCurrentItem()).sdcardPath;
+                        CustomGallery item = new CustomGallery();
+                        item.sdcardPath = mTargetImageUri.getPath();
+                        item.sdCardUri = mTargetImageUri;
 
-                    CustomGallery item = new CustomGallery();
-                    item.sdcardPath = mTargetImageUri.getPath();
-                    item.sdCardUri = mTargetImageUri;
-
-                    imageLoader.clearDiskCache();
-                    imageLoader.getDiskCache().remove("file://" + item.sdcardPath);
-                    imageLoader.getMemoryCache().remove("file://" + item.sdcardPath);
-                    dataT.put(mTargetImageUri.getPath(), item);
-                    adapter.customNotify(dataT);
-                    mImageListAdapter.customNotify(dataT);
+                        imageLoader.clearDiskCache();
+                        imageLoader.getDiskCache().remove("file://" + imagePath);
+                        imageLoader.getMemoryCache().remove("file://" + imagePath);
+                        dataT.remove(imagePath);
+                        dataT.put(mTargetImageUri.getPath(), item);
+                        adapter.customNotify(dataT);
+                        mImageListAdapter.customNotify(dataT);
+                    }
                 } catch (Exception e) {
                     String invalidImageText = (String) data.getExtras().get("invalid_image");
                     if (invalidImageText != null)

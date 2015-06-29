@@ -77,7 +77,8 @@ public class CustomGalleryActivity extends Activity {
         @Override
         public void onItemClick(AdapterView<?> l, View v, int position, long id) {
             CustomGallery item = adapter.getItem(position);
-            Intent data = new Intent().putExtra("single_path", item.sdcardPath);
+            String[] allPath = {item.sdcardPath};
+            Intent data = new Intent().putExtra("all_path", allPath);
             setResult(RESULT_OK, data);
             finish();
         }

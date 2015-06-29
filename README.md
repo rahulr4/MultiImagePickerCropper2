@@ -1,9 +1,9 @@
-# MultiImagePickerCropper
-Multiple image picker cropper is a library to pick and crop multiple images from gallery or camera.
+# MultiMediaPickerCropper
+Multiple media picker and cropper is a library to pick and crop multiple images from gallery or camera.
 Added support of picking single and multiple videos.
 
 # Version
-1.0.2
+1.0.3
 
 # Installation
 
@@ -11,7 +11,7 @@ To use this library in your android project, just simply add the following depen
 
 ```java
 dependencies {
-    compile 'com.crop.multiple:multipleImagePickerLib:1.0.2'
+    compile 'com.crop.multiple:multipleImagePickerLib:1.0.3'
 }
 ```
 
