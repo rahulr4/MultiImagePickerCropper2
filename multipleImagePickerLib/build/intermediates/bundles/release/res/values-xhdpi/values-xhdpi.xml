@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values-xhdpi/dimens.xml -->
+    <eat-comment/>
+    <dimen name="photo_height">100dp</dimen>
+    <dimen name="photo_width">100dp</dimen>
+</resources>

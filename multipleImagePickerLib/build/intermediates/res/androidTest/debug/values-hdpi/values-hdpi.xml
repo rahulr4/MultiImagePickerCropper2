@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/bundles/debug/res/values-hdpi/values-hdpi.xml -->
+    <eat-comment/>
+    <dimen name="photo_height">80dp</dimen>
+    <dimen name="photo_width">80dp</dimen>
+</resources>
