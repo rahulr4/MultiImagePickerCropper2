@@ -1,8 +1,8 @@
 -classpath '/home/rahul/Android/Sdk/platforms/android-22/android.jar'
 -d '/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/docs/javadoc'
--doctitle 'multipleImagePickerLib 1.0.4 API'
+-doctitle 'multipleImagePickerLib 1.0.5 API'
 -quiet 
--windowtitle 'multipleImagePickerLib 1.0.4 API'
+-windowtitle 'multipleImagePickerLib 1.0.5 API'
 '/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/java/crop/HighlightView.java'
 '/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/java/crop/CropImageView.java'
 '/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/java/crop/CropImageActivity.java'
