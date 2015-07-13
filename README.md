@@ -3,7 +3,7 @@ Multiple media picker and cropper is a library to pick and crop multiple images 
 Added support of picking single and multiple videos.
 
 # Version
-1.0.3
+1.0.7
 
 # Installation
 

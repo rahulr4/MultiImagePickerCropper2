@@ -147,7 +147,7 @@ public class MultipleImagePreviewActivity extends Activity {
                 finish();
             }
         });
-        ((TextView) findViewById(R.id.btn_done_text)).setText("Send");
+        ((TextView) findViewById(R.id.btn_done_text)).setText(getString(R.string.crop__done));
         findViewById(R.id.btn_done).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

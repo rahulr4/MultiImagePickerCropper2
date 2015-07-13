@@ -22,6 +22,6 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.1.1'
-    compile 'com.crop.multiple:multipleImagePickerLib:1.0.5'
+//    compile 'com.crop.multiple:multipleImagePickerLib:1.0.6'
     compile project(':multipleImagePickerLib')
 }
