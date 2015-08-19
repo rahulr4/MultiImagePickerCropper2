@@ -187,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
 
                         MediaFactory.MediaBuilder mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
                                 .getMultipleMediaFiles().fromCamera()
+                                .setImageQuality(50)
                                 .doCropping();
                         mediaFactory = MediaFactory.create().start(mediaBuilder);
                     }

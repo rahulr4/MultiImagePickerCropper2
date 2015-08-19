@@ -38,6 +38,7 @@ public class MediaFactory {
         long videoSize = -1;
         long videoDuration = -1;
         private final Context mContext;
+        int imageQuality = 100;
 
         public MediaBuilder(Context mContext) {
             this.mContext = mContext;
@@ -56,6 +57,7 @@ public class MediaFactory {
         /**
          * Sets the size of video.
          * Will work only for camera videos
+         *
          * @param size Size of video in MB
          * @return current instance of MediaBuilder
          */
@@ -65,8 +67,22 @@ public class MediaFactory {
         }
 
         /**
+         * Sets the quality of image.
+         *
+         * @param imageQuality Quality of image between 0 to 100
+         * @return current instance of MediaBuilder
+         */
+        public MediaBuilder setImageQuality(int imageQuality) {
+            if (imageQuality < 0 || imageQuality > 100)
+                imageQuality = 100;
+            this.imageQuality = imageQuality;
+            return this;
+        }
+
+        /**
          * Sets the duration of video
          * Will work only for camera videos
+         *
          * @param seconds Duration of the video in seconds
          * @return current instance of MediaBuilder
          */
@@ -129,6 +145,7 @@ public class MediaFactory {
 
     /**
      * Starts the media picking functionality
+     *
      * @param mediaBuilder MediaBuilder object
      * @return current instance of MediaFactory
      */
@@ -152,6 +169,7 @@ public class MediaFactory {
                 ((Activity) mediaBuilder.mContext).startActivityForResult(intent, GALLERY_APP);
             } else {
                 intent = new Intent(mediaBuilder.mContext, CameraPickActivity.class);
+                bundle.putInt("imageQuality", mediaBuilder.imageQuality);
                 intent.setAction(mediaBuilder.action);
                 intent.putExtras(bundle);
                 ((Activity) mediaBuilder.mContext).startActivityForResult(intent, CAMERA_APP);

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -22,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.luminous.pick.utils.BitmapDecoder;
 import com.luminous.pick.utils.CameraUtils;
 import com.luminous.pick.utils.ViewPagerSwipeLess;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
@@ -56,6 +58,7 @@ public class CameraPickActivity extends Activity {
     private CustomPagerAdapter adapter;
     private ImageListRecycleAdapter mImageListAdapter;
     private Uri userPhotoUri;
+    private int imageQuality;
 
     public static void showAlertDialog(Context mContext, String text) {
 
@@ -154,6 +157,9 @@ public class CameraPickActivity extends Activity {
             e.printStackTrace();
         }
 
+        if (getIntent().getExtras().containsKey("imageQuality")) {
+            imageQuality = getIntent().getExtras().getInt("imageQuality");
+        }
         if (getIntent().getAction() != null)
             action = getIntent().getAction();
         openCamera();
@@ -216,6 +222,30 @@ public class CameraPickActivity extends Activity {
         userPhotoUri = Uri.fromFile(image);
     }
 
+    class ProcessImageView extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            CustomGallery item = new CustomGallery();
+
+            item.sdcardPath = userPhotoUri.getPath();
+            item.sdCardUri = userPhotoUri;
+
+            item.sdcardPath = BitmapDecoder.getBitmap(userPhotoUri.getPath(), imageQuality);
+            item.sdCardUri = (Uri.parse(item.sdcardPath));
+
+            dataT.put(item.sdcardPath, item);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            adapter.customNotify(dataT);
+            mImageListAdapter.customNotify(dataT);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -227,14 +257,8 @@ public class CameraPickActivity extends Activity {
                     dataT.clear();
                 }
                 if (userPhotoUri != null) {
-                    CustomGallery item = new CustomGallery();
-                    item.sdcardPath = userPhotoUri.getPath();
-                    item.sdCardUri = userPhotoUri;
-                    dataT.put(item.sdcardPath, item);
+                    new ProcessImageView().execute();
                 }
-
-                adapter.customNotify(dataT);
-                mImageListAdapter.customNotify(dataT);
 
             } else if (requestCode == Crop.REQUEST_CROP) {
                 try {
