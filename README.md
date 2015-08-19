@@ -3,7 +3,7 @@ Multiple media picker and cropper is a library to pick and crop multiple images 
 Added support of picking single and multiple videos.
 
 # Version
-1.0.7
+1.0.8
 
 # Installation
 
@@ -34,6 +34,7 @@ mediaFactory = MediaFactory.create().start(mediaBuilder);
 MediaBuilder Specifications :-
 ```java
     takeVideo() // Takes a video. Default is image
+    setImageQuality(int size) //Takes the size between 0 to 100
     setVideoSize(int size) // Sets the size of video in MBs for camera. Default is -1
     setVideoDuration(long seconds)// Sets the duration of video in seconds for camera. Default is -1
     fromGallery() // Picks media file from gallery
