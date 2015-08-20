@@ -2,6 +2,7 @@ package com.app.multiimagepickercropper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import java.util.HashMap;
 public class ImageAdapter extends BaseAdapter {
     private final LayoutInflater mInflater;
     ArrayList<MediaBean> mMediaPathArrayList2;
-    private ImageLoader imageLoader;
+    Context mContext;
 
     public ArrayList<MediaBean> getmMediaPathArrayList2() {
         return mMediaPathArrayList2;
@@ -29,11 +29,8 @@ public class ImageAdapter extends BaseAdapter {
 
     public ImageAdapter(HashMap<String, MediaBean> mMediaPathArrayList, Context mContext) {
         this.mMediaPathArrayList2 = new ArrayList<MediaBean>(mMediaPathArrayList.values());
-        imageLoader = ImageLoader.getInstance();
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
-                mContext).build();
-        imageLoader.init(config);
         mInflater = (LayoutInflater.from(mContext));
+        this.mContext = mContext;
     }
 
     @Override
@@ -75,35 +72,17 @@ public class ImageAdapter extends BaseAdapter {
         File file = new File(mMediaPathArrayList2.get(position).getImagePath());
         long length = file.length() / 1024; // Size in KB
 
-        holder.imageSize.setText("Size :- " + length +" KB");
-        imageLoader.displayImage("file://" + mMediaPathArrayList2.get(position).getImagePath(),
-                holder.imageView, new ImageLoadingListener() {
+        holder.imageSize.setText("Size :- " + length + " KB");
+
+        
+        Glide.with(mContext)
+                .load(Uri.parse("file://" + mMediaPathArrayList2.get(position).getImagePath()))
+                .asBitmap()
+                .into(new SimpleTarget<Bitmap>(100, 100) {
                     @Override
-                    public void onLoadingStarted(String imageUri, View view) {
-                        holder.imageView
-                                .setImageResource(com.luminous.pick.R.drawable.placeholder_470x352);
+                    public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                        holder.imageView.setImageBitmap(resource); // Possibly runOnUiThread()
                     }
-
-                    @Override
-                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-                    }
-
-                    @Override
-                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-
-                    }
-
-                    @Override
-                    public void onLoadingCancelled(String imageUri, View view) {
-
-                    }
-                    /*@Override
-                    public void onLoadingStarted(String imageUri, View view) {
-                        holder.imageView
-                                .setImageResource(com.luminous.pick.R.drawable.placeholder_470x352);
-                        super.onLoadingStarted(imageUri, view);
-                    }*/
                 });
 
         return convertView;
