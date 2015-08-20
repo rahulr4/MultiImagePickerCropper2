@@ -11,7 +11,7 @@ To use this library in your android project, just simply add the following depen
 
 ```java
 dependencies {
-    compile 'com.crop.multiple:multipleImagePickerLib:1.0.5'
+    compile 'com.crop.multiple:multipleImagePickerLib:1.0.9'
 }
 ```
 
