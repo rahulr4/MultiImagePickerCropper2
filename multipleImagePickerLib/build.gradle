@@ -18,7 +18,7 @@ ext {
     developerName       = 'Rahul Gupta'
     developerEmail      = 'rahul.r4@gmail.com'
 
-    libraryVersion      = '1.0.8'
+    libraryVersion      = '1.0.9'
 
     allLicenses         = ["Apache-2.0"]
 
@@ -45,9 +45,9 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile 'com.android.support:recyclerview-v7:22.1.1'
+    compile 'com.github.bumptech.glide:glide:3.5.2'
 }
 
 apply from: '../install.gradle'

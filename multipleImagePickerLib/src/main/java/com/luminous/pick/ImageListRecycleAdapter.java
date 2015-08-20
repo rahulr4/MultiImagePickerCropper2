@@ -1,6 +1,8 @@
 package com.luminous.pick;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +10,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.luminous.pick.controller.MediaSingleTon;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,29 +21,16 @@ import java.util.HashMap;
 public class ImageListRecycleAdapter extends RecyclerView.Adapter<ImageListRecycleAdapter.VerticalItemHolder> {
 
     private final Context mContext;
-    private final ImageLoader imageLoader;
-    private final DisplayImageOptions imageOptions;
     public ArrayList<CustomGallery> mItems;
-
+    MediaSingleTon mediaSingleTon;
 
     private AdapterView.OnItemClickListener mOnItemClickListener;
 
     public ImageListRecycleAdapter(Context context,
                                    HashMap<String, CustomGallery> imagesUri) {
         mContext = context;
-
         this.mItems = new ArrayList<CustomGallery>(imagesUri.values());
-
-        imageLoader = ImageLoader.getInstance();
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
-                mContext).build();
-        imageLoader.init(config);
-        imageOptions = new DisplayImageOptions.Builder()
-                .cacheInMemory(true)
-                .showImageOnLoading(R.drawable.placeholder_470x352)
-                .showImageForEmptyUri(R.drawable.placeholder_470x352)
-                .showImageOnFail(R.drawable.placeholder_470x352)
-                .cacheOnDisk(true).build();
+        mediaSingleTon = MediaSingleTon.getInstance();
     }
 
     public void removeItem(int position) {
@@ -107,16 +96,23 @@ public class ImageListRecycleAdapter extends RecyclerView.Adapter<ImageListRecyc
             mAdapter.onItemHolderClick(this);
         }
 
-        public void setImage(String url) {
-            imageLoader.displayImage("file://" + url,
-                    imageView, new SimpleImageLoadingListener() {
-                        @Override
-                        public void onLoadingStarted(String imageUri, View view) {
-                            imageView
-                                    .setImageResource(R.drawable.placeholder_470x352);
-                            super.onLoadingStarted(imageUri, view);
-                        }
-                    });
+        public void setImage(final String url) {
+
+            if (MediaSingleTon.getInstance().getBitmapHashMap().containsKey(url)) {
+                imageView.setImageBitmap(MediaSingleTon.getInstance().getBitmapHashMap().get(url));
+            } else {
+                Glide.with(mContext)
+                        .load(Uri.parse("file://" + url))
+                        .asBitmap()
+                        .into(new SimpleTarget<Bitmap>(100, 100) {
+                            @Override
+                            public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                                MediaSingleTon.getInstance().getBitmapHashMap().put(url, resource);
+                                imageView.setImageBitmap(resource); // Possibly runOnUiThread()
+                            }
+                        });
+            }
+
         }
     }
 

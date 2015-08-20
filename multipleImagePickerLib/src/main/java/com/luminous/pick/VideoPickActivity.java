@@ -14,7 +14,6 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -32,16 +31,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.luminous.pick.controller.MediaSingleTon;
 import com.luminous.pick.utils.ViewPagerSwipeLess;
-import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.nostra13.universalimageloader.utils.StorageUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -53,14 +48,13 @@ public class VideoPickActivity extends Activity {
     private static final int ACTION_REQUEST_VIDEO_FROM_GALLERY = 202;
     private static AlertDialog alertDialog;
     String action = Action.ACTION_PICK;
-    private ImageLoader imageLoader;
     private ViewPagerSwipeLess mPager;
     private HashMap<String, CustomGallery> dataT;
     private CustomPagerAdapter adapter;
     private ImageListRecycleAdapter mImageListAdapter;
     private long videoSize;
     private int videoDuration;
-            
+
 
     public static void showAlertDialog(Context mContext, String text) {
 
@@ -83,7 +77,6 @@ public class VideoPickActivity extends Activity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please wait ...");
         progressDialog.setCancelable(false);
-        initImageLoader();
         mPager = (ViewPagerSwipeLess) findViewById(R.id.pager);
         dataT = new HashMap<String, CustomGallery>();
         adapter = new CustomPagerAdapter(dataT);
@@ -333,32 +326,6 @@ public class VideoPickActivity extends Activity {
         return path;
     }
 
-    private void initImageLoader() {
-        try {
-            String CACHE_DIR = Environment.getExternalStorageDirectory()
-                    .getAbsolutePath() + "/.temp_tmp";
-            new File(CACHE_DIR).mkdirs();
-
-            File cacheDir = StorageUtils.getOwnCacheDirectory(getBaseContext(),
-                    CACHE_DIR);
-
-            DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                    .cacheOnDisk(true).imageScaleType(ImageScaleType.EXACTLY)
-                    .bitmapConfig(Bitmap.Config.RGB_565).build();
-            ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(
-                    getBaseContext())
-                    .defaultDisplayImageOptions(defaultOptions)
-                    .diskCache(new UnlimitedDiscCache(cacheDir));
-
-            ImageLoaderConfiguration config = builder.build();
-            imageLoader = ImageLoader.getInstance();
-            imageLoader.init(config);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     class CustomPagerAdapter extends PagerAdapter {
 
         LayoutInflater mLayoutInflater;
@@ -396,19 +363,25 @@ public class VideoPickActivity extends Activity {
             View itemView = mLayoutInflater.inflate(R.layout.video_image_pager_item, container, false);
 
             final ImageView imageView = (ImageView) itemView.findViewById(R.id.full_screen_image);
+
             if (dataT.get(position).bitmap != null) {
                 imageView.setImageBitmap(dataT.get(position).bitmap);
             } else {
-                imageLoader.displayImage("file://" + dataT.get(position).sdcardPath,
-                        imageView, new SimpleImageLoadingListener() {
-                            @Override
-                            public void onLoadingStarted(String imageUri, View view) {
-                                imageView
-                                        .setImageResource(R.drawable.placeholder_470x352);
-                                super.onLoadingStarted(imageUri, view);
-                            }
-                        });
+                if (MediaSingleTon.getInstance().getBitmapHashMap().containsKey(dataT.get(position).sdcardPath)) {
+                    imageView.setImageBitmap(MediaSingleTon.getInstance().getBitmapHashMap().get((dataT.get(position).sdcardPath)));
+                } else
+                    Glide.with(VideoPickActivity.this)
+                            .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
+                            .asBitmap()
+                            .into(new SimpleTarget<Bitmap>(100, 100) {
+                                @Override
+                                public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                                    MediaSingleTon.getInstance().getBitmapHashMap().put(dataT.get(position).sdcardPath, resource);
+                                    imageView.setImageBitmap(resource); // Possibly runOnUiThread()
+                                }
+                            });
             }
+            
             container.addView(itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

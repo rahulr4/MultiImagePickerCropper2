@@ -151,6 +151,7 @@ public class MediaFactory {
      */
 
     public MediaFactory start(MediaBuilder mediaBuilder) {
+        MediaSingleTon.getInstance();
         Intent intent;
         Bundle bundle = new Bundle();
         if (mediaBuilder.takeVideo) {
