@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -55,6 +56,7 @@ public class CameraPickActivity extends Activity {
     private ImageListRecycleAdapter mImageListAdapter;
     private Uri userPhotoUri;
     private int imageQuality;
+    private FrameLayout mDone;
 
     public static void showAlertDialog(Context mContext, String text) {
 
@@ -122,8 +124,9 @@ public class CameraPickActivity extends Activity {
                 finish();
             }
         });
+        mDone = (FrameLayout) findViewById(R.id.btn_done);
         ((TextView) findViewById(R.id.btn_done_text)).setText(getString(R.string.crop__done));
-        findViewById(R.id.btn_done).setOnClickListener(new View.OnClickListener() {
+        mDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ArrayList<CustomGallery> mArrayList = new ArrayList<CustomGallery>(dataT.values());
@@ -220,6 +223,13 @@ public class CameraPickActivity extends Activity {
     class ProcessImageView extends AsyncTask<Void, Void, Void> {
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mDone.setEnabled(false);
+            mDone.setClickable(false);
+        }
+
+        @Override
         protected Void doInBackground(Void... params) {
             CustomGallery item = new CustomGallery();
 
@@ -238,6 +248,8 @@ public class CameraPickActivity extends Activity {
             super.onPostExecute(aVoid);
             adapter.customNotify(dataT);
             mImageListAdapter.customNotify(dataT);
+            mDone.setEnabled(true);
+            mDone.setClickable(true);
         }
     }
 
