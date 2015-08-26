@@ -163,6 +163,7 @@ public class MediaFactory {
             ((Activity) mediaBuilder.mContext).startActivityForResult(intent, GALLERY_APP);
         } else {
             bundle.putBoolean("crop", mediaBuilder.isCrop);
+            bundle.putInt("imageQuality", mediaBuilder.imageQuality);
             if (mediaBuilder.fromGallery) {
                 intent = new Intent(mediaBuilder.mContext, MultipleImagePreviewActivity.class);
                 intent.setAction(mediaBuilder.action);
@@ -170,7 +171,6 @@ public class MediaFactory {
                 ((Activity) mediaBuilder.mContext).startActivityForResult(intent, GALLERY_APP);
             } else {
                 intent = new Intent(mediaBuilder.mContext, CameraPickActivity.class);
-                bundle.putInt("imageQuality", mediaBuilder.imageQuality);
                 intent.setAction(mediaBuilder.action);
                 intent.putExtras(bundle);
                 ((Activity) mediaBuilder.mContext).startActivityForResult(intent, CAMERA_APP);

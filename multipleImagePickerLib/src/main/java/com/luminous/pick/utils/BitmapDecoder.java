@@ -1,11 +1,13 @@
 package com.luminous.pick.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapRegionDecoder;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.media.ExifInterface;
+import android.os.Environment;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,8 +17,7 @@ import java.io.IOException;
 
 public class BitmapDecoder {
 
-    public static String getBitmap(String filePath, int outputQuality) {
-
+    public static String getBitmap(String filePath, int outputQuality, Context mContext) {
         if (filePath != null) {
             FileInputStream stream = null;
             File file = null;
@@ -74,10 +75,15 @@ public class BitmapDecoder {
                         break;
                 }
 
+                String imageName = filePath.substring(filePath.lastIndexOf("/") + 1,
+                        filePath.length());
+                File fileBackup = new File(getUserImageDir(mContext) + "/" + imageName);
+                initializeImageLoader(mContext);
                 FileOutputStream fOut = null;
                 try {
-                    fOut = new FileOutputStream(file);
+                    fOut = new FileOutputStream(fileBackup);
                     region.compress(Bitmap.CompressFormat.JPEG, outputQuality, fOut);
+                    filePath = fileBackup.getPath();
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -94,6 +100,18 @@ public class BitmapDecoder {
             }
         }
         return filePath;
+
+    }
+
+    private static String getUserImageDir(Context mContext) {
+        return Environment.getExternalStorageDirectory().getAbsolutePath()
+                + "/MultipleImageCache/data/" + mContext.getPackageName() + "/images";
+    }
+
+    private static void initializeImageLoader(Context mContext) {
+        File cacheDir = new File(getUserImageDir(mContext));
+        if (!cacheDir.exists())
+            cacheDir.mkdirs();
 
     }
 

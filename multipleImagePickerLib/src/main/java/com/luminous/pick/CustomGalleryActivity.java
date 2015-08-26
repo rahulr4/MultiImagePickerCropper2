@@ -170,36 +170,45 @@ public class CustomGalleryActivity extends Activity {
 
     private ArrayList<CustomGallery> getGalleryPhotos() {
         ArrayList<CustomGallery> galleryList = new ArrayList<CustomGallery>();
-
-        Cursor imagecursor = null;
         try {
-            final String[] columns = {MediaStore.Images.Media.DATA,
-                    MediaStore.Images.Media._ID};
-            final String orderBy = MediaStore.Images.Media._ID;
+            Cursor imagecursor = null;
+            try {
+                final String[] columns = {MediaStore.Images.Media.DATA,
+                        MediaStore.Images.Media._ID};
+                final String orderBy = MediaStore.Images.Media._ID;
 
-            imagecursor = managedQuery(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
-                    null, null, orderBy);
+                imagecursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        columns, // Which columns to return
+                        null,       // Return all rows
+                        null,
+                        null);
+//                imagecursor = managedQuery(
+//                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
+//                        null, null, orderBy);
 
-            if (imagecursor != null && imagecursor.getCount() > 0) {
+                if (imagecursor != null && imagecursor.getCount() > 0) {
 
-                while (imagecursor.moveToNext()) {
-                    CustomGallery item = new CustomGallery();
+                    while (imagecursor.moveToNext()) {
+                        CustomGallery item = new CustomGallery();
 
-                    int dataColumnIndex = imagecursor
-                            .getColumnIndex(MediaStore.Images.Media.DATA);
+                        int dataColumnIndex = imagecursor
+                                .getColumnIndex(MediaStore.Images.Media.DATA);
 
-                    item.sdcardPath = imagecursor.getString(dataColumnIndex);
+                        item.sdcardPath = imagecursor.getString(dataColumnIndex);
 
-                    galleryList.add(item);
+                        galleryList.add(item);
+                    }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (imagecursor != null)
+                    imagecursor.close();
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (imagecursor != null)
-                imagecursor.close();
         }
+
 
         // show newest photo at beginning of the list
         Collections.reverse(galleryList);

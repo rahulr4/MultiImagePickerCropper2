@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                         MediaFactory.MediaBuilder mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
                                 .getSingleMediaFiles()
                                 .doCropping()
+                                .setImageQuality(50)
                                 .fromGallery();
                         mediaFactory = MediaFactory.create().start(mediaBuilder);
 

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.view.PagerAdapter;
@@ -17,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.luminous.pick.controller.MediaSingleTon;
+import com.luminous.pick.utils.BitmapDecoder;
 import com.luminous.pick.utils.CameraUtils;
 import com.luminous.pick.utils.ViewPagerSwipeLess;
 
@@ -45,6 +48,8 @@ public class MultipleImagePreviewActivity extends Activity {
     private HashMap<String, CustomGallery> dataT;
     private CustomPagerAdapter adapter;
     private ImageListRecycleAdapter mImageListAdapter;
+    private FrameLayout mDone;
+    private int imageQuality;
 
     public static void showAlertDialog(Context mContext, String text) {
 
@@ -72,6 +77,7 @@ public class MultipleImagePreviewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiimage_preview);
         mPager = (ViewPagerSwipeLess) findViewById(R.id.pager);
+        mDone = (FrameLayout) findViewById(R.id.btn_done);
         dataT = new HashMap<String, CustomGallery>();
         adapter = new CustomPagerAdapter(dataT);
         mPager.setAdapter(adapter);
@@ -172,11 +178,49 @@ public class MultipleImagePreviewActivity extends Activity {
         Intent i = new Intent(this,
                 CustomGalleryActivity.class);
 
+        if (getIntent().getExtras().containsKey("imageQuality")) {
+            imageQuality = getIntent().getExtras().getInt("imageQuality");
+        }
+
         if (getIntent().getAction() != null)
             action = getIntent().getAction();
         i.setAction(action);
         startActivityForResult(i, PICK_IMAGE);
 
+    }
+
+    class ProcessImageView extends AsyncTask<Uri, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Uri... params) {
+            CustomGallery item = new CustomGallery();
+
+            item.sdcardPath = params[0].getPath();
+            item.sdCardUri = params[0];
+
+            item.sdcardPath = BitmapDecoder.getBitmap(params[0].getPath(), imageQuality, MultipleImagePreviewActivity.this);
+            item.sdCardUri = (Uri.parse(item.sdcardPath));
+
+            dataT.put(item.sdcardPath, item);
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mDone.setEnabled(false);
+            mDone.setClickable(false);
+        }
+
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            adapter.customNotify(dataT);
+            mImageListAdapter.customNotify(dataT);
+            mDone.setEnabled(true);
+            mDone.setClickable(true);
+        }
     }
 
     @Override
@@ -191,18 +235,21 @@ public class MultipleImagePreviewActivity extends Activity {
                 String[] all_path = data.getStringArrayExtra("all_path");
 
                 if (all_path != null) {
-                    for (String string : all_path) {
-                        if (string != null) {
-                            CustomGallery item = new CustomGallery();
-                            item.sdcardPath = string;
-                            item.sdCardUri = Uri.parse(string);
-                            dataT.put(string, item);
+                    if (action.equals(Action.ACTION_PICK) && all_path.length > 0) {
+                        new ProcessImageView().execute(Uri.parse(all_path[0]));
+                    } else {
+                        for (String string : all_path) {
+                            if (string != null) {
+                                CustomGallery item = new CustomGallery();
+                                item.sdcardPath = string;
+                                item.sdCardUri = Uri.parse(string);
+                                dataT.put(string, item);
+                            }
                         }
                     }
+                    adapter.customNotify(dataT);
+                    mImageListAdapter.customNotify(dataT);
                 }
-                adapter.customNotify(dataT);
-                mImageListAdapter.customNotify(dataT);
-
             } else if (requestCode == Crop.REQUEST_CROP) {
                 try {
                     Uri mTargetImageUri = (Uri) data.getExtras().get(MediaStore.EXTRA_OUTPUT);

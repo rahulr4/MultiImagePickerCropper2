@@ -55,7 +55,7 @@ public class CameraPickActivity extends Activity {
     private CustomPagerAdapter adapter;
     private ImageListRecycleAdapter mImageListAdapter;
     private Uri userPhotoUri;
-    private int imageQuality;
+    private int imageQuality = 100;
     private FrameLayout mDone;
 
     public static void showAlertDialog(Context mContext, String text) {
@@ -236,7 +236,7 @@ public class CameraPickActivity extends Activity {
             item.sdcardPath = userPhotoUri.getPath();
             item.sdCardUri = userPhotoUri;
 
-            item.sdcardPath = BitmapDecoder.getBitmap(userPhotoUri.getPath(), imageQuality);
+            item.sdcardPath = BitmapDecoder.getBitmap(userPhotoUri.getPath(), imageQuality, CameraPickActivity.this);
             item.sdCardUri = (Uri.parse(item.sdcardPath));
 
             dataT.put(item.sdcardPath, item);
