@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.luminous.pick.CustomGallery;
 import com.luminous.pick.controller.MediaFactory;
+import com.luminous.pick.utils.VideoQuality;
 
 import java.util.HashMap;
 
@@ -84,8 +85,9 @@ public class MainActivity extends AppCompatActivity {
                         MediaFactory.MediaBuilder mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
                                 .getSingleMediaFiles()
                                 .fromCamera()
-                                .setVideoDuration(10)
-                                .setVideoSize(3)
+                                .setVideoDuration(300)
+                                .setVideoSize(15)
+                                .setVideoQuality(VideoQuality.LOW_QUALITY)
                                 .takeVideo();
                         mediaFactory = MediaFactory.create().start(mediaBuilder);
 

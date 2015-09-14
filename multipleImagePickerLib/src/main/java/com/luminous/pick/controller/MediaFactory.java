@@ -9,6 +9,7 @@ import com.luminous.pick.Action;
 import com.luminous.pick.CameraPickActivity;
 import com.luminous.pick.MultipleImagePreviewActivity;
 import com.luminous.pick.VideoPickActivity;
+import com.luminous.pick.utils.VideoQuality;
 
 /**
  * Class to initiate media picker
@@ -39,6 +40,7 @@ public class MediaFactory {
         long videoDuration = -1;
         private final Context mContext;
         int imageQuality = 100;
+        private VideoQuality videoQuality = VideoQuality.HIGH_QUALITY;
 
         public MediaBuilder(Context mContext) {
             this.mContext = mContext;
@@ -51,6 +53,18 @@ public class MediaFactory {
          */
         public MediaBuilder takeVideo() {
             takeVideo = true;
+            return this;
+        }
+
+        /**
+         * Sets the size of video.
+         * Will work only for camera videos
+         *
+         * @param videoQuality Quality of video
+         * @return current instance of MediaBuilder
+         */
+        public MediaBuilder setVideoQuality(VideoQuality videoQuality) {
+            this.videoQuality = videoQuality;
             return this;
         }
 
@@ -160,6 +174,7 @@ public class MediaFactory {
             intent.putExtra("from", mediaBuilder.fromGallery);
             intent.putExtra("videoSize", mediaBuilder.videoSize);
             intent.putExtra("videoDuration", mediaBuilder.videoDuration);
+            intent.putExtra("videoQuality", mediaBuilder.videoQuality.getQuality());
             ((Activity) mediaBuilder.mContext).startActivityForResult(intent, GALLERY_APP);
         } else {
             bundle.putBoolean("crop", mediaBuilder.isCrop);

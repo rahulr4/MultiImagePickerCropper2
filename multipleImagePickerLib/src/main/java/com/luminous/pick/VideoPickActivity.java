@@ -35,6 +35,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.luminous.pick.controller.MediaSingleTon;
+import com.luminous.pick.utils.VideoQuality;
 import com.luminous.pick.utils.ViewPagerSwipeLess;
 
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class VideoPickActivity extends Activity {
     private ImageListRecycleAdapter mImageListAdapter;
     private long videoSize;
     private int videoDuration;
+    private int videoQuality = VideoQuality.HIGH_QUALITY.getQuality();
 
 
     public static void showAlertDialog(Context mContext, String text) {
@@ -146,6 +148,8 @@ public class VideoPickActivity extends Activity {
         try {
             videoSize = getIntent().getExtras().getLong("videoSize");
             videoDuration = (int) getIntent().getExtras().getLong("videoDuration");
+            videoQuality = getIntent().getExtras().getInt("videoQuality");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -187,7 +191,7 @@ public class VideoPickActivity extends Activity {
             Uri videoUriFromCamera = getContentResolver().insert(
                     MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
             Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
+            intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, videoQuality);
             if (videoSize != -1)
                 intent.putExtra(MediaStore.EXTRA_SIZE_LIMIT, videoSize);
             if (videoDuration != -1)
@@ -381,7 +385,7 @@ public class VideoPickActivity extends Activity {
                                 }
                             });
             }
-            
+
             container.addView(itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
