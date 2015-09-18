@@ -262,7 +262,7 @@ public class VideoPickActivity extends Activity {
             if (requestCode == ACTION_REQUEST_VIDEO_FROM_CAMERA) {
 
                 String[] projection = {MediaStore.Video.Media.DATA};
-                Cursor cursor = managedQuery(data.getData(), projection, null, null, null);
+                Cursor cursor = getContentResolver().query(data.getData(), projection, null, null, null);
                 int column_index_data = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
                 cursor.moveToFirst();
                 videoUriFromCamera = cursor.getString(column_index_data);

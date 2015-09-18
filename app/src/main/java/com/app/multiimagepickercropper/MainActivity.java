@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                                 .fromCamera()
                                 .setVideoDuration(300)
                                 .setVideoSize(15)
-                                .setVideoQuality(VideoQuality.LOW_QUALITY)
+                                .setVideoQuality(VideoQuality.HIGH_QUALITY)
                                 .takeVideo();
                         mediaFactory = MediaFactory.create().start(mediaBuilder);
 
