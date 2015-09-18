@@ -25,7 +25,8 @@ MediaFactory.MediaBuilder mediaBuilder =
     .getSingleMediaFiles() // Method to pick single media file
     .takeVideo() //Method to take a video. Default is image
     .setVideoDuration(10) // Works with video capture from camera. Duration in seconds
-    .setVideoSize(3) // Works with video capture from camera. Size in MB 
+    .setVideoSize(3) // Works with video capture from camera. Size in MB
+    .setVideoQuality(VideoQuality videoQualityEnum) // Set the video quality to low or high. Works with video capture from camera.
     .fromGallery(); // Location Specific method. Gallery or camera
 mediaFactory = MediaFactory.create().start(mediaBuilder);
 
