@@ -1,8 +1,8 @@
 -classpath '/home/rahul/Android/Sdk/platforms/android-22/android.jar'
 -d '/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/docs/javadoc'
--doctitle 'multipleImagePickerLib 1.1.1 API'
+-doctitle 'multipleImagePickerLib 1.1.3 API'
 -quiet 
--windowtitle 'multipleImagePickerLib 1.1.1 API'
+-windowtitle 'multipleImagePickerLib 1.1.3 API'
 '/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/java/crop/HighlightView.java'
 '/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/java/crop/CropImageView.java'
 '/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/java/crop/CropImageActivity.java'
@@ -25,3 +25,4 @@
 '/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/java/com/luminous/pick/utils/ViewPagerSwipeLess.java'
 '/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/java/com/luminous/pick/utils/CameraUtils.java'
 '/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/java/com/luminous/pick/utils/BitmapDecoder.java'
+'/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/java/com/luminous/pick/utils/VideoQuality.java'

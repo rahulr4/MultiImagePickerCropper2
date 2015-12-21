@@ -173,12 +173,12 @@ public class CustomGalleryActivity extends Activity {
         try {
             Cursor imagecursor = null;
             try {
-                final String[] columns = {MediaStore.Images.Media.DATA,
-                        MediaStore.Images.Media._ID};
+//                final String[] columns = {MediaStore.Images.Media.DATA,
+//                        MediaStore.Images.Media._ID};
                 final String orderBy = MediaStore.Images.Media._ID;
 
                 imagecursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        columns, // Which columns to return
+                        null, // Which columns to return
                         null,       // Return all rows
                         null,
                         null);
