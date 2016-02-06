@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns1="http://schemas.android.com/tools">
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values/attrs.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values/attrs.xml -->
     <eat-comment/>
     <attr format="reference" name="cropImageStyle"/>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
     <eat-comment/>
     <attr format="reference" name="drawerArrowStyle"/>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values/hlv_attrs.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values/hlv_attrs.xml -->
     <eat-comment/>
     <attr format="reference" name="entries"/>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
     <eat-comment/>
     <attr format="dimension" name="height"/>
     <attr format="boolean" name="isLightTheme"/>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values/hlv_attrs.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values/hlv_attrs.xml -->
     <eat-comment/>
     <attr format="reference" name="sephiroth_absHListViewStyle"/>
     <attr format="dimension" name="sephiroth_listPreferredItemWidth"/>
     <attr format="reference" name="sephiroth_listViewStyle"/>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
     <eat-comment/>
     <attr format="string" name="title"/>
     <bool name="abc_action_bar_embed_tabs">true</bool>
@@ -38,11 +38,11 @@
     <color name="background_floating_material_light">#ffeeeeee</color>
     <color name="background_material_dark">#ff303030</color>
     <color name="background_material_light">#ffeeeeee</color>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values/colors.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="background_tab_pressed">#6633B5E5</color>
     <color name="blue_selected">#00CBDE</color>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
     <eat-comment/>
     <color name="bright_foreground_disabled_material_dark">#80ffffff</color>
     <color name="bright_foreground_disabled_material_light">#80000000</color>
@@ -52,13 +52,13 @@
     <color name="bright_foreground_material_light">@android:color/black</color>
     <color name="button_material_dark">#ff5a595b</color>
     <color name="button_material_light">#ffd6d7d7</color>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values/colors.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="crop__button_bar">#f3f3f3</color>
     <color name="crop__button_text">#666666</color>
     <color name="crop__selector_focused">#77000000</color>
     <color name="crop__selector_pressed">#1a000000</color>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
     <eat-comment/>
     <color name="dim_foreground_disabled_material_dark">#80bebebe</color>
     <color name="dim_foreground_disabled_material_light">#80323232</color>
@@ -181,7 +181,7 @@
     <dimen name="abc_text_size_subtitle_material_toolbar">16dp</dimen>
     <dimen name="abc_text_size_title_material">20sp</dimen>
     <dimen name="abc_text_size_title_material_toolbar">20dp</dimen>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values/dimens.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
@@ -190,7 +190,7 @@
     <dimen name="detail_text_size">14sp</dimen>
     <dimen name="detail_text_size_hlv">12dp</dimen>
     <dimen name="detail_text_size_status">14dp</dimen>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
     <eat-comment/>
     <item name="dialog_fixed_height_major" type="dimen">80%</item>
     <item name="dialog_fixed_height_minor" type="dimen">100%</item>
@@ -198,10 +198,10 @@
     <item name="dialog_fixed_width_minor" type="dimen">320dp</item>
     <item format="float" name="disabled_alpha_material_dark" type="dimen">0.30</item>
     <item format="float" name="disabled_alpha_material_light" type="dimen">0.26</item>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values/dimens.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="margin_48">48dp</dimen>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
     <eat-comment/>
     <item name="action_bar_activity_content" type="id"/>
     <item name="action_bar_spinner" type="id"/>
@@ -232,20 +232,20 @@
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <string name="abc_toolbar_collapse_description">Collapse</string>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values/strings.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="crop__cancel" ns1:ignore="ButtonCase">CANCEL</string>
     <string name="crop__done">DONE</string>
     <string name="crop__pick_error">No image sources available</string>
     <string name="crop__saving">Saving picture…</string>
     <string name="crop__wait">Please wait…</string>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
     <eat-comment/>
     <style name="AlertDialog.AppCompat" parent="Base.AlertDialog.AppCompat"/>
     <style name="AlertDialog.AppCompat.Light" parent="Base.AlertDialog.AppCompat.Light"/>
     <style name="Animation.AppCompat.Dialog" parent="Base.Animation.AppCompat.Dialog"/>
     <style name="Animation.AppCompat.DropDownUp" parent="Base.Animation.AppCompat.DropDownUp"/>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values/styles.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--
@@ -257,7 +257,7 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
     <eat-comment/>
     <style name="Base.AlertDialog.AppCompat" parent="android:Widget">
         <item name="android:layout">@layout/abc_alert_dialog_material</item>
@@ -1168,7 +1168,7 @@
         <item name="android:scaleType">center</item>
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values/styles.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="Crop"/>
     <style name="Crop.ActionButton">
@@ -1205,7 +1205,7 @@
         <item name="android:dividerPadding" ns1:ignore="NewApi">12dp</item>
         <item name="android:background">@color/crop__button_bar</item>
     </style>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values/values.xml -->
     <eat-comment/>
     <style name="Platform.AppCompat" parent="android:Theme">
         <item name="android:windowNoTitle">true</item>

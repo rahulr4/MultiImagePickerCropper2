@@ -47,4 +47,4 @@
     <include
         android:id="@+id/llBottomContainer"
         layout="@layout/crop__layout_done_cancel" />
-</LinearLayout><!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/layout/gallery.xml -->
+</LinearLayout><!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/layout/gallery.xml -->

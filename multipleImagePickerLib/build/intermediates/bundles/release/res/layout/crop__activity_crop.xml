@@ -16,4 +16,4 @@
     <include
         android:id="@+id/done_cancel_bar"
         layout="@layout/crop__layout_done_cancel" />
-</LinearLayout><!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/layout/crop__activity_crop.xml -->
+</LinearLayout>

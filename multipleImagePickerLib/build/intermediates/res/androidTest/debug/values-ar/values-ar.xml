@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns1="http://schemas.android.com/tools">
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values-ar/values.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values-ar/values.xml -->
     <eat-comment/>
     <string msgid="4600421777120114993" name="abc_action_bar_home_description">"التنقل إلى الشاشة الرئيسية"</string>
     <string msgid="1594238315039666878" name="abc_action_bar_up_description">"التنقل إلى أعلى"</string>
@@ -15,7 +15,7 @@
     <string msgid="893419373245838918" name="abc_searchview_description_voice">"البحث الصوتي"</string>
     <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"مشاركة مع"</string>
     <string msgid="7165123711973476752" name="abc_shareactionprovider_share_with_application">"‏مشاركة مع %s"</string>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/bundles/debug/res/values-ar/values-ar.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/bundles/debug/res/values-ar/values-ar.xml -->
     <eat-comment/>
     <string name="crop__cancel" ns1:ignore="ButtonCase">الغاء</string>
     <string name="crop__done">تم</string>

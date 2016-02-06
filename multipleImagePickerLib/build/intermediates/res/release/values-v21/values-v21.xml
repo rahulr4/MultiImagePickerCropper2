@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values-v21/colors.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values-v21/colors.xml -->
     <eat-comment/>
     <color name="crop__selector_pressed">#aaaaaa</color>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values-v21/values.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/res/values-v21/values.xml -->
     <eat-comment/>
     <style name="Base.TextAppearance.AppCompat" parent="android:TextAppearance.Material"/>
     <style name="Base.TextAppearance.AppCompat.Body1" parent="android:TextAppearance.Material.Body1"/>

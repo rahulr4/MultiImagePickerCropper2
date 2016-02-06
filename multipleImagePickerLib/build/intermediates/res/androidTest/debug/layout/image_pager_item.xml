@@ -9,4 +9,4 @@
         android:layout_height="match_parent"
         android:id="@+id/full_screen_image"
         android:adjustViewBounds="true" />
-</LinearLayout><!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/layout/image_pager_item.xml --><!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/bundles/debug/res/layout/image_pager_item.xml -->
+</LinearLayout><!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/layout/image_pager_item.xml --><!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/bundles/debug/res/layout/image_pager_item.xml -->

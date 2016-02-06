@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values-mdpi/colors.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values-mdpi/colors.xml -->
     <eat-comment/>
     <color name="bg_light_blue">#EBF5FF</color>
     <color name="dialog_bg">#f0f0f0</color>
@@ -14,12 +14,12 @@
     <color name="menu_bg">#101F2D</color>
     <color name="tab_bg">#142029</color>
     <drawable name="light_black_">#33000000</drawable>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values-mdpi/strings.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values-mdpi/strings.xml -->
     <eat-comment/>
     <string name="btn_ok">OK</string>
     <string name="btn_pick">Pick From Gallery</string>
     <string name="btn_pick_mul">Pick From Gallery (Multiple)</string>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values-mdpi/styles.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values-mdpi/styles.xml -->
     <eat-comment/>
     <style name="btn">
         <item name="android:textColor">#ffffff</item>

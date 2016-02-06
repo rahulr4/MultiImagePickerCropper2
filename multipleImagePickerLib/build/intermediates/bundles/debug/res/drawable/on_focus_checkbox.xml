@@ -5,4 +5,4 @@
     <item android:drawable="@drawable/checkbox_selected" android:state_checked="true"></item>
     <item android:drawable="@drawable/checkbox_up"></item>
 
-</selector><!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/drawable/on_focus_checkbox.xml -->
+</selector>

@@ -4,4 +4,4 @@
     <item android:drawable="@drawable/btn_hover" android:state_pressed="true"></item>
     <item android:drawable="@drawable/btn2"></item>
 
-</selector><!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/drawable/btn_sel.xml --><!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/bundles/debug/res/drawable/btn_sel.xml -->
+</selector><!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/drawable/btn_sel.xml --><!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/bundles/debug/res/drawable/btn_sel.xml -->

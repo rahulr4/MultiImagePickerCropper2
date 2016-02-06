@@ -4,4 +4,4 @@
         android:color="@color/crop__selector_pressed">
   <item android:drawable="@color/crop__button_bar" />
 </ripple>
-<!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/drawable-v21/crop__selectable_background.xml --><!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/bundles/debug/res/drawable-v21/crop__selectable_background.xml -->
+<!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/drawable-v21/crop__selectable_background.xml --><!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/bundles/debug/res/drawable-v21/crop__selectable_background.xml -->

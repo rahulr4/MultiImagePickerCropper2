@@ -6,4 +6,4 @@
     android:background="@drawable/list_selector"
     android:padding="2dp"
     android:src="@drawable/placeholder_470x352"
-    android:scaleType="fitXY" /><!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/layout/image_strip_view.xml -->
+    android:scaleType="fitXY" /><!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/layout/image_strip_view.xml -->

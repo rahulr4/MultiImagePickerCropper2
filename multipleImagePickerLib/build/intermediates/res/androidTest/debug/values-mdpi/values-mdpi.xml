@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/bundles/debug/res/values-mdpi/values-mdpi.xml -->
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/multipleImagePickerLib/build/intermediates/bundles/debug/res/values-mdpi/values-mdpi.xml -->
     <eat-comment/>
     <color name="bg_light_blue">#EBF5FF</color>
     <color name="dialog_bg">#f0f0f0</color>

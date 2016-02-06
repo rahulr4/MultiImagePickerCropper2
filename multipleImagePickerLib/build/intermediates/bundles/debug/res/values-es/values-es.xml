@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns1="http://schemas.android.com/tools">
-    <!-- From: file:/home/rahul/MultiImagePickerCropper2/MultiImagePickerCropper2/multipleImagePickerLib/src/main/res/values-es/strings.xml -->
-    <eat-comment/>
     <string name="crop__cancel" ns1:ignore="ButtonCase">CANCELAR</string>
     <string name="crop__done">ACEPTAR</string>
     <string name="crop__pick_error">No hay imágenes disponibles</string>
