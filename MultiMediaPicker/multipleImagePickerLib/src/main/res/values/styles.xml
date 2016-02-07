@@ -57,4 +57,8 @@
         <item name="android:drawableLeft">@drawable/crop__ic_cancel</item>
         <item name="android:text">@string/crop__cancel</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

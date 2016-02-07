@@ -4,10 +4,6 @@
     android:versionCode="1"
     android:versionName="1.0">
 
-    <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="21" />
-
     <!-- For android.media.audiofx.Visualizer -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <!-- We will request access to the camera, saying we require a camera
@@ -46,6 +42,22 @@
         <activity
             android:name="com.luminous.pick.VideoPickActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.sangcomz.fishbun.videomodule.VideoAlbumActivity"
+            android:label="@string/video_gallery"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.sangcomz.fishbun.videomodule.VideoAlbumGalleryActivity"
+            android:label="@string/video_gallery"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.sangcomz.fishbun.ui.album.ImageAlbumListActivity"
+            android:label="@string/album"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.sangcomz.fishbun.ui.picker.ImageGalleryPickerActivity" />
     </application>
 
 </manifest>

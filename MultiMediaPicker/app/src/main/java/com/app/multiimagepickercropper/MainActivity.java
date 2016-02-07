@@ -34,7 +34,11 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.img_single_pick).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showSingleImageChooserDialog();
+                MediaFactory.MediaBuilder mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
+                        .getSingleMediaFiles()
+                        .takeVideo()
+                        .fromGallery();
+                mediaFactory = MediaFactory.create().start(mediaBuilder);
             }
         });
 

@@ -12,7 +12,7 @@
 
         <Button
             android:id="@+id/img_single_pick"
-            android:text="Pick single Image"
+            android:text="Video Gallery"
             android:gravity="center"
             android:layout_width="0dp"
             android:layout_weight="1"

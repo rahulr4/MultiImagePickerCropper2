@@ -31,7 +31,7 @@
             android:background="@drawable/on_focus_checkbox"
             android:gravity="center"
             android:scaleType="center"
-            android:visibility="gone" />
+            android:visibility="visible" />
     </FrameLayout>
 
 </LinearLayout>
