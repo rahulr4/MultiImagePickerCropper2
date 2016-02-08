@@ -4,7 +4,14 @@
     <item
         android:id="@+id/action_ok"
         android:icon="@drawable/ic_ok"
-        android:title="@string/camera"
+        android:title="@string/video"
+        app:showAsAction="withText|ifRoom" />
+
+    <item
+        android:id="@+id/take_video"
+        android:icon="@drawable/ic_action_photo"
+        android:title="@string/video"
+        android:visible="false"
         app:showAsAction="withText|ifRoom" />
 
 </menu>

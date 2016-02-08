@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.luminous.pick.R;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.sangcomz.fishbun.bean.MediaType;
@@ -36,6 +37,11 @@ public class ProcessGalleryFile extends AsyncTask<Void, Void, Bitmap> {
         this.durationHolder = durationHolder;
         this.photoHolder = photoHolder;
         this.type = type;
+        try {
+            ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(photoHolder.getContext()));
+        } catch (Exception ignored) {
+
+        }
     }
 
     @Override

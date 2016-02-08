@@ -1,15 +1,20 @@
 package com.sangcomz.fishbun.videomodule;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +48,7 @@ public class VideoAlbumGalleryActivity extends AppCompatActivity {
     Set<ProcessGalleryFile> tasks = new HashSet<ProcessGalleryFile>();
     private VideoGalleryAdapter mAdapter;
     private int mPickCount = 1;
+    private String pathDir;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,6 +82,12 @@ public class VideoAlbumGalleryActivity extends AppCompatActivity {
             } else if (resultCode == Define.ADD_PHOTO_REQUEST_CODE) {
                 new GetVideoListAsync().execute();
             }
+        } else if (requestCode == Define.TAKE_A_VIDEO_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Uri uri = data.getData();
+
+                new GetVideoListAsync().execute();
+            }
         }
     }
 
@@ -103,7 +115,7 @@ public class VideoAlbumGalleryActivity extends AppCompatActivity {
      *
      * @param bucketName
      */
-    private void initVideoImages(String bucketName) {
+    private void getAlbumVideos(String bucketName) {
         try {
             final String orderBy = MediaStore.Video.Media.DATE_TAKEN;
             String searchParams = null;
@@ -117,11 +129,14 @@ public class VideoAlbumGalleryActivity extends AppCompatActivity {
 
             if (mVideoCursor != null && mVideoCursor.moveToFirst()) {
 
-                mVideoArrayList = new ArrayList<MediaObject>();
+                mVideoArrayList = new ArrayList<>();
 
                 do {
-                    String filePath = mVideoCursor.getString(1);
+                    String filePath = mVideoCursor.getString(mVideoCursor.getColumnIndex(MediaStore.Video.Media.DATA));
                     long creationDate = getCreationDate(filePath);
+
+                    setPathDir(filePath,
+                            mVideoCursor.getString(mVideoCursor.getColumnIndex(MediaStore.Video.Media.DISPLAY_NAME)));
 
                     MediaObject mediaObject = new MediaObject(mVideoCursor.getInt(0),
                             filePath, MediaType.VIDEO, creationDate);
@@ -146,13 +161,14 @@ public class VideoAlbumGalleryActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             mVideoArrayList.clear();
-            initVideoImages(bucketName);
+            getAlbumVideos(bucketName);
             return !mVideoArrayList.isEmpty();
         }
 
         @Override
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
+            getPathDir();
             if (result) {
                 noAlbum.setVisibility(View.GONE);
                 mAdapter = new VideoGalleryAdapter(VideoAlbumGalleryActivity.this, mVideoArrayList);
@@ -236,15 +252,12 @@ public class VideoAlbumGalleryActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_photo_album, menu);
+        getMenuInflater().inflate(R.menu.menu_video_album, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_ok) {
             String[] allPath = mAdapter.getSelectedStringArray();
@@ -265,7 +278,44 @@ public class VideoAlbumGalleryActivity extends AppCompatActivity {
             Intent data = new Intent();
             setResult(RESULT_CANCELED, data);
             finish();
+        } else if (id == R.id.take_video) {
+            openVideoFromCamera();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setPathDir(String path, String fileName) {
+        pathDir = path.replace("/" + fileName, "");
+    }
+
+    private String getPathDir() {
+
+        if (TextUtils.isEmpty(pathDir))
+            pathDir = Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_PICTURES).getAbsolutePath();
+        return pathDir;
+    }
+
+    public void openVideoFromCamera() {
+        String filePath = pathDir + "/" + System.currentTimeMillis() + "_video.mp4";
+        File file = new File(filePath);
+        try {
+
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Video.Media.TITLE, file.getName());
+            values.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4");
+            values.put(MediaStore.Video.Media.BUCKET_DISPLAY_NAME, bucketName);
+
+            Uri videoUriFromCamera = getContentResolver().insert(
+                    MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
+
+            Log.i("Inserted ", videoUriFromCamera != null ? videoUriFromCamera.getPath() : "");
+            Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.parse("file://" + filePath));
+            startActivityForResult(intent, Define.TAKE_A_VIDEO_REQUEST_CODE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Snackbar.make(findViewById(R.id.parent), R.string.sd_card_not_avail, Snackbar.LENGTH_SHORT).show();
+        }
     }
 }

@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'android-maven'
 
 ext {
     libraryDescription  = 'A library to select and crop multiple images from gallery and camera'
