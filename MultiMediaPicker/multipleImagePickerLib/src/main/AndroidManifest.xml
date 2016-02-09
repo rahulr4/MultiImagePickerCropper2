@@ -42,6 +42,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.luminous.pick.VideoPickActivity"
+            android:label="@string/video_preview"
             android:screenOrientation="portrait" />
 
         <activity

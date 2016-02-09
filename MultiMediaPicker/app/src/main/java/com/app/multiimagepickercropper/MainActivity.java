@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                 MediaFactory.MediaBuilder mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
                         .getSingleMediaFiles()
                         .takeVideo()
-                        .fromGallery();
+                        .fromCamera();
                 mediaFactory = MediaFactory.create().start(mediaBuilder);
             }
         });

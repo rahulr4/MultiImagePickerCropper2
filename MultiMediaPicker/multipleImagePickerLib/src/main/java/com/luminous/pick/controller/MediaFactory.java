@@ -8,6 +8,7 @@ import android.os.Bundle;
 import com.luminous.pick.Action;
 import com.luminous.pick.CameraPickActivity;
 import com.luminous.pick.MultipleImagePreviewActivity;
+import com.luminous.pick.VideoPickActivity;
 import com.luminous.pick.utils.VideoQuality;
 import com.sangcomz.fishbun.videomodule.VideoAlbumActivity;
 
@@ -170,9 +171,13 @@ public class MediaFactory {
         Bundle bundle = new Bundle();
         if (mediaBuilder.takeVideo) {
 
-            intent = new Intent(mediaBuilder.mContext, VideoAlbumActivity.class);
-//            intent = new Intent(mediaBuilder.mContext, VideoPickActivity.class);
-//            intent.setAction(mediaBuilder.action);
+            if (mediaBuilder.fromGallery) {
+                intent = new Intent(mediaBuilder.mContext, VideoAlbumActivity.class);
+            } else {
+                intent = new Intent(mediaBuilder.mContext, VideoPickActivity.class);
+
+            }
+
             intent.putExtra("from", mediaBuilder.fromGallery);
             intent.putExtra("videoSize", mediaBuilder.videoSize);
             intent.putExtra("videoDuration", mediaBuilder.videoDuration);
