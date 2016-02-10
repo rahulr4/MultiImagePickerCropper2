@@ -104,8 +104,8 @@ public class CameraUtils {
         options.inJustDecodeBounds = false;
 
 //      this options allow android to claim the bitmap memory if it runs low on memory
-        options.inPurgeable = true;
-        options.inInputShareable = true;
+//        options.inPurgeable = true;
+//        options.inInputShareable = true;
         options.inTempStorage = new byte[16 * 1024];
 
         try {

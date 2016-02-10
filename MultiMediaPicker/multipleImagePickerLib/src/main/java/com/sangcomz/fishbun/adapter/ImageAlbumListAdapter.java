@@ -23,6 +23,7 @@ import java.util.List;
 public class ImageAlbumListAdapter
         extends RecyclerView.Adapter<ImageAlbumListAdapter.ViewHolder> {
 
+    private final int pickCount;
     private List<Album> albumlist;
     private List<String> thumbList = new ArrayList<String>();
     private String thumPath;
@@ -39,7 +40,7 @@ public class ImageAlbumListAdapter
         public ViewHolder(View view) {
             super(view);
             imgAlbum = (ImageView) view.findViewById(R.id.img_album);
-            imgAlbum.setLayoutParams(new RelativeLayout.LayoutParams(Define.ALBUM_THUMNAIL_SIZE, Define.ALBUM_THUMNAIL_SIZE));
+            imgAlbum.setLayoutParams(new RelativeLayout.LayoutParams(Define.ALBUM_THUMBNAIL_SIZE, Define.ALBUM_THUMBNAIL_SIZE));
 
             txtAlbum = (TextView) view.findViewById(R.id.txt_album);
             txtAlbumCount = (TextView) view.findViewById(R.id.txt_album_count);
@@ -47,9 +48,10 @@ public class ImageAlbumListAdapter
         }
     }
 
-    public ImageAlbumListAdapter(List<Album> albumlist, ArrayList<String> path) {
+    public ImageAlbumListAdapter(List<Album> albumlist, ArrayList<String> path, int pickCount) {
         this.albumlist = albumlist;
         this.path = path;
+        this.pickCount = pickCount;
     }
 
     @Override
@@ -78,7 +80,7 @@ public class ImageAlbumListAdapter
                         .with(holder.imgAlbum.getContext())
                         .load(thumPath)
                         .asBitmap()
-                        .override(Define.ALBUM_THUMNAIL_SIZE, Define.ALBUM_THUMNAIL_SIZE)
+                        .override(Define.ALBUM_THUMBNAIL_SIZE, Define.ALBUM_THUMBNAIL_SIZE)
                         .placeholder(R.drawable.loading_img)
                         .into(holder.imgAlbum);
             } else {
@@ -98,6 +100,7 @@ public class ImageAlbumListAdapter
                 Intent i = new Intent(holder.areaAlbum.getContext(), ImageGalleryPickerActivity.class);
                 i.putExtra("album", a);
                 i.putExtra("album_title", albumlist.get(position).bucketname);
+                i.putExtra("pickCount", pickCount);
                 i.putStringArrayListExtra(Define.INTENT_PATH, path);
                 ((Activity) holder.areaAlbum.getContext()).startActivityForResult(i, Define.ENTER_ALBUM_REQUEST_CODE);
             }

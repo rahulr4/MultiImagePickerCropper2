@@ -52,7 +52,7 @@ public class GalleryAdapter extends BaseAdapter {
 
 	/*public void selectAll(boolean selection) {
         for (int i = 0; i < data.size(); i++) {
-			data.get(i).isSeleted = selection;
+			data.get(i).isSelected = selection;
 
 		}
 		notifyDataSetChanged();
@@ -62,7 +62,7 @@ public class GalleryAdapter extends BaseAdapter {
         boolean isAllSelected = true;
 
 		for (int i = 0; i < data.size(); i++) {
-			if (!data.get(i).isSeleted) {
+			if (!data.get(i).isSelected) {
 				isAllSelected = false;
 				break;
 			}
@@ -75,7 +75,7 @@ public class GalleryAdapter extends BaseAdapter {
         boolean isAnySelected = false;
 
 		for (int i = 0; i < data.size(); i++) {
-			if (data.get(i).isSeleted) {
+			if (data.get(i).isSelected) {
 				isAnySelected = true;
 				break;
 			}
@@ -88,7 +88,7 @@ public class GalleryAdapter extends BaseAdapter {
         ArrayList<CustomGallery> dataT = new ArrayList<CustomGallery>();
 
 		for (int i = 0; i < data.size(); i++) {
-			if (data.get(i).isSeleted) {
+			if (data.get(i).isSelected) {
 				dataT.add(data.get(i));
 			}
 		}

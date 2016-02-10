@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class VideoAlbumListAdapter
         extends RecyclerView.Adapter<VideoAlbumListAdapter.ViewHolder> {
 
-    private ArrayList<GalleryPhotoAlbum> albumlist;
+    private ArrayList<GalleryPhotoAlbum> albumList;
     Context mContext;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -36,7 +36,7 @@ public class VideoAlbumListAdapter
             super(view);
             this.view = view;
             imgAlbum = (ImageView) view.findViewById(R.id.img_album);
-            imgAlbum.setLayoutParams(new RelativeLayout.LayoutParams(Define.ALBUM_THUMNAIL_SIZE, Define.ALBUM_THUMNAIL_SIZE));
+            imgAlbum.setLayoutParams(new RelativeLayout.LayoutParams(Define.ALBUM_THUMBNAIL_SIZE, Define.ALBUM_THUMBNAIL_SIZE));
             txtAlbum = (TextView) view.findViewById(R.id.txt_album);
             txtAlbumCount = (TextView) view.findViewById(R.id.txt_album_count);
             areaAlbum = (RelativeLayout) view.findViewById(R.id.area_album);
@@ -44,7 +44,7 @@ public class VideoAlbumListAdapter
     }
 
     public VideoAlbumListAdapter(Context mContext, ArrayList<GalleryPhotoAlbum> path) {
-        this.albumlist = path;
+        this.albumList = path;
         this.mContext = mContext;
     }
 
@@ -59,14 +59,14 @@ public class VideoAlbumListAdapter
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         holder.imgAlbum.setVisibility(View.GONE);
-        holder.areaAlbum.setTag(albumlist.get(position));
-        holder.txtAlbum.setText(albumlist.get(position).getBucketName());
-        holder.txtAlbumCount.setText(albumlist.get(position).getTotalCount() + "");
+        holder.areaAlbum.setTag(albumList.get(position));
+        holder.txtAlbum.setText(albumList.get(position).getBucketName());
+        holder.txtAlbumCount.setText(albumList.get(position).getTotalCount() + "");
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, VideoAlbumGalleryActivity.class);
-                intent.putExtra("bucketName", albumlist.get(position).getBucketName());
+                intent.putExtra("bucketName", albumList.get(position).getBucketName());
 
                 mContext.startActivity(intent);
             }
@@ -75,7 +75,7 @@ public class VideoAlbumListAdapter
 
     @Override
     public int getItemCount() {
-        return albumlist.size();
+        return albumList.size();
     }
 
 

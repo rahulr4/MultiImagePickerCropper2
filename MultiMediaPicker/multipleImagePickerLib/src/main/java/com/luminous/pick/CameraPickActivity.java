@@ -31,6 +31,7 @@ import com.luminous.pick.controller.MediaSingleTon;
 import com.luminous.pick.utils.BitmapDecoder;
 import com.luminous.pick.utils.CameraUtils;
 import com.luminous.pick.utils.ViewPagerSwipeLess;
+import com.sangcomz.fishbun.define.Define;
 
 import java.io.File;
 import java.io.IOException;
@@ -136,7 +137,7 @@ public class CameraPickActivity extends Activity {
                         allPath[i] = mArrayList.get(i).sdcardPath;
                     }
 
-                    Intent data = new Intent().putExtra("all_path", allPath);
+                    Intent data = new Intent().putExtra(Define.INTENT_PATH, allPath);
                     setResult(RESULT_OK, data);
                     finish();
                 } else {

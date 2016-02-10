@@ -405,7 +405,7 @@ public class VideoPickActivity extends AppCompatActivity {
                     allPath[i] = mArrayList.get(i).sdcardPath;
                 }
 
-                Intent data = new Intent().putExtra("all_path", allPath);
+                Intent data = new Intent().putExtra(Define.INTENT_PATH, allPath);
                 setResult(RESULT_OK, data);
                 finish();
             } else {

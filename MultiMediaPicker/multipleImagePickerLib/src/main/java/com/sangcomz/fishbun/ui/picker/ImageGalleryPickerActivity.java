@@ -9,22 +9,23 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.GridView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.luminous.pick.R;
+import com.msupport.MSupport;
+import com.msupport.MSupportConstants;
 import com.sangcomz.fishbun.adapter.ImageGalleryGridAdapter;
 import com.sangcomz.fishbun.bean.Album;
-import com.sangcomz.fishbun.bean.ImageBean;
-import com.sangcomz.fishbun.bean.PickedImageBean;
+import com.sangcomz.fishbun.bean.MediaObject;
+import com.sangcomz.fishbun.bean.MediaType;
 import com.sangcomz.fishbun.define.Define;
-import com.sangcomz.fishbun.permission.PermissionCheck;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,17 +33,14 @@ import java.util.ArrayList;
 
 public class ImageGalleryPickerActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private ArrayList<PickedImageBean> pickedImageBeans;
-    private PickerController pickerController;
+    private GridView gridView;
+    private ArrayList<MediaObject> mGalleryImageArrayList = new ArrayList<>();
     private Album a;
-    //    boolean stop = false;
-    private ImageBean[] imageBeans;
-    PermissionCheck permissionCheck;
 
     ImageGalleryGridAdapter adapter;
 
     private String pathDir = "";
+    private int pickCount;
 
     @Override
     protected void onDestroy() {
@@ -62,25 +60,14 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         a = (Album) getIntent().getSerializableExtra("album");
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
-        recyclerView.setLayoutManager(gridLayoutManager);
-        pickedImageBeans = new ArrayList<>();
+        getSupportActionBar().setTitle(a.bucketname);
+        pickCount = getIntent().getIntExtra("pickCount", 1);
+        gridView = (GridView) findViewById(R.id.gridview);
 
-        pickerController = new PickerController(this, getSupportActionBar(), recyclerView, a.bucketname);
-
-        ArrayList<String> path = getIntent().getStringArrayListExtra(Define.INTENT_PATH);
-        if (path != null) {
-            for (int i = 0; i < path.size(); i++) {
-                pickedImageBeans.add(new PickedImageBean(i + 1, path.get(i), -1));
-            }
-        }
-        pickerController.setActionbarTitle(pickedImageBeans.size());
-        imageBeans = new ImageBean[a.counter];
-
-        permissionCheck = new PermissionCheck(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (permissionCheck.CheckStoragePermission())
+            boolean isStoragePermissionGiven = MSupport.checkPermissionWithRationale(ImageGalleryPickerActivity.this,
+                    null, MSupportConstants.WRITE_EXTERNAL_STORAGE, MSupportConstants.REQUEST_STORAGE_READ_WRITE);
+            if (isStoragePermissionGiven)
                 new DisplayImage().execute();
         } else
             new DisplayImage().execute();
@@ -102,13 +89,13 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_ok) {
-            if (pickedImageBeans.size() == 0) {
-                Toast.makeText(this, getString(R.string.msg_no_slected), Toast.LENGTH_SHORT).show();
-//                Snackbar.make(recyclerView, getString(R.string.msg_no_slected), Snackbar.LENGTH_SHORT).show();
+            if (mGalleryImageArrayList.size() == 0) {
+                Snackbar.make(gridView, getString(R.string.msg_no_slected), Snackbar.LENGTH_SHORT).show();
             } else {
                 ArrayList<String> path = new ArrayList<>();
-                for (int i = 0; i < pickedImageBeans.size(); i++) {
-                    path.add(pickedImageBeans.get(i).getImgPath());
+                for (int i = 0; i < mGalleryImageArrayList.size(); i++) {
+                    if (mGalleryImageArrayList.get(i).isSelected)
+                        path.add(mGalleryImageArrayList.get(i).getPath());
                 }
                 Intent i = new Intent();
                 i.putStringArrayListExtra(Define.INTENT_PATH, path);
@@ -128,7 +115,7 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
             super.onPreExecute();
             Thread t = new Thread(new Runnable() {
                 public void run() {
-                    getAllMediaThumbnailsPath(a.bucketid);
+
                 }
             });
             t.start();
@@ -136,12 +123,7 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            boolean flag = true;
-            while (flag) {
-                if (imageBeans[0] != null && imageBeans[0].getImgPath().length() > 0) {
-                    flag = false;
-                }
-            }
+            getAllMediaThumbnailsPath(a.bucketid);
             return true;
         }
 
@@ -151,9 +133,9 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
             super.onPostExecute(result);
             if (result != null) {
                 if (result) {
-                    adapter = new ImageGalleryGridAdapter(getApplicationContext(),
-                            imageBeans, pickedImageBeans, pickerController, getPathDir());
-                    recyclerView.setAdapter(adapter);
+                    adapter = new ImageGalleryGridAdapter(ImageGalleryPickerActivity.this,
+                            mGalleryImageArrayList, getPathDir(), pickCount, getSupportActionBar(), a.bucketname);
+                    gridView.setAdapter(adapter);
                 }
             }
         }
@@ -162,18 +144,15 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case Define.PERMISSION_STORAGE: {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
+        switch (requestCode) {
+            case MSupportConstants.REQUEST_STORAGE_READ_WRITE: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     new DisplayImage().execute();
-                    // permission was granted, yay! do the
-                    // calendar task you need to do.
                 } else {
-                    permissionCheck.showPermissionDialog(recyclerView);
+                    Toast.makeText(ImageGalleryPickerActivity.this, "Storage permission not granted", Toast.LENGTH_SHORT).show();
                     finish();
                 }
-                return;
             }
         }
     }
@@ -199,34 +178,31 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
         if (c != null) {
 
             c.moveToFirst();
-
             setPathDir(c.getString(c.getColumnIndex(MediaStore.Images.Media.DATA)), c.getString(c.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)));
             int position = 0;
             while (true) {
                 path = c.getString(c.getColumnIndex(MediaStore.Images.Thumbnails.DATA));
+                long creationDate = getCreationDate(path);
                 if (c.isLast()) {
-                    imageBeans[position] = new ImageBean(-1, path);
+                    MediaObject mediaObject = new MediaObject(c.getInt(0),
+                            path, MediaType.PHOTO, creationDate);
+                    mGalleryImageArrayList.add(mediaObject);
+
                     c.close();
                     break;
                 } else {
-                    imageBeans[position++] = new ImageBean(-1, path);
+                    MediaObject mediaObject = new MediaObject(c.getInt(0),
+                            path, MediaType.PHOTO, creationDate);
+                    mGalleryImageArrayList.add(mediaObject);
                     c.moveToNext();
                 }
             }
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Define.TAKE_A_PICK_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                startFileMediaScan(pickerController.getSavePath());
-                adapter.addImage(pickerController.getSavePath());
-                setResult(Define.ADD_PHOTO_REQUEST_CODE);
-            } else {
-                new File(pickerController.getSavePath()).delete();
-            }
-        }
+    private static long getCreationDate(String filePath) {
+        File file = new File(filePath);
+        return file.lastModified();
     }
 
     //MediaScanning
@@ -245,4 +221,5 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
                     Environment.DIRECTORY_PICTURES).getAbsolutePath();
         return pathDir;
     }
+
 }

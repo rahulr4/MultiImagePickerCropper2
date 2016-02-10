@@ -7,7 +7,6 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 
 public enum ImageOption {
 
-
     GALLERY_OPTIONS(new DisplayImageOptions.Builder()
             .imageScaleType(ImageScaleType.EXACTLY)
             .bitmapConfig(Bitmap.Config.RGB_565)
@@ -27,5 +26,4 @@ public enum ImageOption {
 
         this.displayImageOptions = displayImageOptions;
     }
-
 }

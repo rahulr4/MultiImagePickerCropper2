@@ -16,12 +16,14 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.luminous.pick.R;
+import com.msupport.MSupport;
+import com.msupport.MSupportConstants;
 import com.sangcomz.fishbun.ItemDecoration.DividerItemDecoration;
 import com.sangcomz.fishbun.bean.GalleryPhotoAlbum;
 import com.sangcomz.fishbun.define.Define;
-import com.sangcomz.fishbun.permission.PermissionCheck;
 import com.sangcomz.fishbun.videomodule.adapter.VideoAlbumListAdapter;
 
 import java.util.ArrayList;
@@ -30,7 +32,6 @@ import java.util.ArrayList;
 public class VideoAlbumActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private PermissionCheck permissionCheck;
     private RelativeLayout noAlbum;
     private ArrayList<GalleryPhotoAlbum> arrayListAlbums = new ArrayList<>();
 
@@ -51,10 +52,11 @@ public class VideoAlbumActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        permissionCheck = new PermissionCheck(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (permissionCheck.CheckStoragePermission())
+            boolean isStoragePermissionGiven = MSupport.checkPermissionWithRationale(VideoAlbumActivity.this,
+                    null, MSupportConstants.WRITE_EXTERNAL_STORAGE, MSupportConstants.REQUEST_STORAGE_READ_WRITE);
+            if (isStoragePermissionGiven)
                 new GetVideoListAsync().execute();
         } else
             new GetVideoListAsync().execute();
@@ -67,8 +69,6 @@ public class VideoAlbumActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 setResult(RESULT_OK, data);
                 finish();
-            } else if (resultCode == Define.ADD_PHOTO_REQUEST_CODE) {
-                new GetVideoListAsync().execute();
             }
         }
     }
@@ -76,18 +76,15 @@ public class VideoAlbumActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case Define.PERMISSION_STORAGE: {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
+        switch (requestCode) {
+            case MSupportConstants.REQUEST_STORAGE_READ_WRITE: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     new GetVideoListAsync().execute();
-                    // permission was granted, yay! do the
-                    // calendar task you need to do.
                 } else {
-                    permissionCheck.showPermissionDialog(recyclerView);
+                    Toast.makeText(VideoAlbumActivity.this, "Storage permission not granted", Toast.LENGTH_SHORT).show();
                     finish();
                 }
-                return;
             }
         }
     }

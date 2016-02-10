@@ -30,6 +30,7 @@ import com.luminous.pick.controller.MediaSingleTon;
 import com.luminous.pick.utils.BitmapDecoder;
 import com.luminous.pick.utils.CameraUtils;
 import com.luminous.pick.utils.ViewPagerSwipeLess;
+import com.sangcomz.fishbun.define.Define;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -156,7 +157,7 @@ public class MultipleImagePreviewActivity extends Activity {
                         allPath[i] = mArrayList.get(i).sdcardPath;
                     }
 
-                    Intent data = new Intent().putExtra("all_path", allPath);
+                    Intent data = new Intent().putExtra(Define.INTENT_PATH, allPath);
                     setResult(RESULT_OK, data);
                     finish();
                 } else {
@@ -232,7 +233,7 @@ public class MultipleImagePreviewActivity extends Activity {
                 dataT.clear();
             }
             if (requestCode == PICK_IMAGE) {
-                String[] all_path = data.getStringArrayExtra("all_path");
+                String[] all_path = data.getStringArrayExtra(Define.INTENT_PATH);
 
                 if (all_path != null) {
                     if (action.equals(Action.ACTION_PICK) && all_path.length > 0) {

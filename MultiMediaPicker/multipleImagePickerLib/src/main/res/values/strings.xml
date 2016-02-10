@@ -23,4 +23,7 @@
     <string name="delete">Delete</string>
     <string name="sd_card_not_avail">SD-Card not available.</string>
     <string name="done_caps">Done</string>
+
+    <string name="camera_permission_rationale">Please allow the app to use your camera so that we can take a picture for you.</string>
+    <string name="storage_permission_rationale">Please allow the app to view your gallery so that we can select a picture for you.</string>
 </resources>

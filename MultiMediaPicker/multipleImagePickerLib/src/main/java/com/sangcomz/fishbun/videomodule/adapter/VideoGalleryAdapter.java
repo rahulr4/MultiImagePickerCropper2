@@ -43,7 +43,7 @@ public class VideoGalleryAdapter extends BaseAdapter {
         ArrayList<String> dataT = new ArrayList<String>();
 
         for (int i = 0; i < mediaObjectArrayList.size(); i++) {
-            if (mediaObjectArrayList.get(i).isSeleted) {
+            if (mediaObjectArrayList.get(i).isSelected) {
                 dataT.add(mediaObjectArrayList.get(i).getPath());
             }
         }
@@ -100,20 +100,20 @@ public class VideoGalleryAdapter extends BaseAdapter {
         holder.selectIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mediaObjectArrayList.get(position).isSeleted = !mediaObjectArrayList.get(position).isSeleted;
-                holder.selectIv.setChecked(mediaObjectArrayList.get(position).isSeleted);
+                mediaObjectArrayList.get(position).isSelected = !mediaObjectArrayList.get(position).isSelected;
+                holder.selectIv.setChecked(mediaObjectArrayList.get(position).isSelected);
             }
         });
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mediaObjectArrayList.get(position).isSeleted = !mediaObjectArrayList.get(position).isSeleted;
-                holder.selectIv.setChecked(mediaObjectArrayList.get(position).isSeleted);
+                mediaObjectArrayList.get(position).isSelected = !mediaObjectArrayList.get(position).isSelected;
+                holder.selectIv.setChecked(mediaObjectArrayList.get(position).isSelected);
             }
         });
 
-        holder.selectIv.setChecked(mediaObjectArrayList.get(position).isSeleted);
+        holder.selectIv.setChecked(mediaObjectArrayList.get(position).isSelected);
 
         if (isFirstTime) {
             /*

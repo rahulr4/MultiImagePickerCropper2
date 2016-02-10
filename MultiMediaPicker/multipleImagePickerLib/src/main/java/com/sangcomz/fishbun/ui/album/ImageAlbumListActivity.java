@@ -1,7 +1,6 @@
 package com.sangcomz.fishbun.ui.album;
 
 import android.content.ContentResolver;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -17,12 +16,15 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
+
 import com.luminous.pick.R;
+import com.msupport.MSupport;
+import com.msupport.MSupportConstants;
 import com.sangcomz.fishbun.ItemDecoration.DividerItemDecoration;
 import com.sangcomz.fishbun.adapter.ImageAlbumListAdapter;
 import com.sangcomz.fishbun.bean.Album;
 import com.sangcomz.fishbun.define.Define;
-import com.sangcomz.fishbun.permission.PermissionCheck;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +32,12 @@ import java.util.List;
 
 public class ImageAlbumListActivity extends AppCompatActivity {
 
-    private List<Album> albumlist = new ArrayList<>();
+    private List<Album> albumList = new ArrayList<>();
     private RecyclerView recyclerView;
     private ImageAlbumListAdapter adapter;
     private List<String> thumbList;
-    private PermissionCheck permissionCheck;
-
     private RelativeLayout noAlbum;
+    private int pickCount;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,44 +55,28 @@ public class ImageAlbumListActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        permissionCheck = new PermissionCheck(this);
 
+        pickCount = getIntent().getIntExtra("pickCount", 1);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (permissionCheck.CheckStoragePermission())
+            boolean isStoragePermissionGiven = MSupport.checkPermissionWithRationale(ImageAlbumListActivity.this,
+                    null, MSupportConstants.WRITE_EXTERNAL_STORAGE, MSupportConstants.REQUEST_STORAGE_READ_WRITE);
+            if (isStoragePermissionGiven)
                 new DisplayImage().execute();
         } else
             new DisplayImage().execute();
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Define.ENTER_ALBUM_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                setResult(RESULT_OK, data);
-                finish();
-            } else if (resultCode == Define.ADD_PHOTO_REQUEST_CODE) {
-                new DisplayImage().execute();
-            }
-        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case Define.PERMISSION_STORAGE: {
+            case MSupportConstants.REQUEST_STORAGE_READ_WRITE: {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                     new DisplayImage().execute();
-                    // permission was granted, yay! do the
-                    // calendar task you need to do.
                 } else {
-                    permissionCheck.showPermissionDialog(recyclerView);
+                    Toast.makeText(ImageAlbumListActivity.this, "Storage permission not granted", Toast.LENGTH_SHORT).show();
                     finish();
                 }
-                return;
             }
         }
     }
@@ -118,12 +103,12 @@ public class ImageAlbumListActivity extends AppCompatActivity {
 
             int bucketcolumnid = imagecursor
                     .getColumnIndex(MediaStore.Images.Media.BUCKET_ID);
-            albumlist = new ArrayList<Album>();
+            albumList = new ArrayList<Album>();
             Album totalAlbum = new Album();
             totalAlbum.bucketid = 0;
             totalAlbum.bucketname = getString(R.string.str_all_view);
             totalAlbum.counter = 0;
-            albumlist.add(totalAlbum);
+            albumList.add(totalAlbum);
             int totalCounter = 0;
             while (imagecursor.moveToNext()) {
                 totalCounter++;
@@ -133,20 +118,20 @@ public class ImageAlbumListActivity extends AppCompatActivity {
                     album.bucketid = bucketid;
                     album.bucketname = imagecursor.getString(bucketColumn);
                     album.counter++;
-                    albumlist.add(album);
+                    albumList.add(album);
                     previousid = bucketid;
 
                 } else {
-                    if (albumlist.size() > 0)
-                        albumlist.get(albumlist.size() - 1).counter++;
+                    if (albumList.size() > 0)
+                        albumList.get(albumList.size() - 1).counter++;
                 }
                 if (imagecursor.isLast()) {
-                    albumlist.get(0).counter = totalCounter;
+                    albumList.get(0).counter = totalCounter;
                 }
             }
             imagecursor.close();
             if (totalCounter == 0) {
-                albumlist.clear();
+                albumList.clear();
                 return false;
             } else {
                 return true;
@@ -159,15 +144,11 @@ public class ImageAlbumListActivity extends AppCompatActivity {
             if (result) {
                 noAlbum.setVisibility(View.GONE);
 //                if (adapter == null) {
-                adapter = new ImageAlbumListAdapter(albumlist, getIntent().getStringArrayListExtra(Define.INTENT_PATH));
+                adapter = new ImageAlbumListAdapter(albumList,
+                        getIntent().getStringArrayListExtra(Define.INTENT_PATH), pickCount);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 new DisplayThumbnail().execute();
-//                }
-//                else {
-//                    adapter.notifyDataSetChanged();
-//                    new DisplayThumbnail().execute();
-//                }
             } else {
                 noAlbum.setVisibility(View.VISIBLE);
             }
@@ -184,8 +165,8 @@ public class ImageAlbumListActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
 
-            for (int i = 0; i < albumlist.size(); i++) {
-                Album album = albumlist.get(i);
+            for (int i = 0; i < albumList.size(); i++) {
+                Album album = albumList.get(i);
 
                 String path = getAllMediaThumbnailsPath(album.bucketid);
                 thumbList.add(path);
@@ -219,21 +200,25 @@ public class ImageAlbumListActivity extends AppCompatActivity {
         }
 
 
-        if (c.moveToNext()) {
-            selection = MediaStore.Images.Media._ID + " = ?";
-            String photoID = c.getString(c.getColumnIndex(MediaStore.Images.Media._ID));
-            selectionArgs = new String[]{photoID};
+        if (c != null) {
+            if (c.moveToNext()) {
+                selection = MediaStore.Images.Media._ID + " = ?";
+                String photoID = c.getString(c.getColumnIndex(MediaStore.Images.Media._ID));
+                selectionArgs = new String[]{photoID};
 
-            images = MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI;
-            Cursor cursor = getContentResolver().query(images, null,
-                    selection, selectionArgs, sort);
-            if (cursor != null && cursor.moveToNext()) {
-                path = c.getString(c.getColumnIndex(MediaStore.Images.Media.DATA));
-            } else
-                path = c.getString(c.getColumnIndex(MediaStore.Images.Media.DATA));
-            cursor.close();
-        } else {
-            Log.e("id", "from else");
+                images = MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI;
+                Cursor cursor = getContentResolver().query(images, null,
+                        selection, selectionArgs, sort);
+                if (cursor != null && cursor.moveToNext()) {
+                    path = c.getString(c.getColumnIndex(MediaStore.Images.Media.DATA));
+                } else
+                    path = c.getString(c.getColumnIndex(MediaStore.Images.Media.DATA));
+                if (cursor != null) {
+                    cursor.close();
+                }
+            } else {
+                Log.e("id", "from else");
+            }
         }
 
         c.close();

@@ -17,6 +17,8 @@ import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.sangcomz.fishbun.define.Define;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -39,7 +41,7 @@ public class CustomGalleryActivity extends Activity {
                 if (allPath.length > 10) {
                     showAlertDialog(CustomGalleryActivity.this, "Please select only 10 images at a time");
                 } else {
-                    Intent data = new Intent().putExtra("all_path", allPath);
+                    Intent data = new Intent().putExtra(Define.INTENT_PATH, allPath);
                     setResult(RESULT_OK, data);
                     finish();
                 }
@@ -66,7 +68,7 @@ public class CustomGalleryActivity extends Activity {
         public void onItemClick(AdapterView<?> l, View v, int position, long id) {
             CustomGallery item = adapter.getItem(position);
             String[] allPath = {item.sdcardPath};
-            Intent data = new Intent().putExtra("all_path", allPath);
+            Intent data = new Intent().putExtra(Define.INTENT_PATH, allPath);
             setResult(RESULT_OK, data);
             finish();
         }

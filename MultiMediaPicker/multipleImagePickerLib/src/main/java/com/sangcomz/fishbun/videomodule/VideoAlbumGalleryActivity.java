@@ -22,12 +22,14 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.luminous.pick.R;
+import com.msupport.MSupport;
+import com.msupport.MSupportConstants;
 import com.sangcomz.fishbun.bean.MediaObject;
 import com.sangcomz.fishbun.bean.MediaType;
 import com.sangcomz.fishbun.define.Define;
-import com.sangcomz.fishbun.permission.PermissionCheck;
 import com.sangcomz.fishbun.util.ProcessGalleryFile;
 import com.sangcomz.fishbun.videomodule.adapter.VideoGalleryAdapter;
 
@@ -40,7 +42,6 @@ import java.util.Set;
 
 public class VideoAlbumGalleryActivity extends AppCompatActivity {
 
-    private PermissionCheck permissionCheck;
     private RelativeLayout noAlbum;
     private ArrayList<MediaObject> mVideoArrayList = new ArrayList<>();
     private String bucketName;
@@ -63,49 +64,27 @@ public class VideoAlbumGalleryActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setBackgroundColor(Define.ACTIONBAR_COLOR);
 
-        permissionCheck = new PermissionCheck(this);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (permissionCheck.CheckStoragePermission())
+            boolean isStoragePermissionGiven = MSupport.checkPermissionWithRationale(VideoAlbumGalleryActivity.this,
+                    null, MSupportConstants.WRITE_EXTERNAL_STORAGE, MSupportConstants.REQUEST_STORAGE_READ_WRITE);
+            if (isStoragePermissionGiven)
                 new GetVideoListAsync().execute();
         } else
             new GetVideoListAsync().execute();
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Define.ENTER_ALBUM_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                setResult(RESULT_OK, data);
-                finish();
-            } else if (resultCode == Define.ADD_PHOTO_REQUEST_CODE) {
-                new GetVideoListAsync().execute();
-            }
-        } else if (requestCode == Define.TAKE_A_VIDEO_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                Uri uri = data.getData();
-
-                new GetVideoListAsync().execute();
-            }
-        }
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case Define.PERMISSION_STORAGE: {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
+        switch (requestCode) {
+            case MSupportConstants.REQUEST_STORAGE_READ_WRITE: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     new GetVideoListAsync().execute();
-                    // permission was granted, yay! do the
-                    // calendar task you need to do.
                 } else {
-                    permissionCheck.showPermissionDialog(mGridView);
+                    Toast.makeText(VideoAlbumGalleryActivity.this, "Storage permission not granted", Toast.LENGTH_SHORT).show();
                     finish();
                 }
-                return;
             }
         }
     }
@@ -266,7 +245,7 @@ public class VideoAlbumGalleryActivity extends AppCompatActivity {
                 if (allPath.length > mPickCount) {
                     Snackbar.make(findViewById(R.id.parent), "You can select only 1 video", Snackbar.LENGTH_SHORT).show();
                 } else {
-                    Intent data = new Intent().putExtra("all_path", allPath);
+                    Intent data = new Intent().putExtra(Define.INTENT_PATH, allPath);
                     setResult(RESULT_OK, data);
                     finish();
                 }
@@ -312,7 +291,7 @@ public class VideoAlbumGalleryActivity extends AppCompatActivity {
             Log.i("Inserted ", videoUriFromCamera != null ? videoUriFromCamera.getPath() : "");
             Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.parse("file://" + filePath));
-            startActivityForResult(intent, Define.TAKE_A_VIDEO_REQUEST_CODE);
+//            startActivityForResult(intent, Define.TAKE_A_VIDEO_REQUEST_CODE);
         } catch (Exception e) {
             e.printStackTrace();
             Snackbar.make(findViewById(R.id.parent), R.string.sd_card_not_avail, Snackbar.LENGTH_SHORT).show();

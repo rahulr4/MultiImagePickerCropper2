@@ -7,9 +7,10 @@ import android.os.Bundle;
 
 import com.luminous.pick.Action;
 import com.luminous.pick.CameraPickActivity;
-import com.luminous.pick.MultipleImagePreviewActivity;
 import com.luminous.pick.VideoPickActivity;
 import com.luminous.pick.utils.VideoQuality;
+import com.sangcomz.fishbun.define.Define;
+import com.sangcomz.fishbun.ui.album.ImageAlbumListActivity;
 import com.sangcomz.fishbun.videomodule.VideoAlbumActivity;
 
 /**
@@ -42,6 +43,7 @@ public class MediaFactory {
         private final Context mContext;
         int imageQuality = 100;
         private VideoQuality videoQuality = VideoQuality.HIGH_QUALITY;
+        private int pickCount = 1;
 
         public MediaBuilder(Context mContext) {
             this.mContext = mContext;
@@ -128,7 +130,7 @@ public class MediaFactory {
 
         /**
          * Sets the cropping feature enabled or disabled.
-         * Works only for image
+         * Works only for camera image
          *
          * @return current instance of MediaBuilder
          */
@@ -144,6 +146,13 @@ public class MediaFactory {
          */
         public MediaBuilder getSingleMediaFiles() {
             this.action = Action.ACTION_PICK;
+            return this;
+        }
+
+        public MediaBuilder setPickCount(int count) {
+            if (count <= 0)
+                count = 1;
+            this.pickCount = count;
             return this;
         }
 
@@ -175,7 +184,6 @@ public class MediaFactory {
                 intent = new Intent(mediaBuilder.mContext, VideoAlbumActivity.class);
             } else {
                 intent = new Intent(mediaBuilder.mContext, VideoPickActivity.class);
-
             }
 
             intent.putExtra("from", mediaBuilder.fromGallery);
@@ -186,11 +194,14 @@ public class MediaFactory {
         } else {
             bundle.putBoolean("crop", mediaBuilder.isCrop);
             bundle.putInt("imageQuality", mediaBuilder.imageQuality);
+            bundle.putInt("pickCount", mediaBuilder.pickCount);
             if (mediaBuilder.fromGallery) {
-                intent = new Intent(mediaBuilder.mContext, MultipleImagePreviewActivity.class);
+
+                intent = new Intent(mediaBuilder.mContext, ImageAlbumListActivity.class);
                 intent.setAction(mediaBuilder.action);
                 intent.putExtras(bundle);
                 ((Activity) mediaBuilder.mContext).startActivityForResult(intent, GALLERY_APP);
+
             } else {
                 intent = new Intent(mediaBuilder.mContext, CameraPickActivity.class);
                 intent.setAction(mediaBuilder.action);
@@ -206,7 +217,7 @@ public class MediaFactory {
         String[] all_path = new String[0];
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GALLERY_APP || requestCode == CAMERA_APP) {
-                all_path = data.getStringArrayExtra("all_path");
+                all_path = data.getStringArrayExtra(Define.INTENT_PATH);
 
             }
         }
