@@ -39,7 +39,7 @@ public class VideoGalleryAdapter extends BaseAdapter {
         this.isFirstTime = firstTime;
     }
 
-    public String[] getSelectedStringArray() {
+    public ArrayList<String> getSelectedStringArray() {
         ArrayList<String> dataT = new ArrayList<String>();
 
         for (int i = 0; i < mediaObjectArrayList.size(); i++) {
@@ -48,7 +48,7 @@ public class VideoGalleryAdapter extends BaseAdapter {
             }
         }
 
-        return dataT.toArray(new String[dataT.size()]);
+        return dataT;
     }
     // Get max available VM memory, exceeding this amount will throw an
     // OutOfMemory exception. Stored in kilobytes as LruCache takes an

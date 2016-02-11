@@ -1,6 +1,5 @@
 package com.luminous.pick;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,17 +11,19 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -47,7 +48,7 @@ import static android.os.Environment.MEDIA_MOUNTED;
 /**
  * Created by rahul on 22/5/15.
  */
-public class CameraPickActivity extends Activity {
+public class CameraPickActivity extends AppCompatActivity {
     private static final int ACTION_REQUEST_CAMERA = 201;
     private static AlertDialog alertDialog;
     String action = Action.ACTION_PICK;
@@ -57,7 +58,7 @@ public class CameraPickActivity extends Activity {
     private ImageListRecycleAdapter mImageListAdapter;
     private Uri userPhotoUri;
     private int imageQuality = 100;
-    private FrameLayout mDone;
+    private boolean isCrop;
 
     public static void showAlertDialog(Context mContext, String text) {
 
@@ -77,6 +78,12 @@ public class CameraPickActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_preview);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setBackgroundColor(Define.ACTIONBAR_COLOR);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mPager = (ViewPagerSwipeLess) findViewById(R.id.pager);
         dataT = new HashMap<String, CustomGallery>();
         adapter = new CustomPagerAdapter(dataT);
@@ -92,66 +99,8 @@ public class CameraPickActivity extends Activity {
             }
         });
 
-        findViewById(R.id.navigate_crop).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (adapter != null && adapter.getCount() > 0) {
-                    String imagePath = mImageListAdapter.mItems.get(mPager.getCurrentItem()).sdcardPath;
-
-                    Uri destination = null;
-                    try {
-                        destination = CameraUtils.createImageFile(CameraPickActivity.this);
-                        Crop.of((Uri.parse("file://" + imagePath)), destination).
-                                asSquare().start(CameraPickActivity.this);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-
-        findViewById(R.id.add_image_navigate).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openCamera();
-            }
-        });
-
-        findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent data2 = new Intent();
-                setResult(RESULT_CANCELED, data2);
-                finish();
-            }
-        });
-        mDone = (FrameLayout) findViewById(R.id.btn_done);
-        ((TextView) findViewById(R.id.btn_done_text)).setText(getString(R.string.crop__done));
-        mDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ArrayList<CustomGallery> mArrayList = new ArrayList<CustomGallery>(dataT.values());
-                if (mArrayList.size() > 0) {
-                    String[] allPath = new String[mArrayList.size()];
-                    for (int i = 0; i < allPath.length; i++) {
-                        allPath[i] = mArrayList.get(i).sdcardPath;
-                    }
-
-                    Intent data = new Intent().putExtra(Define.INTENT_PATH, allPath);
-                    setResult(RESULT_OK, data);
-                    finish();
-                } else {
-                    showAlertDialog(CameraPickActivity.this, "Please select an image.");
-                }
-            }
-        });
-
         try {
-            boolean isCrop = getIntent().getExtras().getBoolean("crop");
-            if (isCrop)
-                findViewById(R.id.navigate_crop).setVisibility(View.VISIBLE);
-            else
-                findViewById(R.id.navigate_crop).setVisibility(View.GONE);
+            isCrop = getIntent().getExtras().getBoolean("crop");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -226,8 +175,6 @@ public class CameraPickActivity extends Activity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mDone.setEnabled(false);
-            mDone.setClickable(false);
         }
 
         @Override
@@ -249,8 +196,6 @@ public class CameraPickActivity extends Activity {
             super.onPostExecute(aVoid);
             adapter.customNotify(dataT);
             mImageListAdapter.customNotify(dataT);
-            mDone.setEnabled(true);
-            mDone.setClickable(true);
         }
     }
 
@@ -360,5 +305,54 @@ public class CameraPickActivity extends Activity {
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((LinearLayout) object);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_camera, menu);
+        menu.findItem(R.id.action_crop).setVisible(isCrop);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_ok) {
+            ArrayList<CustomGallery> mArrayList = new ArrayList<>(dataT.values());
+            if (mArrayList.size() > 0) {
+                ArrayList<String> allPath = new ArrayList<>();
+                for (int i = 0; i < mArrayList.size(); i++) {
+                    allPath.add(mArrayList.get(i).sdcardPath);
+                }
+
+                Intent data = new Intent().putStringArrayListExtra(Define.INTENT_PATH, allPath);
+                setResult(RESULT_OK, data);
+                finish();
+            } else {
+                showAlertDialog(CameraPickActivity.this, "Please select an image.");
+            }
+        } else if (id == android.R.id.home) {
+            Intent data = new Intent();
+            setResult(RESULT_CANCELED, data);
+            finish();
+        } else if (id == R.id.action_camera) {
+            openCamera();
+        } else if (id == R.id.action_crop) {
+            if (adapter != null && adapter.getCount() > 0) {
+                String imagePath = mImageListAdapter.mItems.get(mPager.getCurrentItem()).sdcardPath;
+
+                Uri destination = null;
+                try {
+                    destination = CameraUtils.createImageFile(CameraPickActivity.this);
+                    Crop.of((Uri.parse("file://" + imagePath)), destination).
+                            asSquare().start(CameraPickActivity.this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

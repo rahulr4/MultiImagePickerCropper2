@@ -1,6 +1,8 @@
 package com.sangcomz.fishbun.ui.album;
 
+import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -185,13 +187,13 @@ public class ImageAlbumListActivity extends AppCompatActivity {
     private String getAllMediaThumbnailsPath(long id) {
         String path = "";
         String selection = MediaStore.Images.Media.BUCKET_ID + " = ?";
-        String bucketid = String.valueOf(id);
+        String bucketId = String.valueOf(id);
         String sort = MediaStore.Images.Thumbnails._ID + " DESC";
-        String[] selectionArgs = {bucketid};
+        String[] selectionArgs = {bucketId};
 
         Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         Cursor c;
-        if (!bucketid.equals("0")) {
+        if (!bucketId.equals("0")) {
             c = getContentResolver().query(images, null,
                     selection, selectionArgs, sort);
         } else {
@@ -221,7 +223,9 @@ public class ImageAlbumListActivity extends AppCompatActivity {
             }
         }
 
-        c.close();
+        if (c != null) {
+            c.close();
+        }
         return path;
     }
 
@@ -229,11 +233,23 @@ public class ImageAlbumListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                Intent i = new Intent();
+                setResult(RESULT_CANCELED, i);
                 finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Define.ENTER_ALBUM_REQUEST_CODE
+                && resultCode == Activity.RESULT_OK) {
+            Intent i = new Intent();
+            i.putStringArrayListExtra(Define.INTENT_PATH, data.getStringArrayListExtra(Define.INTENT_PATH));
+            setResult(RESULT_OK, i);
+            finish();
+        }
+    }
 }

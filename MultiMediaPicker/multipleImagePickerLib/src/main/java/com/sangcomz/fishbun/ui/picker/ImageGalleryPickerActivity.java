@@ -89,14 +89,14 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_ok) {
-            if (mGalleryImageArrayList.size() == 0) {
+            ArrayList<String> path = new ArrayList<>();
+            for (int i = 0; i < mGalleryImageArrayList.size(); i++) {
+                if (mGalleryImageArrayList.get(i).isSelected)
+                    path.add(mGalleryImageArrayList.get(i).getPath());
+            }
+            if (path.isEmpty()) {
                 Snackbar.make(gridView, getString(R.string.msg_no_slected), Snackbar.LENGTH_SHORT).show();
             } else {
-                ArrayList<String> path = new ArrayList<>();
-                for (int i = 0; i < mGalleryImageArrayList.size(); i++) {
-                    if (mGalleryImageArrayList.get(i).isSelected)
-                        path.add(mGalleryImageArrayList.get(i).getPath());
-                }
                 Intent i = new Intent();
                 i.putStringArrayListExtra(Define.INTENT_PATH, path);
                 setResult(RESULT_OK, i);

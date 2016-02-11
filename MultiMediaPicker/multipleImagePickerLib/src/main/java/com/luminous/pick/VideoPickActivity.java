@@ -117,7 +117,7 @@ public class VideoPickActivity extends AppCompatActivity {
         /*if (getIntent().getExtras().getBoolean("from"))
             openVideoFromGallery();
         else*/
-            openVideoFromCamera();
+        openVideoFromCamera();
     }
 
     private void showVideoChooserDialog() {
@@ -398,14 +398,14 @@ public class VideoPickActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_ok) {
-            ArrayList<CustomGallery> mArrayList = new ArrayList<CustomGallery>(dataT.values());
+            ArrayList<CustomGallery> mArrayList = new ArrayList<>(dataT.values());
             if (mArrayList.size() > 0) {
-                String[] allPath = new String[mArrayList.size()];
-                for (int i = 0; i < allPath.length; i++) {
-                    allPath[i] = mArrayList.get(i).sdcardPath;
+                ArrayList<String> allPath = new ArrayList<>();
+                for (int i = 0; i < mArrayList.size(); i++) {
+                    allPath.add(mArrayList.get(i).sdcardPath);
                 }
 
-                Intent data = new Intent().putExtra(Define.INTENT_PATH, allPath);
+                Intent data = new Intent().putStringArrayListExtra(Define.INTENT_PATH, allPath);
                 setResult(RESULT_OK, data);
                 finish();
             } else {

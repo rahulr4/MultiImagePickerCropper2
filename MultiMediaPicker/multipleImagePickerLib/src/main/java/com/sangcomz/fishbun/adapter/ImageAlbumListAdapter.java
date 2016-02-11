@@ -41,15 +41,14 @@ public class ImageAlbumListAdapter
             super(view);
             imgAlbum = (ImageView) view.findViewById(R.id.img_album);
             imgAlbum.setLayoutParams(new RelativeLayout.LayoutParams(Define.ALBUM_THUMBNAIL_SIZE, Define.ALBUM_THUMBNAIL_SIZE));
-
             txtAlbum = (TextView) view.findViewById(R.id.txt_album);
             txtAlbumCount = (TextView) view.findViewById(R.id.txt_album_count);
             areaAlbum = (RelativeLayout) view.findViewById(R.id.area_album);
         }
     }
 
-    public ImageAlbumListAdapter(List<Album> albumlist, ArrayList<String> path, int pickCount) {
-        this.albumlist = albumlist;
+    public ImageAlbumListAdapter(List<Album> albumList, ArrayList<String> path, int pickCount) {
+        this.albumlist = albumList;
         this.path = path;
         this.pickCount = pickCount;
     }

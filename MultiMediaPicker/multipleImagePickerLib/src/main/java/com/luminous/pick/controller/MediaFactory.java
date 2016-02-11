@@ -13,6 +13,8 @@ import com.sangcomz.fishbun.define.Define;
 import com.sangcomz.fishbun.ui.album.ImageAlbumListActivity;
 import com.sangcomz.fishbun.videomodule.VideoAlbumActivity;
 
+import java.util.ArrayList;
+
 /**
  * Class to initiate media picker
  * Created by rahul on 24/6/15.
@@ -213,11 +215,11 @@ public class MediaFactory {
         return mMediaFactory;
     }
 
-    public String[] onActivityResult(int requestCode, int resultCode, Intent data) {
-        String[] all_path = new String[0];
+    public ArrayList<String> onActivityResult(int requestCode, int resultCode, Intent data) {
+        ArrayList<String> all_path = new ArrayList<>();
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GALLERY_APP || requestCode == CAMERA_APP) {
-                all_path = data.getStringArrayExtra(Define.INTENT_PATH);
+                all_path = data.getStringArrayListExtra(Define.INTENT_PATH);
 
             }
         }

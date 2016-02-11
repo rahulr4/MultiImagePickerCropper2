@@ -239,13 +239,13 @@ public class VideoAlbumGalleryActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_ok) {
-            String[] allPath = mAdapter.getSelectedStringArray();
-            if (allPath.length > 0) {
+            ArrayList<String> allPath = mAdapter.getSelectedStringArray();
+            if (!allPath.isEmpty()) {
 
-                if (allPath.length > mPickCount) {
+                if (allPath.size() > mPickCount) {
                     Snackbar.make(findViewById(R.id.parent), "You can select only 1 video", Snackbar.LENGTH_SHORT).show();
                 } else {
-                    Intent data = new Intent().putExtra(Define.INTENT_PATH, allPath);
+                    Intent data = new Intent().putStringArrayListExtra(Define.INTENT_PATH, allPath);
                     setResult(RESULT_OK, data);
                     finish();
                 }

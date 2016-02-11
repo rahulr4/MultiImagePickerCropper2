@@ -11,6 +11,7 @@ import android.widget.ListView;
 import com.luminous.pick.CustomGallery;
 import com.luminous.pick.controller.MediaFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        String[] all_path = mediaFactory.onActivityResult(requestCode, resultCode, data);
+        ArrayList<String> all_path = mediaFactory.onActivityResult(requestCode, resultCode, data);
         for (String string : all_path) {
             CustomGallery item = new CustomGallery();
             item.sdcardPath = string;

@@ -108,9 +108,9 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
     private void performCheck(ViewHolder holder, int position) {
         if (selectedPositions.size() == pickCount && !mediaObjectArrayList.get(position).isSelected) {
             if (pickCount == 1)
-                Toast.makeText(mContext, "You can select only " + pickCount + " image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "You can select max " + pickCount + " image", Toast.LENGTH_SHORT).show();
             else
-                Toast.makeText(mContext, "You can select only " + pickCount + " images", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "You can select max " + pickCount + " images", Toast.LENGTH_SHORT).show();
         } else {
             if (!mediaObjectArrayList.get(position).isSelected) {
                 selectedPositions.add(position);
@@ -118,9 +118,9 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
                 selectedPositions.remove(position);
 
             mediaObjectArrayList.get(position).isSelected = !mediaObjectArrayList.get(position).isSelected;
-            holder.selectIv.setChecked(mediaObjectArrayList.get(position).isSelected);
             setActionbarTitle(getCount());
         }
+        holder.selectIv.setChecked(mediaObjectArrayList.get(position).isSelected);
     }
 
     public static class ViewHolder {
@@ -135,6 +135,6 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
         if (pickCount == 1)
             actionBar.setTitle(bucketTitle);
         else
-            actionBar.setTitle(bucketTitle + "(" + String.valueOf(total) + "/" + mediaObjectArrayList.size() + ")");
+            actionBar.setTitle(bucketTitle + " (" + selectedPositions.size() + "/" + String.valueOf(total) + ")");
     }
 }
