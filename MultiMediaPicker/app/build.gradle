@@ -17,10 +17,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+   
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-//    compile 'com.crop.multiple:multipleImagePickerLib:1.0.7'
+    //    compile 'com.crop.multiple:multipleImagePickerLib:1.0.7'
     compile project(':multipleImagePickerLib')
 }

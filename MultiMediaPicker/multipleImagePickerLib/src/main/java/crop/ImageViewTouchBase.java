@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2009 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package crop;
 
 import android.content.Context;
@@ -26,16 +10,13 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.widget.ImageView;
 
-/*
- * Modified from original in AOSP.
- */
 abstract class ImageViewTouchBase extends ImageView {
 
     private static final float SCALE_RATE = 1.25F;
 
     // This is the base transformation which is used to show the image
     // initially.  The current computation for this shows the image in
-    // it's entirety, letterboxing as needed.  One could choose to
+    // it's entirety, letter boxing as needed.  One could choose to
     // show the image as cropped instead.
     //
     // This matrix is recomputed when we go from the thumbnail image to
@@ -49,7 +30,7 @@ abstract class ImageViewTouchBase extends ImageView {
     // to the full size image.
     protected Matrix suppMatrix = new Matrix();
 
-    // This is the final matrix which is computed as the concatentation
+    // This is the final matrix which is computed as the concatenation
     // of the base matrix and the supplementary matrix.
     private final Matrix displayMatrix = new Matrix();
 
@@ -168,7 +149,7 @@ abstract class ImageViewTouchBase extends ImageView {
     public void setImageRotateBitmapResetBase(final RotateBitmap bitmap, final boolean resetSupp) {
         final int viewWidth = getWidth();
 
-        if (viewWidth <= 0)  {
+        if (viewWidth <= 0) {
             onLayoutRunnable = new Runnable() {
                 public void run() {
                     setImageRotateBitmapResetBase(bitmap, resetSupp);
@@ -208,7 +189,7 @@ abstract class ImageViewTouchBase extends ImageView {
         m.mapRect(rect);
 
         float height = rect.height();
-        float width  = rect.width();
+        float width = rect.width();
 
         float deltaX = 0, deltaY = 0;
 
@@ -274,7 +255,7 @@ abstract class ImageViewTouchBase extends ImageView {
             matrix.postConcat(bitmap.getRotateMatrix());
         }
         matrix.postScale(scale, scale);
-        matrix.postTranslate((viewWidth  - w * scale) / 2F, (viewHeight - h * scale) / 2F);
+        matrix.postTranslate((viewWidth - w * scale) / 2F, (viewHeight - h * scale) / 2F);
     }
 
     // Combine the base matrix and the supp matrix to make the final matrix
@@ -286,7 +267,7 @@ abstract class ImageViewTouchBase extends ImageView {
         return displayMatrix;
     }
 
-    public Matrix getUnrotatedMatrix(){
+    public Matrix getUnrotatedMatrix() {
         Matrix unrotated = new Matrix();
         getProperBaseMatrix(bitmapDisplayed, unrotated, false);
         unrotated.postConcat(suppMatrix);
@@ -298,7 +279,7 @@ abstract class ImageViewTouchBase extends ImageView {
             return 1F;
         }
 
-        float fw = (float) bitmapDisplayed.getWidth()  / (float) thisWidth;
+        float fw = (float) bitmapDisplayed.getWidth() / (float) thisWidth;
         float fh = (float) bitmapDisplayed.getHeight() / (float) thisHeight;
         return Math.max(fw, fh) * 4; // 400%
     }
