@@ -17,33 +17,11 @@ import com.luminous.pick.R;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Class to handle M support logic
- * Created by Rahul Gupta on 9/22/15.
- */
-
 public class MSupport {
 
-    /**
-     * @return true in case of M Device,
-     * false in case of below M devices
-     */
     public static boolean isMSupportDevice(Context ctx) {
         return Build.VERSION.SDK_INT >= MSupportConstants.SDK_VERSION;
     }
-
-
-    /**
-     * Method to check permissions set
-     *
-     * @param mActivity     Calling activity context
-     * @param fragment      Calling fragment instance
-     * @param permissionSet Permission set to check
-     * @param requestCode   request code
-     * @return true in case of permission is granted or pre marshmallow
-     * false in case of permission is not granted
-     * in case of false we have to request that permission
-     */
 
     @TargetApi(23)
     public static boolean checkPermission(final Activity mActivity, final Fragment fragment, String[] permissionSet,
@@ -94,18 +72,6 @@ public class MSupport {
             return true;
     }
 
-
-    /**
-     * Method to check single permission with rationale
-     *
-     * @param mActivity   Calling activity context
-     * @param fragment    Calling fragment instance
-     * @param permission  Permission to check
-     * @param requestCode request code
-     * @return true in case of permission is granted or pre marshmallow
-     * false in case of permission is not granted
-     * in case of false we have to request that permission
-     */
 
     @TargetApi(23)
     public static boolean checkPermissionWithRationale(final Activity mActivity, final Fragment fragment,

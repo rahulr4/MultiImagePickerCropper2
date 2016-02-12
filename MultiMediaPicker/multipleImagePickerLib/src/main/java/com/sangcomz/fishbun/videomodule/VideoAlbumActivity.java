@@ -164,13 +164,6 @@ public class VideoAlbumActivity extends AppCompatActivity {
         cur.close();
     }
 
-
-    /**
-     * video count find based on bucket name(Album name)
-     *
-     * @param bucketName
-     * @return
-     */
     private int videoCountByAlbum(String bucketName) {
 
         try {

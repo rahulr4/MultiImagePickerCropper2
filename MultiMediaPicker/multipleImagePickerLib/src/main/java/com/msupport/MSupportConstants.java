@@ -2,13 +2,7 @@ package com.msupport;
 
 import android.Manifest;
 
-/**
- * Created by jayant on 9/17/15.
- */
 public class MSupportConstants {
-    /**
-     * This Constants for SDK needed to be compare with
-     */
     public static final int SDK_VERSION = 23;
     public static final int CAMERA_PERMISSIONS_REQUEST_CODE = 123;
     public static final int GPS_PERMISSION_REQUEST_CODE = 456;
@@ -17,9 +11,6 @@ public class MSupportConstants {
     public static final int MY_PERMISSION_LOCATION = 4;
     public static final int MY_STORAGE_DB = 5;
 
-    /**
-     * marshmallow permission list constants
-     */
     public static final String SEND_SMS = Manifest.permission.SEND_SMS;
     public static final String CAMERA = Manifest.permission.CAMERA;
     public static final String CALL_PHONE = Manifest.permission.CALL_PHONE;

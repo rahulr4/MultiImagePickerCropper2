@@ -89,11 +89,6 @@ public class VideoAlbumGalleryActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * find video list for given bucket name
-     *
-     * @param bucketName
-     */
     private void getAlbumVideos(String bucketName) {
         try {
             final String orderBy = MediaStore.Video.Media.DATE_TAKEN;
