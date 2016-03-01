@@ -7,10 +7,10 @@ import android.os.Bundle;
 
 import com.luminous.pick.Action;
 import com.luminous.pick.CameraPickActivity;
+import com.luminous.pick.MultipleImagePreviewActivity;
 import com.luminous.pick.VideoPickActivity;
 import com.luminous.pick.utils.VideoQuality;
 import com.sangcomz.fishbun.define.Define;
-import com.sangcomz.fishbun.ui.album.ImageAlbumListActivity;
 import com.sangcomz.fishbun.videomodule.VideoAlbumActivity;
 
 import java.util.ArrayList;
@@ -199,7 +199,7 @@ public class MediaFactory {
             bundle.putInt("pickCount", mediaBuilder.pickCount);
             if (mediaBuilder.fromGallery) {
 
-                intent = new Intent(mediaBuilder.mContext, ImageAlbumListActivity.class);
+                intent = new Intent(mediaBuilder.mContext, MultipleImagePreviewActivity.class);
                 intent.setAction(mediaBuilder.action);
                 intent.putExtras(bundle);
                 ((Activity) mediaBuilder.mContext).startActivityForResult(intent, GALLERY_APP);

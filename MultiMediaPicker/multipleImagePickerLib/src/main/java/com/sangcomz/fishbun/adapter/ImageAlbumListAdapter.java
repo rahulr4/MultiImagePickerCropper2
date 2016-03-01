@@ -27,7 +27,6 @@ public class ImageAlbumListAdapter
     private List<Album> albumlist;
     private List<String> thumbList = new ArrayList<String>();
     private String thumPath;
-    private ArrayList<String> path;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -47,9 +46,8 @@ public class ImageAlbumListAdapter
         }
     }
 
-    public ImageAlbumListAdapter(List<Album> albumList, ArrayList<String> path, int pickCount) {
+    public ImageAlbumListAdapter(List<Album> albumList, int pickCount) {
         this.albumlist = albumList;
-        this.path = path;
         this.pickCount = pickCount;
     }
 
@@ -100,7 +98,6 @@ public class ImageAlbumListAdapter
                 i.putExtra("album", a);
                 i.putExtra("album_title", albumlist.get(position).bucketname);
                 i.putExtra("pickCount", pickCount);
-                i.putStringArrayListExtra(Define.INTENT_PATH, path);
                 ((Activity) holder.areaAlbum.getContext()).startActivityForResult(i, Define.ENTER_ALBUM_REQUEST_CODE);
             }
         });

@@ -59,6 +59,7 @@ public class ImageAlbumListActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
         pickCount = getIntent().getIntExtra("pickCount", 1);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             boolean isStoragePermissionGiven = MSupport.checkPermissionWithRationale(ImageAlbumListActivity.this,
                     null, MSupportConstants.WRITE_EXTERNAL_STORAGE, MSupportConstants.REQUEST_STORAGE_READ_WRITE);
@@ -146,8 +147,7 @@ public class ImageAlbumListActivity extends AppCompatActivity {
             if (result) {
                 noAlbum.setVisibility(View.GONE);
 //                if (adapter == null) {
-                adapter = new ImageAlbumListAdapter(albumList,
-                        getIntent().getStringArrayListExtra(Define.INTENT_PATH), pickCount);
+                adapter = new ImageAlbumListAdapter(albumList, pickCount);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 new DisplayThumbnail().execute();

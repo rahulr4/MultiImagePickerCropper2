@@ -33,18 +33,6 @@
         android:layout_margin="5dp"
         android:background="@android:color/white" />
 
-    <!--<com.luminous.pick.hlistview.HListView
-        android:id="@+id/image_hlistview"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="center_vertical"
-        android:choiceMode="singleChoice"
-        android:layout_marginLeft="5dp"
-        app:dividerWidth="2dp"
-        android:layout_marginRight="5dp"
-        android:background="@android:color/transparent"
-        android:visibility="visible" />-->
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/image_hlistview"
         android:layout_width="match_parent"

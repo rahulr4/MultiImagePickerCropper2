@@ -33,6 +33,7 @@
 
         <activity
             android:name="com.luminous.pick.MultipleImagePreviewActivity"
+            android:label="Gallery"
             android:screenOrientation="portrait" />
         <activity
             android:name="crop.CropImageActivity"

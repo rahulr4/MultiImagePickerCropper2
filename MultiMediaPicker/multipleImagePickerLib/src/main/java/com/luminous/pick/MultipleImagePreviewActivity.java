@@ -1,6 +1,6 @@
 package com.luminous.pick;
 
-import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,16 +12,18 @@ import android.provider.MediaStore;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -31,6 +33,7 @@ import com.luminous.pick.utils.BitmapDecoder;
 import com.luminous.pick.utils.CameraUtils;
 import com.luminous.pick.utils.ViewPagerSwipeLess;
 import com.sangcomz.fishbun.define.Define;
+import com.sangcomz.fishbun.ui.album.ImageAlbumListActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,16 +44,16 @@ import crop.Crop;
 /**
  * Created by rahul on 22/5/15.
  */
-public class MultipleImagePreviewActivity extends Activity {
+public class MultipleImagePreviewActivity extends AppCompatActivity {
     private static final int PICK_IMAGE = 200;
     private static AlertDialog alertDialog;
-    String action = Action.ACTION_PICK;
     private ViewPagerSwipeLess mPager;
     private HashMap<String, CustomGallery> dataT;
     private CustomPagerAdapter adapter;
     private ImageListRecycleAdapter mImageListAdapter;
-    private FrameLayout mDone;
     private int imageQuality;
+    private boolean isCrop;
+    private int pickCount;
 
     public static void showAlertDialog(Context mContext, String text) {
 
@@ -78,11 +81,14 @@ public class MultipleImagePreviewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiimage_preview);
         mPager = (ViewPagerSwipeLess) findViewById(R.id.pager);
-        mDone = (FrameLayout) findViewById(R.id.btn_done);
-        dataT = new HashMap<String, CustomGallery>();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setBackgroundColor(Define.ACTIONBAR_COLOR);
+        dataT = new HashMap<>();
         adapter = new CustomPagerAdapter(dataT);
         mPager.setAdapter(adapter);
-        mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -110,87 +116,39 @@ public class MultipleImagePreviewActivity extends Activity {
             }
         });
 
-        findViewById(R.id.navigate_crop).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (adapter != null && adapter.getCount() > 0) {
-                    String imagePath = mImageListAdapter.mItems.get(mPager.getCurrentItem()).sdcardPath;
-
-                    Uri destination = null;
-                    try {
-                        destination = CameraUtils.createImageFile(MultipleImagePreviewActivity.this);
-                        Crop.of((Uri.parse("file://" + imagePath)), destination).
-                                asSquare().start(MultipleImagePreviewActivity.this);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-
-        findViewById(R.id.add_image_navigate).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MultipleImagePreviewActivity.this,
-                        CustomGalleryActivity.class);
-                i.setAction(action);
-                startActivityForResult(i, PICK_IMAGE);
-            }
-        });
-
-        findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent data2 = new Intent();
-                setResult(RESULT_CANCELED, data2);
-                finish();
-            }
-        });
-        ((TextView) findViewById(R.id.btn_done_text)).setText(getString(R.string.crop__done));
-        findViewById(R.id.btn_done).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ArrayList<CustomGallery> mArrayList = new ArrayList<CustomGallery>(dataT.values());
-                if (mArrayList.size() > 0) {
-                    String[] allPath = new String[mArrayList.size()];
-                    for (int i = 0; i < allPath.length; i++) {
-                        allPath[i] = mArrayList.get(i).sdcardPath;
-                    }
-
-                    Intent data = new Intent().putExtra(Define.INTENT_PATH, allPath);
-                    setResult(RESULT_OK, data);
-                    finish();
-                } else {
-                    showAlertDialog(MultipleImagePreviewActivity.this, "Please select an image.");
-                }
-            }
-        });
-
         try {
-            boolean isCrop = getIntent().getExtras().getBoolean("crop");
-            if (isCrop)
-                findViewById(R.id.navigate_crop).setVisibility(View.VISIBLE);
-            else
-                findViewById(R.id.navigate_crop).setVisibility(View.GONE);
+            isCrop = getIntent().getExtras().getBoolean("crop");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        Intent i = new Intent(this,
-                CustomGalleryActivity.class);
-
+        pickCount = getIntent().getIntExtra("pickCount", 1);
         if (getIntent().getExtras().containsKey("imageQuality")) {
             imageQuality = getIntent().getExtras().getInt("imageQuality");
         }
 
-        if (getIntent().getAction() != null)
-            action = getIntent().getAction();
-        i.setAction(action);
-        startActivityForResult(i, PICK_IMAGE);
+        openGallery();
+    }
 
+    private void openGallery() {
+        Intent i = new Intent(this, ImageAlbumListActivity.class);
+        i.putExtra("pickCount", pickCount);
+        startActivityForResult(i, PICK_IMAGE);
     }
 
     class ProcessImageView extends AsyncTask<Uri, Void, Void> {
+
+        private ProgressDialog mProgressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressDialog = new ProgressDialog(MultipleImagePreviewActivity.this);
+            mProgressDialog.setMessage("Processing image ...");
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setCanceledOnTouchOutside(false);
+            mProgressDialog.show();
+        }
 
         @Override
         protected Void doInBackground(Uri... params) {
@@ -207,20 +165,11 @@ public class MultipleImagePreviewActivity extends Activity {
         }
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mDone.setEnabled(false);
-            mDone.setClickable(false);
-        }
-
-
-        @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            mProgressDialog.dismiss();
             adapter.customNotify(dataT);
             mImageListAdapter.customNotify(dataT);
-            mDone.setEnabled(true);
-            mDone.setClickable(true);
         }
     }
 
@@ -229,17 +178,15 @@ public class MultipleImagePreviewActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
 
-            if (action.equals(Action.ACTION_PICK)) {
-                dataT.clear();
-            }
             if (requestCode == PICK_IMAGE) {
-                String[] all_path = data.getStringArrayExtra(Define.INTENT_PATH);
+                ArrayList<String> allPath = data.getStringArrayListExtra(Define.INTENT_PATH);
 
-                if (all_path != null) {
-                    if (action.equals(Action.ACTION_PICK) && all_path.length > 0) {
-                        new ProcessImageView().execute(Uri.parse(all_path[0]));
+                if (allPath != null && !allPath.isEmpty()) {
+                    if (pickCount == 1) {
+                        dataT.clear();
+                        new ProcessImageView().execute(Uri.parse(allPath.get(0)));
                     } else {
-                        for (String string : all_path) {
+                        for (String string : allPath) {
                             if (string != null) {
                                 CustomGallery item = new CustomGallery();
                                 item.sdcardPath = string;
@@ -341,5 +288,52 @@ public class MultipleImagePreviewActivity extends Activity {
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((LinearLayout) object);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_camera, menu);
+        menu.findItem(R.id.action_crop).setVisible(isCrop);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_ok) {
+            ArrayList<CustomGallery> mArrayList = new ArrayList<>(dataT.values());
+            if (mArrayList.size() > 0) {
+                ArrayList<String> allPath = new ArrayList<>();
+                for (int i = 0; i < mArrayList.size(); i++) {
+                    allPath.add(mArrayList.get(i).sdcardPath);
+                }
+
+                Intent data = new Intent().putStringArrayListExtra(Define.INTENT_PATH, allPath);
+                setResult(RESULT_OK, data);
+                finish();
+            }
+        } else if (id == android.R.id.home) {
+            Intent data = new Intent();
+            setResult(RESULT_CANCELED, data);
+            finish();
+        } else if (id == R.id.action_camera) {
+            openGallery();
+        } else if (id == R.id.action_crop) {
+            if (adapter != null && adapter.getCount() > 0) {
+                String imagePath = mImageListAdapter.mItems.get(mPager.getCurrentItem()).sdcardPath;
+
+                Uri destination = null;
+                try {
+                    destination = CameraUtils.createImageFile(MultipleImagePreviewActivity.this);
+                    Crop.of((Uri.parse("file://" + imagePath)), destination).
+                            asSquare().start(MultipleImagePreviewActivity.this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

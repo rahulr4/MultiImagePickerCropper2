@@ -50,13 +50,16 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             case R.id.img_single_pick:
                 mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
                         .getSingleMediaFiles()
-                        .setPickCount(5)
+                        .setPickCount(1)
+                        .doCropping()
                         .fromGallery();
                 mediaFactory = MediaFactory.create().start(mediaBuilder);
                 break;
             case R.id.img_multiple_pick:
                 mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
-                        .getMultipleMediaFiles().fromGallery()
+                        .getMultipleMediaFiles()
+                        .fromGallery()
+                        .setPickCount(5)
                         .doCropping();
                 mediaFactory = MediaFactory.create().start(mediaBuilder);
                 break;
