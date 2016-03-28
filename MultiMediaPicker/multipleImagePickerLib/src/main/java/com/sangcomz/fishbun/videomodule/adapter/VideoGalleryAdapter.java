@@ -93,7 +93,7 @@ public class VideoGalleryAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.imgThumb.setImageResource(R.drawable.ic_launcher);
+        holder.imgThumb.setImageResource(R.drawable.placeholder_470x352);
         holder.object = getItem(position);
         convertView.setTag(holder);
 
