@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
@@ -39,6 +40,8 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.luminous.pick.controller.MediaSingleTon;
 import com.luminous.pick.utils.VideoQuality;
 import com.luminous.pick.utils.ViewPagerSwipeLess;
+import com.msupport.MSupport;
+import com.msupport.MSupportConstants;
 import com.sangcomz.fishbun.define.Define;
 
 import java.util.ArrayList;
@@ -114,36 +117,60 @@ public class VideoPickActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        /*if (getIntent().getExtras().getBoolean("from"))
-            openVideoFromGallery();
-        else*/
-        openVideoFromCamera();
+        openVideoFromCamera(false);
     }
 
-    private void showVideoChooserDialog() {
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle("Select Video");
-        alertDialog.setMessage("Select video source.");
-        alertDialog.setIcon(R.drawable.ic_launcher);
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Gallery",
-                new DialogInterface.OnClickListener() {
+    public void openVideoFromCamera(boolean isPermission) {
+        String[] permissionSet = {MSupportConstants.WRITE_EXTERNAL_STORAGE, MSupportConstants.CAMERA};
+        if (isPermission) {
+            openVideoCamera();
+        } else {
+            boolean isCameraPermissionGranted;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                isCameraPermissionGranted = MSupport.checkMultiplePermission(VideoPickActivity.this, permissionSet, MSupportConstants.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
+            } else
+                isCameraPermissionGranted = true;
 
-                    public void onClick(DialogInterface dialog, int id) {
-//                        openVideoFromGallery();
-                    }
-                });
-
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Camera",
-                new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int id) {
-                        openVideoFromCamera();
-                    }
-                });
-        alertDialog.show();
+            if (isCameraPermissionGranted) {
+                openVideoCamera();
+            }
+        }
     }
 
-    public void openVideoFromCamera() {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+
+        switch (requestCode) {
+            case MSupportConstants.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS: {
+                ArrayList<String> deniedPermissionList = new ArrayList<>();
+                boolean isAllPermissionGranted = true;
+                for (int i = 0; i < grantResults.length; i++) {
+                    int results = grantResults[i];
+                    String permission = permissions[i];
+                    if (results != PackageManager.PERMISSION_GRANTED) {
+                        isAllPermissionGranted = false;
+                        deniedPermissionList.add(MSupportConstants.getPermissionRationaleMessage(permission));
+                    }
+                }
+                if (isAllPermissionGranted) {
+                    openVideoFromCamera(true);
+                } else {
+                    String message = "Requested Permission not granted";
+                    if (!deniedPermissionList.isEmpty()) {
+                        message = "You need to grant access to " + deniedPermissionList.get(0);
+                        for (int i = 1; i < deniedPermissionList.size(); i++) {
+                            message = message + ", " + deniedPermissionList.get(i);
+                        }
+                        message = message + " to access app features";
+                    }
+                    Toast.makeText(VideoPickActivity.this, message, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        }
+    }
+
+    private void openVideoCamera() {
         ContentValues values = new ContentValues();
         String fileName = System.currentTimeMillis() + ".mp4";
         values.put(MediaStore.Video.Media.TITLE, fileName);
@@ -162,20 +189,6 @@ public class VideoPickActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(VideoPickActivity.this, "SD-Card not available", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    void openVideoFromGallery() {
-        try {
-            Intent intent = new Intent();
-            intent.setType("video/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(
-                    Intent.createChooser(intent, "Select Video"),
-                    ACTION_REQUEST_VIDEO_FROM_GALLERY);
-
-        } catch (Exception e) {
-            showAlertDialog(VideoPickActivity.this, "Device does not support video pick.");
         }
     }
 
@@ -416,7 +429,7 @@ public class VideoPickActivity extends AppCompatActivity {
             setResult(RESULT_CANCELED, data);
             finish();
         } else if (id == R.id.action_pick) {
-            openVideoFromCamera();
+            openVideoFromCamera(false);
         } else if (id == R.id.delete) {
             if (adapter != null && adapter.getCount() > 0) {
                 String imagePath = mImageListAdapter.mItems.get(mPager.getCurrentItem()).sdcardPath;

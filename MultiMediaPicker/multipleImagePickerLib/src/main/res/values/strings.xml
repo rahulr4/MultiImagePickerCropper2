@@ -26,4 +26,5 @@
 
     <string name="camera_permission_rationale">Please allow the app to use your camera so that we can take a picture for you.</string>
     <string name="storage_permission_rationale">Please allow the app to view your gallery so that we can select a picture for you.</string>
+    <string name="preview">Preview</string>
 </resources>

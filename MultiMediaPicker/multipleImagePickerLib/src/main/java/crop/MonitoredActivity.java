@@ -1,11 +1,11 @@
 package crop;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
-abstract class MonitoredActivity extends Activity {
+abstract class MonitoredActivity extends AppCompatActivity {
 
     private final ArrayList<LifeCycleListener> listeners = new ArrayList<LifeCycleListener>();
 

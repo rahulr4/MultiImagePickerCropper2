@@ -3,9 +3,11 @@ package com.luminous.pick;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -24,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -32,6 +35,8 @@ import com.luminous.pick.controller.MediaSingleTon;
 import com.luminous.pick.utils.BitmapDecoder;
 import com.luminous.pick.utils.CameraUtils;
 import com.luminous.pick.utils.ViewPagerSwipeLess;
+import com.msupport.MSupport;
+import com.msupport.MSupportConstants;
 import com.sangcomz.fishbun.define.Define;
 
 import java.io.File;
@@ -110,7 +115,7 @@ public class CameraPickActivity extends AppCompatActivity {
         }
         if (getIntent().getAction() != null)
             action = getIntent().getAction();
-        openCamera();
+        openCamera(false);
     }
 
     @Override
@@ -120,20 +125,78 @@ public class CameraPickActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    void openCamera() {
-        try {
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    void openCamera(boolean isPermission) {
+        String[] permissionSet = {MSupportConstants.WRITE_EXTERNAL_STORAGE, MSupportConstants.CAMERA};
+        if (isPermission) {
+            try {
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 
-                createImageFile();
+                    createImageFile();
 
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, userPhotoUri);
-                startActivityForResult(takePictureIntent, ACTION_REQUEST_CAMERA);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, userPhotoUri);
+                    startActivityForResult(takePictureIntent, ACTION_REQUEST_CAMERA);
 
+                }
+            } catch (Exception e) {
+                showAlertDialog(CameraPickActivity.this, "Device does not support camera.");
             }
-        } catch (Exception e) {
-            showAlertDialog(CameraPickActivity.this, "Device does not support camera.");
+        } else {
+            boolean isCameraPermissionGranted;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                isCameraPermissionGranted = MSupport.checkMultiplePermission(CameraPickActivity.this, permissionSet, MSupportConstants.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
+            } else
+                isCameraPermissionGranted = true;
+            if (isCameraPermissionGranted) {
+                try {
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+
+                        createImageFile();
+
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, userPhotoUri);
+                        startActivityForResult(takePictureIntent, ACTION_REQUEST_CAMERA);
+
+                    }
+                } catch (Exception e) {
+                    showAlertDialog(CameraPickActivity.this, "Device does not support camera.");
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+
+        switch (requestCode) {
+            case MSupportConstants.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS: {
+                ArrayList<String> deniedPermissionList = new ArrayList<>();
+                boolean isAllPermissionGranted = true;
+                for (int i = 0; i < grantResults.length; i++) {
+                    int results = grantResults[i];
+                    String permission = permissions[i];
+                    if (results != PackageManager.PERMISSION_GRANTED) {
+                        isAllPermissionGranted = false;
+                        deniedPermissionList.add(MSupportConstants.getPermissionRationaleMessage(permission));
+                    }
+                }
+                if (isAllPermissionGranted) {
+                    openCamera(true);
+                } else {
+                    String message = "Requested Permission not granted";
+                    if (!deniedPermissionList.isEmpty()) {
+                        message = "You need to grant access to " + deniedPermissionList.get(0);
+                        for (int i = 1; i < deniedPermissionList.size(); i++) {
+                            message = message + ", " + deniedPermissionList.get(i);
+                        }
+                        message = message + " to access app features";
+                    }
+                    Toast.makeText(CameraPickActivity.this, message, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
         }
     }
 
@@ -337,7 +400,7 @@ public class CameraPickActivity extends AppCompatActivity {
             setResult(RESULT_CANCELED, data);
             finish();
         } else if (id == R.id.action_camera) {
-            openCamera();
+            openCamera(false);
         } else if (id == R.id.action_crop) {
             if (adapter != null && adapter.getCount() > 0) {
                 String imagePath = mImageListAdapter.mItems.get(mPager.getCurrentItem()).sdcardPath;

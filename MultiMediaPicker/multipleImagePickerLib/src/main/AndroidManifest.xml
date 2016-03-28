@@ -37,6 +37,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="crop.CropImageActivity"
+            android:label="Crop"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.luminous.pick.CameraPickActivity"

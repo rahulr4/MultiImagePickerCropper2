@@ -85,6 +85,7 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setBackgroundColor(Define.ACTIONBAR_COLOR);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         dataT = new HashMap<>();
         adapter = new CustomPagerAdapter(dataT);
         mPager.setAdapter(adapter);

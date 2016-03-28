@@ -5,11 +5,8 @@ import android.Manifest;
 public class MSupportConstants {
     public static final int SDK_VERSION = 23;
     public static final int CAMERA_PERMISSIONS_REQUEST_CODE = 123;
-    public static final int GPS_PERMISSION_REQUEST_CODE = 456;
+    public static final int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
     public static final int REQUEST_STORAGE_READ_WRITE = 2;
-    public static final int MY_PERMISSION_SEND_SMS = 3;
-    public static final int MY_PERMISSION_LOCATION = 4;
-    public static final int MY_STORAGE_DB = 5;
 
     public static final String SEND_SMS = Manifest.permission.SEND_SMS;
     public static final String CAMERA = Manifest.permission.CAMERA;
@@ -30,4 +27,19 @@ public class MSupportConstants {
     public static final String ACCESS_COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     public static final String READ_PHONE_STATE = Manifest.permission.READ_PHONE_STATE;
     public static final String GET_ACCOUNTS = Manifest.permission.GET_ACCOUNTS;
+
+    public static String getPermissionRationaleMessage(String permission) {
+        switch (permission) {
+            case ACCESS_COARSE_LOCATION:
+            case ACCESS_FINE_LOCATION:
+                return "GPS";
+            case CAMERA:
+                return "CAMERA";
+            case WRITE_EXTERNAL_STORAGE:
+            case READ_EXTERNAL_STORAGE:
+                return "STORAGE";
+            default:
+                return "PERMISSION";
+        }
+    }
 }

@@ -12,10 +12,12 @@ import android.opengl.GLES10;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.view.View;
-import android.view.Window;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.luminous.pick.R;
+import com.sangcomz.fishbun.define.Define;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,8 +51,13 @@ public class CropImageActivity extends MonitoredActivity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.crop__activity_crop);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setBackgroundColor(Define.ACTIONBAR_COLOR);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initViews();
 
         setupFromIntent();
@@ -59,6 +66,27 @@ public class CropImageActivity extends MonitoredActivity {
             return;
         }
         startCrop();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_crop, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_ok) {
+            onSaveClicked();
+
+        } else if (id == android.R.id.home) {
+            Intent data = new Intent();
+            setResult(RESULT_CANCELED, data);
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initViews() {
@@ -72,18 +100,6 @@ public class CropImageActivity extends MonitoredActivity {
             }
         });
 
-        findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                setResult(RESULT_CANCELED);
-                finish();
-            }
-        });
-
-        findViewById(R.id.btn_done).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                onSaveClicked();
-            }
-        });
     }
 
     private void setupFromIntent() {
