@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.luminous.pick.R;
 import com.sangcomz.fishbun.bean.MediaObject;
-import com.sangcomz.fishbun.define.Define;
 import com.sangcomz.fishbun.util.SquareImageView;
 
 import java.util.ArrayList;
@@ -82,7 +81,7 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
         Glide.with(holder.imgThumb.getContext())
                 .load(mediaObjectArrayList.get(position).getPath())
                 .asBitmap()
-                .override(Define.ALBUM_THUMBNAIL_SIZE, Define.ALBUM_THUMBNAIL_SIZE)
+                /*.override(Define.ALBUM_THUMBNAIL_SIZE, Define.ALBUM_THUMBNAIL_SIZE)*/
                 .placeholder(R.drawable.loading_img)
                 .into(holder.imgThumb);
 

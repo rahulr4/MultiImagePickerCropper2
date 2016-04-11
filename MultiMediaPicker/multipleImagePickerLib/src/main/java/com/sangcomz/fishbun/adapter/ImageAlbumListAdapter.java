@@ -77,7 +77,7 @@ public class ImageAlbumListAdapter
                         .with(holder.imgAlbum.getContext())
                         .load(thumPath)
                         .asBitmap()
-                        .override(Define.ALBUM_THUMBNAIL_SIZE, Define.ALBUM_THUMBNAIL_SIZE)
+                        /*.override(Define.ALBUM_THUMBNAIL_SIZE, Define.ALBUM_THUMBNAIL_SIZE)*/
                         .placeholder(R.drawable.loading_img)
                         .into(holder.imgAlbum);
             } else {
