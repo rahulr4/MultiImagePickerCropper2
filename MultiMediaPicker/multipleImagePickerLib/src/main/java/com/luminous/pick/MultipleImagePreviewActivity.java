@@ -26,8 +26,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.luminous.pick.controller.MediaSingleTon;
 import com.luminous.pick.utils.BitmapDecoder;
 import com.luminous.pick.utils.CameraUtils;
@@ -273,13 +272,26 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
                 Glide.with(MultipleImagePreviewActivity.this)
                         .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
                         .asBitmap()
-                        .into(new SimpleTarget<Bitmap>(100, 100) {
+                        .into(new BitmapImageViewTarget(imageView) {
+                            @Override
+                            protected void setResource(Bitmap resource) {
+                                super.setResource(resource);
+                                MediaSingleTon.getInstance().getBitmapHashMap().put(dataT.get(position).sdcardPath, resource);
+//                                mediaSingleTon.getBitmapHashMap().put(dataT.get(position).sdcardPath, resource);
+//                                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                imageView.setImageBitmap(resource); // Possibly runOnUiThread()
+                            }
+                        });
+           /*     Glide.with(MultipleImagePreviewActivity.this)
+                        .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
+                        .asBitmap()
+                        .into(new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
                                 MediaSingleTon.getInstance().getBitmapHashMap().put(dataT.get(position).sdcardPath, resource);
                                 imageView.setImageBitmap(resource); // Possibly runOnUiThread()
                             }
-                        });
+                        });*/
 
             container.addView(itemView);
             return itemView;

@@ -125,7 +125,7 @@ public class BitmapDecoder {
             FileOutputStream fOut = null;
             try {
                 fOut = new FileOutputStream(fileBackup);
-                scaledBitmap.compress(Bitmap.CompressFormat.PNG, 70, fOut);
+                scaledBitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut);
                 filePath = fileBackup.getPath();
             } catch (Exception e) {
                 e.printStackTrace();

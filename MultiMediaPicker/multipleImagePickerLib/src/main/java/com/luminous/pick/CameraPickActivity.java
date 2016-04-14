@@ -29,8 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.luminous.pick.controller.MediaSingleTon;
 import com.luminous.pick.utils.BitmapDecoder;
 import com.luminous.pick.utils.CameraUtils;
@@ -348,18 +347,58 @@ public class CameraPickActivity extends AppCompatActivity {
 
             if (mediaSingleTon.getBitmapHashMap().containsKey(dataT.get(position).sdcardPath)) {
                 imageView.setImageBitmap(mediaSingleTon.getBitmapHashMap().get((dataT.get(position).sdcardPath)));
-            } else
-                Glide.with(CameraPickActivity.this)
+            } else {
+              /*  Glide.with(CameraPickActivity.this)
                         .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
                         .asBitmap()
-                        .into(new SimpleTarget<Bitmap>(100, 100) {
+                        .override(Target.SIZE_ORIGINAL, imageView.getHeight())
+                        .into(new BitmapImageViewTarget(imageView))
+                        .into(new BitmapImageViewTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
                                 mediaSingleTon.getBitmapHashMap().put(dataT.get(position).sdcardPath, resource);
+//                                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                imageView.setImageBitmap(resource); // Possibly runOnUiThread()
+                            }
+                        });*/
+
+                Glide.with(CameraPickActivity.this)
+                        .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
+                        .asBitmap()
+                        .into(new BitmapImageViewTarget(imageView) {
+                            @Override
+                            protected void setResource(Bitmap resource) {
+                                super.setResource(resource);
+                                mediaSingleTon.getBitmapHashMap().put(dataT.get(position).sdcardPath, resource);
+//                                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                 imageView.setImageBitmap(resource); // Possibly runOnUiThread()
                             }
                         });
+/*
+                Uri uri = Uri.fromFile(new File(dataT.get(position).sdcardPath));
 
+                Picasso.with(CameraPickActivity.this)
+                        .load(uri)
+                        .placeholder(R.drawable.placeholder_470x352)
+                        .error(R.drawable.placeholder_470x352)
+                        .into(new Target() {
+                            @Override
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                mediaSingleTon.getBitmapHashMap().put(dataT.get(position).sdcardPath, bitmap);
+                                imageView.setImageBitmap(bitmap);
+                            }
+
+                            @Override
+                            public void onBitmapFailed(Drawable errorDrawable) {
+                                Log.i("Bitmap", "Failed :- "+errorDrawable.toString());
+                            }
+
+                            @Override
+                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                                Log.i("Bitmap", "Prepared :- "+placeHolderDrawable.toString());
+                            }
+                        });*/
+            }
             container.addView(itemView);
             return itemView;
         }
