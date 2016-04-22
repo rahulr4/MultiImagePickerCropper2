@@ -266,7 +266,21 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
 
             final ImageView imageView = (ImageView) itemView.findViewById(R.id.full_screen_image);
 
-            if (MediaSingleTon.getInstance().getBitmapHashMap().containsKey(dataT.get(position).sdcardPath)) {
+            Glide.with(MultipleImagePreviewActivity.this)
+                    .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
+                    .asBitmap()
+                    .into(new BitmapImageViewTarget(imageView) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            super.setResource(resource);
+                            MediaSingleTon.getInstance().getBitmapHashMap().put(dataT.get(position).sdcardPath, resource);
+//                                mediaSingleTon.getBitmapHashMap().put(dataT.get(position).sdcardPath, resource);
+//                                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                            imageView.setImageBitmap(resource); // Possibly runOnUiThread()
+                        }
+                    });
+
+            /*if (MediaSingleTon.getInstance().getBitmapHashMap().containsKey(dataT.get(position).sdcardPath)) {
                 imageView.setImageBitmap(MediaSingleTon.getInstance().getBitmapHashMap().get((dataT.get(position).sdcardPath)));
             } else
                 Glide.with(MultipleImagePreviewActivity.this)
@@ -281,7 +295,7 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
 //                                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                 imageView.setImageBitmap(resource); // Possibly runOnUiThread()
                             }
-                        });
+                        });*/
            /*     Glide.with(MultipleImagePreviewActivity.this)
                         .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
                         .asBitmap()

@@ -345,10 +345,23 @@ public class CameraPickActivity extends AppCompatActivity {
 
             final ImageView imageView = (ImageView) itemView.findViewById(R.id.full_screen_image);
 
-            if (mediaSingleTon.getBitmapHashMap().containsKey(dataT.get(position).sdcardPath)) {
+            Glide.with(CameraPickActivity.this)
+                    .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
+                    .asBitmap()
+                    .into(new BitmapImageViewTarget(imageView) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            super.setResource(resource);
+                            mediaSingleTon.getBitmapHashMap().put(dataT.get(position).sdcardPath, resource);
+//                                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                            imageView.setImageBitmap(resource); // Possibly runOnUiThread()
+                        }
+                    });
+
+            /*if (mediaSingleTon.getBitmapHashMap().containsKey(dataT.get(position).sdcardPath)) {
                 imageView.setImageBitmap(mediaSingleTon.getBitmapHashMap().get((dataT.get(position).sdcardPath)));
             } else {
-              /*  Glide.with(CameraPickActivity.this)
+              *//*  Glide.with(CameraPickActivity.this)
                         .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
                         .asBitmap()
                         .override(Target.SIZE_ORIGINAL, imageView.getHeight())
@@ -360,7 +373,7 @@ public class CameraPickActivity extends AppCompatActivity {
 //                                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                 imageView.setImageBitmap(resource); // Possibly runOnUiThread()
                             }
-                        });*/
+                        });*//*
 
                 Glide.with(CameraPickActivity.this)
                         .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
@@ -374,7 +387,7 @@ public class CameraPickActivity extends AppCompatActivity {
                                 imageView.setImageBitmap(resource); // Possibly runOnUiThread()
                             }
                         });
-/*
+*//*
                 Uri uri = Uri.fromFile(new File(dataT.get(position).sdcardPath));
 
                 Picasso.with(CameraPickActivity.this)
@@ -397,8 +410,8 @@ public class CameraPickActivity extends AppCompatActivity {
                             public void onPrepareLoad(Drawable placeHolderDrawable) {
                                 Log.i("Bitmap", "Prepared :- "+placeHolderDrawable.toString());
                             }
-                        });*/
-            }
+                        });*//*
+            }*/
             container.addView(itemView);
             return itemView;
         }

@@ -345,7 +345,19 @@ public class VideoPickActivity extends AppCompatActivity {
             if (dataT.get(position).bitmap != null) {
                 imageView.setImageBitmap(dataT.get(position).bitmap);
             } else {
-                if (MediaSingleTon.getInstance().getBitmapHashMap().containsKey(dataT.get(position).sdcardPath)) {
+
+                Glide.with(VideoPickActivity.this)
+                        .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
+                        .asBitmap()
+                        .into(new SimpleTarget<Bitmap>(100, 100) {
+                            @Override
+                            public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                                MediaSingleTon.getInstance().getBitmapHashMap().put(dataT.get(position).sdcardPath, resource);
+                                imageView.setImageBitmap(resource); // Possibly runOnUiThread()
+                            }
+                        });
+
+                /*if (MediaSingleTon.getInstance().getBitmapHashMap().containsKey(dataT.get(position).sdcardPath)) {
                     imageView.setImageBitmap(MediaSingleTon.getInstance().getBitmapHashMap().get((dataT.get(position).sdcardPath)));
                 } else
                     Glide.with(VideoPickActivity.this)
@@ -357,7 +369,7 @@ public class VideoPickActivity extends AppCompatActivity {
                                     MediaSingleTon.getInstance().getBitmapHashMap().put(dataT.get(position).sdcardPath, resource);
                                     imageView.setImageBitmap(resource); // Possibly runOnUiThread()
                                 }
-                            });
+                            });*/
             }
 
             container.addView(itemView);

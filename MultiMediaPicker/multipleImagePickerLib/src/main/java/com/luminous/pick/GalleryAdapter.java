@@ -158,6 +158,21 @@ public class GalleryAdapter extends BaseAdapter {
 //        holder.imgQueue.setTag(position);
 
         try {
+            Glide.with(mContext)
+                    .load(Uri.parse("file://" + data.get(position).sdcardPath))
+                    .asBitmap()
+                    .into(new SimpleTarget<Bitmap>(100, 100) {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                            mediaSingleTon.getBitmapHashMap().put(data.get(position).sdcardPath, resource);
+                            holder.imgQueue.setImageBitmap(resource); // Possibly runOnUiThread()
+                        }
+                    });
+        }
+        catch (Exception e){
+
+        }
+        /*try {
 
 //            Picasso.with(mContext).load("file://" + data.get(position).sdcardPath).into(holder.imgQueue);
 
@@ -195,7 +210,7 @@ public class GalleryAdapter extends BaseAdapter {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
 
         return convertView;
     }

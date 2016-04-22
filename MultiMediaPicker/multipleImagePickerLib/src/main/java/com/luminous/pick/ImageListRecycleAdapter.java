@@ -98,7 +98,17 @@ public class ImageListRecycleAdapter extends RecyclerView.Adapter<ImageListRecyc
 
         public void setImage(final String url) {
 
-            if (MediaSingleTon.getInstance().getBitmapHashMap().containsKey(url)) {
+            Glide.with(mContext)
+                    .load(Uri.parse("file://" + url))
+                    .asBitmap()
+                    .into(new SimpleTarget<Bitmap>(100, 100) {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                            MediaSingleTon.getInstance().getBitmapHashMap().put(url, resource);
+                            imageView.setImageBitmap(resource); // Possibly runOnUiThread()
+                        }
+                    });
+            /*if (MediaSingleTon.getInstance().getBitmapHashMap().containsKey(url)) {
                 imageView.setImageBitmap(MediaSingleTon.getInstance().getBitmapHashMap().get(url));
             } else {
                 Glide.with(mContext)
@@ -111,7 +121,7 @@ public class ImageListRecycleAdapter extends RecyclerView.Adapter<ImageListRecyc
                                 imageView.setImageBitmap(resource); // Possibly runOnUiThread()
                             }
                         });
-            }
+            }*/
 
         }
     }
