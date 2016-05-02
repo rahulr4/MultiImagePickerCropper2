@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -37,6 +38,7 @@ import com.luminous.pick.utils.ViewPagerSwipeLess;
 import com.msupport.MSupport;
 import com.msupport.MSupportConstants;
 import com.sangcomz.fishbun.define.Define;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -331,7 +333,7 @@ public class CameraPickActivity extends AppCompatActivity {
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
-            return view == ((LinearLayout) object);
+            return view == object;
         }
 
         @Override
@@ -345,7 +347,16 @@ public class CameraPickActivity extends AppCompatActivity {
 
             final ImageView imageView = (ImageView) itemView.findViewById(R.id.full_screen_image);
 
-            Glide.with(CameraPickActivity.this)
+            if (!TextUtils.isEmpty(dataT.get(position).sdcardPath))
+                Picasso.with(CameraPickActivity.this)
+                        .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
+                        .placeholder(R.drawable.placeholder_470x352)
+                        .error(R.drawable.placeholder_470x352)
+                        .into(imageView);
+            else
+                imageView.setImageResource(R.drawable.placeholder_470x352);
+
+            /*Glide.with(CameraPickActivity.this)
                     .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
                     .asBitmap()
                     .into(new BitmapImageViewTarget(imageView) {
@@ -356,7 +367,7 @@ public class CameraPickActivity extends AppCompatActivity {
 //                                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                             imageView.setImageBitmap(resource); // Possibly runOnUiThread()
                         }
-                    });
+                    });*/
 
             /*if (mediaSingleTon.getBitmapHashMap().containsKey(dataT.get(position).sdcardPath)) {
                 imageView.setImageBitmap(mediaSingleTon.getBitmapHashMap().get((dataT.get(position).sdcardPath)));
