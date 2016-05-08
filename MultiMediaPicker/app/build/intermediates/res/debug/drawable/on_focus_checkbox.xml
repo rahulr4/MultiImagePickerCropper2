@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item android:drawable="@drawable/checkbox_selected" android:state_selected="true"/>
-    <item android:drawable="@drawable/checkbox_selected" android:state_checked="true"/>
-    <item android:drawable="@drawable/checkbox_up"/>
-
-</selector><!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/MultiMediaPicker/multipleImagePickerLib/src/main/res/drawable/on_focus_checkbox.xml --><!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/MultiMediaPicker/app/build/intermediates/exploded-aar/com.crop.multiple/multipleImagePickerLib/1.2.0/res/drawable/on_focus_checkbox.xml -->
