@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/MultiMediaPicker/multipleImagePickerLib/build/intermediates/bundles/debug/res/values-xhdpi/values-xhdpi.xml -->
+    <eat-comment/>
+    <dimen name="photo_height">100dp</dimen>
+    <dimen name="photo_width">100dp</dimen>
+</resources>

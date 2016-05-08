@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/MultiMediaPicker/multipleImagePickerLib/src/main/res/values-large/dimens.xml -->
+    <eat-comment/>
+    <dimen name="crop__bar_height">55dp</dimen>
+</resources>

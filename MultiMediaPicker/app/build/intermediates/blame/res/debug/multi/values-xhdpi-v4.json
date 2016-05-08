@@ -1,0 +1,45 @@
+[
+    {
+        "outputFile": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\app\\build\\intermediates\\res\\merged\\debug\\values-xhdpi-v4\\values-xhdpi-v4.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 44,
+                    "endOffset": 95
+                },
+                "from": {
+                    "file": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\app\\build\\intermediates\\exploded-aar\\com.crop.multiple\\multipleImagePickerLib\\1.2.5\\res\\values-xhdpi-v4\\values-xhdpi-v4.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 55,
+                        "endColumn": 44,
+                        "endOffset": 95
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 100,
+                    "endColumn": 43,
+                    "endOffset": 139
+                },
+                "from": {
+                    "file": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\app\\build\\intermediates\\exploded-aar\\com.crop.multiple\\multipleImagePickerLib\\1.2.5\\res\\values-xhdpi-v4\\values-xhdpi-v4.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 100,
+                        "endColumn": 43,
+                        "endOffset": 139
+                    }
+                }
+            }
+        ]
+    }
+]

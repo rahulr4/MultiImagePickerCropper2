@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_pick"
+        android:icon="@drawable/ic_action_photo"
+        android:title="@string/video"
+        app:showAsAction="withText|ifRoom" />
+
+    <item
+        android:id="@+id/delete"
+        android:icon="@drawable/ic_delete"
+        android:title="@string/delete"
+        app:showAsAction="withText|ifRoom" />
+
+    <item
+        android:id="@+id/action_ok"
+        android:icon="@drawable/ic_ok"
+        android:title="@string/done_caps"
+        app:showAsAction="withText|ifRoom" />
+
+</menu>
+<!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/MultiMediaPicker/multipleImagePickerLib/src/main/res/menu/menu_video_pick.xml --><!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/MultiMediaPicker/multipleImagePickerLib/build/intermediates/bundles/debug/res/menu/menu_video_pick.xml -->

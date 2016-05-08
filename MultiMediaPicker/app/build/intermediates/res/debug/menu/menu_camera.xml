@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_camera"
+        android:icon="@drawable/ic_action_photo"
+        android:title="@string/camera"
+        app:showAsAction="withText|ifRoom" />
+    <item
+        android:id="@+id/action_crop"
+        android:icon="@drawable/crop_icon"
+        android:title="@string/delete"
+        app:showAsAction="withText|ifRoom" />
+
+    <item
+        android:id="@+id/action_ok"
+        android:icon="@drawable/ic_ok"
+        android:title="@string/done"
+        app:showAsAction="withText|ifRoom" />
+</menu>
+<!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/MultiMediaPicker/multipleImagePickerLib/src/main/res/menu/menu_camera.xml --><!-- From: file:/C:/Users/Rahul/Documents/MultiImagePickerCropper2/MultiMediaPicker/app/build/intermediates/exploded-aar/com.crop.multiple/multipleImagePickerLib/1.2.0/res/menu/menu_camera.xml -->

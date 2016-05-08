@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_photo_album.xml",
+        "source": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\app\\build\\intermediates\\exploded-aar\\com.crop.multiple\\multipleImagePickerLib\\1.2.5\\res\\menu\\menu_photo_album.xml"
+    },
+    {
+        "merged": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_main.xml",
+        "source": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\app\\src\\main\\res\\menu\\menu_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_video_album.xml",
+        "source": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\app\\build\\intermediates\\exploded-aar\\com.crop.multiple\\multipleImagePickerLib\\1.2.5\\res\\menu\\menu_video_album.xml"
+    },
+    {
+        "merged": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_camera.xml",
+        "source": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\app\\build\\intermediates\\exploded-aar\\com.crop.multiple\\multipleImagePickerLib\\1.2.5\\res\\menu\\menu_camera.xml"
+    },
+    {
+        "merged": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_video_pick.xml",
+        "source": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\app\\build\\intermediates\\exploded-aar\\com.crop.multiple\\multipleImagePickerLib\\1.2.5\\res\\menu\\menu_video_pick.xml"
+    },
+    {
+        "merged": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\app\\build\\intermediates\\res\\merged\\debug\\menu\\menu_crop.xml",
+        "source": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\app\\build\\intermediates\\exploded-aar\\com.crop.multiple\\multipleImagePickerLib\\1.2.5\\res\\menu\\menu_crop.xml"
+    }
+]

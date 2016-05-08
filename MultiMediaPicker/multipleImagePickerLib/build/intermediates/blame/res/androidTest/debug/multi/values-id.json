@@ -1,0 +1,102 @@
+[
+    {
+        "outputFile": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\multipleImagePickerLib\\build\\intermediates\\res\\merged\\androidTest\\debug\\values-id\\values-id.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 100,
+                    "endColumn": 70,
+                    "endOffset": 166
+                },
+                "from": {
+                    "file": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\multipleImagePickerLib\\build\\intermediates\\bundles\\debug\\res\\values-id\\values-id.xml",
+                    "position": {
+                        "startLine": 2,
+                        "startColumn": 4,
+                        "startOffset": 100,
+                        "endColumn": 70,
+                        "endOffset": 166
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 171,
+                    "endColumn": 46,
+                    "endOffset": 213
+                },
+                "from": {
+                    "file": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\multipleImagePickerLib\\build\\intermediates\\bundles\\debug\\res\\values-id\\values-id.xml",
+                    "position": {
+                        "startLine": 3,
+                        "startColumn": 4,
+                        "startOffset": 171,
+                        "endColumn": 46,
+                        "endOffset": 213
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 218,
+                    "endColumn": 82,
+                    "endOffset": 296
+                },
+                "from": {
+                    "file": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\multipleImagePickerLib\\build\\intermediates\\bundles\\debug\\res\\values-id\\values-id.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 218,
+                        "endColumn": 82,
+                        "endOffset": 296
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 301,
+                    "endColumn": 58,
+                    "endOffset": 355
+                },
+                "from": {
+                    "file": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\multipleImagePickerLib\\build\\intermediates\\bundles\\debug\\res\\values-id\\values-id.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 301,
+                        "endColumn": 58,
+                        "endOffset": 355
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 6,
+                    "startColumn": 4,
+                    "startOffset": 360,
+                    "endColumn": 54,
+                    "endOffset": 410
+                },
+                "from": {
+                    "file": "C:\\Users\\Rahul\\Documents\\MultiImagePickerCropper2\\MultiMediaPicker\\multipleImagePickerLib\\build\\intermediates\\bundles\\debug\\res\\values-id\\values-id.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 360,
+                        "endColumn": 54,
+                        "endOffset": 410
+                    }
+                }
+            }
+        ]
+    }
+]
