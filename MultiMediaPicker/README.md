@@ -1,9 +1,10 @@
 # MultiMediaPickerCropper
-Multiple media picker and cropper is a library to pick and crop multiple images from gallery or camera.
-Added support of picking single and multiple videos.
+Multiple media picker and cropper is a library to pick files, images and videos from storage directory.
+You can also crop multiple images from gallery or camera.
+
 
 # Version
-1.1.3
+1.2.5
 
 # Installation
 
@@ -11,26 +12,20 @@ To use this library in your android project, just simply add the following depen
 
 ```java
 dependencies {
-    compile 'com.crop.multiple:multipleImagePickerLib:1.1.3'
+    compile 'com.crop.multiple:multipleImagePickerLib:1.2.5'
 }
+```
+
+# ToolBar Color
+
+To match your app toolbar color, set this attribute in your application.
+
+```java
+Define.ACTIONBAR_COLOR = getResources().getColor(R.color.colorPrimary);
 ```
 
 # Usage
 We support various features using a builder pattern
-
-```java
-
-MediaFactory.MediaBuilder mediaBuilder = 
-    new MediaFactory.MediaBuilder(MainActivity.this)
-    .getSingleMediaFiles() // Method to pick single media file
-    .takeVideo() //Method to take a video. Default is image
-    .setVideoDuration(10) // Works with video capture from camera. Duration in seconds
-    .setVideoSize(3) // Works with video capture from camera. Size in MB
-    .setVideoQuality(VideoQuality videoQualityEnum) // Set the video quality to low or high. Works with video capture from camera.
-    .fromGallery(); // Location Specific method. Gallery or camera
-mediaFactory = MediaFactory.create().start(mediaBuilder);
-
-```
 
 MediaBuilder Specifications :-
 ```java
@@ -50,7 +45,7 @@ MediaBuilder Specifications :-
 
 And to get the images, you have to add this piece of code to Activity's `onActivityResult` in your app.
 ```java
-String[] all_path = mediaFactory.onActivityResult(requestCode, resultCode, data);
+ArrayList<String> pathArrayList = mediaFactory.onActivityResult(requestCode, resultCode, data);
 ```
 
 # License
