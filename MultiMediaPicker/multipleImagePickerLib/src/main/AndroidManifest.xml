@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.luminous.pick"
+    android:versionCode="1"
+    android:versionName="1.0">
+
+    <!-- For android.media.audiofx.Visualizer -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- We will request access to the camera, saying we require a camera
+     of some sort but not one with autofocus capability. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:theme="@style/AppTheme">
+        <activity android:name="CustomGalleryActivity">
+            <intent-filter>
+                <action android:name="luminous.ACTION_PICK" />
+                <action android:name="luminous.ACTION_MULTIPLE_PICK" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.luminous.pick.MultipleImagePreviewActivity"
+            android:label="Gallery"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="crop.CropImageActivity"
+            android:label="Crop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.luminous.pick.CameraPickActivity"
+            android:label="Camera"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.luminous.pick.VideoPickActivity"
+            android:label="@string/video_preview"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.sangcomz.fishbun.videomodule.VideoAlbumActivity"
+            android:label="@string/video_gallery"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.sangcomz.fishbun.videomodule.VideoAlbumGalleryActivity"
+            android:label="@string/video_gallery"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.sangcomz.fishbun.ui.album.ImageAlbumListActivity"
+            android:label="@string/album"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.sangcomz.fishbun.ui.picker.ImageGalleryPickerActivity" />
+    </application>
+
+</manifest>
