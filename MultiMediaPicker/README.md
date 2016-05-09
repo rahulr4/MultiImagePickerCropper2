@@ -16,6 +16,26 @@ dependencies {
 }
 ```
 
+# Third Party Dependencies
+
+This library uses the following third parties
+
+```java
+dependencies {
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:design:23.2.1'
+    compile 'com.android.support:recyclerview-v7:23.2.1'
+    compile 'com.github.bumptech.glide:glide:3.6.0'
+    compile files('libs/universal-image-loader-1.9.4.jar')
+    compile 'com.squareup.picasso:picasso:2.5.2'
+}
+```
+
+```java
+dependencies {
+    compile 'com.crop.multiple:multipleImagePickerLib:1.2.5'
+}
+```
 # ToolBar Color
 
 To match your app toolbar color, set this attribute in your application.
@@ -25,7 +45,7 @@ Define.ACTIONBAR_COLOR = getResources().getColor(R.color.colorPrimary);
 ```
 
 # Usage
-We support various features using a builder pattern
+Features supported in this library
 
 MediaBuilder Specifications :-
 ```java
