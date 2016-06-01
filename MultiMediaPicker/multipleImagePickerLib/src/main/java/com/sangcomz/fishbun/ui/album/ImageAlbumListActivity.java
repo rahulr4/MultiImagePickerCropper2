@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -184,7 +183,7 @@ public class ImageAlbumListActivity extends AppCompatActivity {
     }
 
 
-    private String getAllMediaThumbnailsPath(long id) {
+    /*private String getAllMediaThumbnailsPath(long id) {
         String path = "";
         String selection = MediaStore.Images.Media.BUCKET_ID + " = ?";
         String bucketId = String.valueOf(id);
@@ -225,6 +224,35 @@ public class ImageAlbumListActivity extends AppCompatActivity {
 
         if (c != null) {
             c.close();
+        }
+        return path;
+    }*/
+
+    private String getAllMediaThumbnailsPath(long id) {
+        String path = "";
+        String selection = MediaStore.Images.Media.BUCKET_ID + " = ?";
+        String bucketid = String.valueOf(id);
+        String sort = MediaStore.Images.Media._ID + " DESC";
+        String[] selectionArgs = {bucketid};
+
+        Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        Cursor c;
+        if (!bucketid.equals("0")) {
+            c = getContentResolver().query(images, null,
+                    selection, selectionArgs, sort);
+        } else {
+            c = getContentResolver().query(images, null,
+                    null, null, sort);
+        }
+
+
+        if (c != null) {
+            c.moveToFirst();
+            while (true) {
+                path = c.getString(c.getColumnIndex(MediaStore.Images.Thumbnails.DATA));
+                c.close();
+                break;
+            }
         }
         return path;
     }

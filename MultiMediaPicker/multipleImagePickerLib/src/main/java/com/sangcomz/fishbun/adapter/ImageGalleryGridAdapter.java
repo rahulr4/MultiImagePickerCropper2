@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.luminous.pick.R;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.sangcomz.fishbun.bean.MediaObject;
 import com.sangcomz.fishbun.util.SquareImageView;
 
@@ -36,6 +38,7 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
         this.pickCount = pickCount;
         this.actionBar = supportActionBar;
         this.bucketTitle = bucketTitle;
+        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
     }
 
     HashSet<Integer> selectedPositions = new HashSet<>();
@@ -78,12 +81,33 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
         } else
             selectedPositions.remove(position);
 
-        Glide.with(holder.imgThumb.getContext())
-                .load(mediaObjectArrayList.get(position).getPath())
-                .asBitmap()
-                /*.override(Define.ALBUM_THUMBNAIL_SIZE, Define.ALBUM_THUMBNAIL_SIZE)*/
-                .placeholder(R.drawable.loading_img)
-                .into(holder.imgThumb);
+        /*if (!TextUtils.isEmpty(mediaObjectArrayList.get(position).getPath())) {
+            Bitmap bitmap = MediaSingleTon.getInstance().getImage(mediaObjectArrayList.get(position).getPath());
+            if (bitmap != null) {
+                try {
+                    Log.i("Image", "Set From Bitmap");
+                    holder.imgThumb.setImageBitmap(bitmap);
+                } catch (Exception e) {
+                    Log.i("Image", "Set From Bitmap Failed");
+                    loadImage(mediaObjectArrayList.get(position).getPath(), holder.imgThumb);
+                }
+            } else {
+                loadImage(mediaObjectArrayList.get(position).getPath(), holder.imgThumb);
+            }
+        } else {
+            holder.imgThumb.setImageResource(R.drawable.loading_img);
+        }*/
+
+        /*Bitmap bitmap = MediaSingleTon.getInstance().getImage(mediaObjectArrayList.get(position).getPath());
+        if (bitmap != null) {
+            holder.imgThumb.setImageBitmap(bitmap);
+            Log.i("Image", "Set From Bitmap : " + position);
+        } else {
+            Log.i("Image", "Set From Glide  : " + position);
+            loadImage(mediaObjectArrayList.get(position).getPath(), holder.imgThumb);
+        }*/
+
+        loadImage(mediaObjectArrayList.get(position).getPath(), holder.imgThumb);
 
         holder.selectIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +126,31 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
         holder.selectIv.setChecked(mediaObjectArrayList.get(position).isSelected);
 
         return convertView;
+    }
+
+    private void loadImage(final String path, final SquareImageView imgThumb) {
+        /*Glide.with(imgThumb.getContext())
+                .load(path)
+                .asBitmap()
+                .placeholder(R.drawable.loading_img)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
+                        Log.i("Image", "Bitmap Loaded");
+                        MediaSingleTon.getInstance().putImage(path, bitmap);
+                        imgThumb.setImageBitmap(bitmap);
+                    }
+                });*/
+        Glide.with(imgThumb.getContext())
+                .load(path)
+                .asBitmap()
+                .placeholder(R.drawable.loading_img)
+                .into(imgThumb);
+//        Picasso.with(imgThumb.getContext())
+//                .load(new File(path))
+//                .placeholder(R.drawable.loading_img)
+//                .into(imgThumb);
+
     }
 
     private void performCheck(ViewHolder holder, int position) {

@@ -136,6 +136,7 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
                     adapter = new ImageGalleryGridAdapter(ImageGalleryPickerActivity.this,
                             mGalleryImageArrayList, getPathDir(), pickCount, getSupportActionBar(), a.bucketname);
                     gridView.setAdapter(adapter);
+//                    new ProcessImages().execute();
                 }
             }
         }
@@ -157,6 +158,43 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
         }
     }
 
+    /*class ProcessImages extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(ImageGalleryPickerActivity.this));
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            for (int i = 0; i < mGalleryImageArrayList.size(); i++) {
+                Bitmap bmp = null;
+                try {
+                    bmp = ImageLoader.getInstance().getMemoryCache().get(Uri.fromFile(new File(mGalleryImageArrayList.get(i).getPath())).toString() + "_");
+                } catch (Exception e) {
+                    Log.e(ProcessGalleryFile.class.getSimpleName(), "" + e);
+                }
+                if (bmp == null) {
+                    try {
+                        bmp = ImageLoader.getInstance().loadImageSync("file://" + mGalleryImageArrayList.get(i).getPath());
+                    } catch (Exception e) {
+                        Log.e(getClass().getSimpleName(), "Exception when rotating thumbnail for gallery", e);
+                    } catch (OutOfMemoryError e) {
+                        Log.e(ProcessGalleryFile.class.getSimpleName(), "" + e);
+                    }
+                }
+                MediaSingleTon.getInstance().putImage(mGalleryImageArrayList.get(i).getPath(), bmp);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            adapter.notifyDataSetChanged();
+        }
+    }*/
+
     private void getAllMediaThumbnailsPath(long id) {
         String path = "";
         String selection = MediaStore.Images.Media.BUCKET_ID + " = ?";
@@ -176,10 +214,7 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
 
 
         if (c != null) {
-
             c.moveToFirst();
-            setPathDir(c.getString(c.getColumnIndex(MediaStore.Images.Media.DATA)), c.getString(c.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME)));
-            int position = 0;
             while (true) {
                 path = c.getString(c.getColumnIndex(MediaStore.Images.Thumbnails.DATA));
                 long creationDate = getCreationDate(path);

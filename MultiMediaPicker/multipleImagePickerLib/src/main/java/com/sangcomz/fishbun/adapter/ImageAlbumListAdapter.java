@@ -24,9 +24,8 @@ public class ImageAlbumListAdapter
         extends RecyclerView.Adapter<ImageAlbumListAdapter.ViewHolder> {
 
     private final int pickCount;
-    private List<Album> albumlist;
+    private List<Album> albumList;
     private List<String> thumbList = new ArrayList<String>();
-    private String thumPath;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -39,7 +38,6 @@ public class ImageAlbumListAdapter
         public ViewHolder(View view) {
             super(view);
             imgAlbum = (ImageView) view.findViewById(R.id.img_album);
-            imgAlbum.setLayoutParams(new RelativeLayout.LayoutParams(Define.ALBUM_THUMBNAIL_SIZE, Define.ALBUM_THUMBNAIL_SIZE));
             txtAlbum = (TextView) view.findViewById(R.id.txt_album);
             txtAlbumCount = (TextView) view.findViewById(R.id.txt_album_count);
             areaAlbum = (RelativeLayout) view.findViewById(R.id.area_album);
@@ -47,7 +45,7 @@ public class ImageAlbumListAdapter
     }
 
     public ImageAlbumListAdapter(List<Album> albumList, int pickCount) {
-        this.albumlist = albumList;
+        this.albumList = albumList;
         this.pickCount = pickCount;
     }
 
@@ -67,26 +65,33 @@ public class ImageAlbumListAdapter
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
+        String thumbPath = "";
         if (thumbList != null && thumbList.size() > position)
-            thumPath = thumbList.get(position);
+            thumbPath = thumbList.get(position);
 
 
-        if (thumbList != null) {
-            if (thumbList.size() > position) {
-                Glide
-                        .with(holder.imgAlbum.getContext())
-                        .load(thumPath)
-                        .asBitmap()
-                        /*.override(Define.ALBUM_THUMBNAIL_SIZE, Define.ALBUM_THUMBNAIL_SIZE)*/
-                        .placeholder(R.drawable.loading_img)
-                        .into(holder.imgAlbum);
-            } else {
-                Glide.with(holder.imgAlbum.getContext()).load(R.drawable.loading_img).into(holder.imgAlbum);
-            }
-        }
-        holder.areaAlbum.setTag(albumlist.get(position));
+        /*if (!TextUtils.isEmpty(thumbPath)) {
+            Bitmap bitmap = MediaSingleTon.getInstance().getImage(thumbPath);
+            if (bitmap != null) {
+                try {
+                    Log.i("Image", "Set From Bitmap");
+                    holder.imgAlbum.setImageBitmap(bitmap);
+                } catch (Exception e) {
+                    Log.i("Image", "Set From Bitmap Failed");
+                    loadImage(thumbPath, holder.imgAlbum);
+                }
+            } else
+                loadImage(thumbPath, holder.imgAlbum);
+
+        } else {
+            holder.imgAlbum.setImageResource(R.drawable.loading_img);
+        }*/
+
+        loadImage(thumbPath, holder.imgAlbum);
+
+        holder.areaAlbum.setTag(albumList.get(position));
         Album a = (Album) holder.areaAlbum.getTag();
-        holder.txtAlbum.setText(albumlist.get(position).bucketname);
+        holder.txtAlbum.setText(albumList.get(position).bucketname);
         holder.txtAlbumCount.setText(String.valueOf(a.counter));
 
 
@@ -96,16 +101,38 @@ public class ImageAlbumListAdapter
                 Album a = (Album) v.getTag();
                 Intent i = new Intent(holder.areaAlbum.getContext(), ImageGalleryPickerActivity.class);
                 i.putExtra("album", a);
-                i.putExtra("album_title", albumlist.get(position).bucketname);
+                i.putExtra("album_title", albumList.get(position).bucketname);
                 i.putExtra("pickCount", pickCount);
                 ((Activity) holder.areaAlbum.getContext()).startActivityForResult(i, Define.ENTER_ALBUM_REQUEST_CODE);
             }
         });
     }
 
+    private void loadImage(String thumbPath, final ImageView imgAlbum) {
+        final String finalThumbPath = thumbPath;
+        /*Glide.with(imgAlbum.getContext())
+                .load(thumbPath)
+                .asBitmap()
+                .placeholder(R.drawable.loading_img)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
+                        Log.i("Image", "Bitmap Loaded");
+                        MediaSingleTon.getInstance().putImage(finalThumbPath, bitmap);
+                        imgAlbum.setImageBitmap(bitmap);
+                    }
+                });*/
+        Glide.with(imgAlbum.getContext())
+                .load(thumbPath)
+                .asBitmap()
+                .placeholder(R.drawable.loading_img)
+                .into(imgAlbum);
+
+    }
+
     @Override
     public int getItemCount() {
-        return albumlist.size();
+        return albumList.size();
     }
 
 

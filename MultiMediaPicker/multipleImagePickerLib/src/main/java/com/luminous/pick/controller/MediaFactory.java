@@ -26,7 +26,6 @@ public class MediaFactory {
     public static MediaFactory mMediaFactory;
 
     private MediaFactory() {
-
     }
 
     public static synchronized MediaFactory create() {
