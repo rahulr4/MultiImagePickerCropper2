@@ -1,19 +1,26 @@
 package com.sangcomz.fishbun.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.luminous.pick.R;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.sangcomz.fishbun.bean.MediaObject;
 import com.sangcomz.fishbun.util.SquareImageView;
 
@@ -26,6 +33,7 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
     private final ArrayList<MediaObject> mediaObjectArrayList;
     private final int pickCount;
     private final Context mContext;
+    private final DisplayImageOptions options;
     String saveDir;
     ActionBar actionBar;
     private String bucketTitle;
@@ -39,6 +47,18 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
         this.actionBar = supportActionBar;
         this.bucketTitle = bucketTitle;
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
+
+
+        BitmapFactory.Options resizeOptions = new BitmapFactory.Options();
+        resizeOptions.inSampleSize = 3; // decrease size 3 times
+
+        options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .showImageOnLoading(R.drawable.placeholder_470x352)
+                .showImageForEmptyUri(R.drawable.placeholder_470x352)
+                .showImageOnFail(R.drawable.placeholder_470x352)
+                .decodingOptions(resizeOptions)
+                .cacheOnDisk(true).build();
     }
 
     HashSet<Integer> selectedPositions = new HashSet<>();
@@ -129,6 +149,28 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
     }
 
     private void loadImage(final String path, final SquareImageView imgThumb) {
+
+        ImageLoader.getInstance().displayImage("file://" + path, new ImageView(mContext), options, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String s, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String s, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                Log.i("Image", "UIL Bitmap Loaded");
+            }
+
+            @Override
+            public void onLoadingCancelled(String s, View view) {
+
+            }
+        });
         /*Glide.with(imgThumb.getContext())
                 .load(path)
                 .asBitmap()
@@ -144,6 +186,7 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
         Glide.with(imgThumb.getContext())
                 .load(path)
                 .asBitmap()
+                .override(150, 150)
                 .placeholder(R.drawable.loading_img)
                 .into(imgThumb);
 //        Picasso.with(imgThumb.getContext())

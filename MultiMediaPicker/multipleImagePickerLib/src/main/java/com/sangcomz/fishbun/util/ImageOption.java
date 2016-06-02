@@ -10,7 +10,7 @@ public enum ImageOption {
     GALLERY_OPTIONS(new DisplayImageOptions.Builder()
             .imageScaleType(ImageScaleType.EXACTLY)
             .bitmapConfig(Bitmap.Config.RGB_565)
-            .cacheOnDisc(false)
+            .cacheOnDisk(false)
             .cacheInMemory(true)
             .build()
     );

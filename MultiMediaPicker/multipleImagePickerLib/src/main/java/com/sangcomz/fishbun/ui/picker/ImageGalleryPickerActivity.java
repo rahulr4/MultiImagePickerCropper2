@@ -91,8 +91,28 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
         if (id == R.id.action_ok) {
             ArrayList<String> path = new ArrayList<>();
             for (int i = 0; i < mGalleryImageArrayList.size(); i++) {
-                if (mGalleryImageArrayList.get(i).isSelected)
+                if (mGalleryImageArrayList.get(i).isSelected) {
+
+                    // method one
+                   /* String path1 = "";
+                    File file = DiskCacheUtils.findInCache("file://" + mGalleryImageArrayList.get(i).getPath(), ImageLoader.getInstance().getDiskCache());
+                    if (file != null) {
+                        path1 = file.getAbsolutePath();
+                        Log.i("Image", path1);
+                    }
+                    // method two
+                    File file2 = ImageLoader.getInstance().getDiskCache().get("file://" + mGalleryImageArrayList.get(i).getPath());
+                    if (file2 != null) {
+                        path1 = file2.getAbsolutePath();
+                        Log.i("Image", path1);
+                    }
+                    if (TextUtils.isEmpty(path1))
+                        path.add(mGalleryImageArrayList.get(i).getPath());
+                    else
+                        path.add(path1);*/
+
                     path.add(mGalleryImageArrayList.get(i).getPath());
+                }
             }
             if (path.isEmpty()) {
                 Snackbar.make(gridView, getString(R.string.msg_no_slected), Snackbar.LENGTH_SHORT).show();
