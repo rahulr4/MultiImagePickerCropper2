@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,14 +26,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.luminous.pick.controller.MediaSingleTon;
 import com.luminous.pick.utils.BitmapDecoder;
 import com.luminous.pick.utils.CameraUtils;
 import com.luminous.pick.utils.ViewPagerSwipeLess;
 import com.sangcomz.fishbun.define.Define;
 import com.sangcomz.fishbun.ui.album.ImageAlbumListActivity;
-import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -268,13 +264,18 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
 
             final ImageView imageView = (ImageView) itemView.findViewById(R.id.full_screen_image);
 
-            if (!TextUtils.isEmpty(dataT.get(position).sdcardPath))
-                Picasso.with(MultipleImagePreviewActivity.this)
+            if (!TextUtils.isEmpty(dataT.get(position).sdcardPath)) {
+                Glide.with(MultipleImagePreviewActivity.this)
+                        .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
+                        .asBitmap()
+                        .into(imageView);
+
+                /*Picasso.with(MultipleImagePreviewActivity.this)
                         .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
                         .placeholder(R.drawable.placeholder_470x352)
                         .error(R.drawable.placeholder_470x352)
-                        .into(imageView);
-            else
+                        .into(imageView);*/
+            } else
                 imageView.setImageResource(R.drawable.placeholder_470x352);
 
             /*Glide.with(MultipleImagePreviewActivity.this)
