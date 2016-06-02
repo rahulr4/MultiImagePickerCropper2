@@ -17,7 +17,16 @@ import java.io.IOException;
 public class BitmapDecoder {
 
     public static String compressImage(String filePath, int outputQuality, Context mContext) {
+
         try {
+            initializeImageLoader(mContext);
+            String imageName = filePath.substring(filePath.lastIndexOf("/") + 1,
+                    filePath.length());
+            File fileBackup = new File(getUserImageDir(mContext) + "/" + imageName);
+            if (fileBackup.exists())
+                return fileBackup.getAbsolutePath();
+
+
             Bitmap scaledBitmap = null;
 
             BitmapFactory.Options options = new BitmapFactory.Options();
@@ -118,10 +127,7 @@ public class BitmapDecoder {
                 e.printStackTrace();
             }
 
-            String imageName = filePath.substring(filePath.lastIndexOf("/") + 1,
-                    filePath.length());
-            File fileBackup = new File(getUserImageDir(mContext) + "/" + imageName);
-            initializeImageLoader(mContext);
+
             FileOutputStream fOut = null;
             try {
                 fOut = new FileOutputStream(fileBackup);

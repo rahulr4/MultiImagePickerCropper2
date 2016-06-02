@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,6 +27,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.luminous.pick.utils.BitmapDecoder;
 import com.luminous.pick.utils.CameraUtils;
 import com.luminous.pick.utils.ViewPagerSwipeLess;
@@ -171,6 +174,52 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
         }
     }
 
+    class ProcessAllImages extends AsyncTask<Void, Void, Void> {
+
+        private ArrayList<String> stringArrayList;
+
+        public ProcessAllImages(ArrayList<String> stringArrayList) {
+
+            this.stringArrayList = stringArrayList;
+        }
+
+        private ProgressDialog mProgressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressDialog = new ProgressDialog(MultipleImagePreviewActivity.this);
+            mProgressDialog.setMessage("Processing images ...");
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setCanceledOnTouchOutside(false);
+            mProgressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            for (int i = 0; i < stringArrayList.size(); i++) {
+                CustomGallery item = new CustomGallery();
+
+                item.sdcardPath = stringArrayList.get(i);
+                item.sdCardUri = Uri.parse(stringArrayList.get(i));
+
+                item.sdcardPath = BitmapDecoder.getBitmap(stringArrayList.get(i), imageQuality, MultipleImagePreviewActivity.this);
+                item.sdCardUri = (Uri.parse(item.sdcardPath));
+
+                dataT.put(item.sdcardPath, item);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            mProgressDialog.dismiss();
+            adapter.customNotify(dataT);
+            mImageListAdapter.customNotify(dataT);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -182,19 +231,20 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
                 if (allPath != null && !allPath.isEmpty()) {
                     if (pickCount == 1) {
                         dataT.clear();
-                        new ProcessImageView().execute(Uri.parse(allPath.get(0)));
+                        new ProcessAllImages(allPath).execute();
                     } else {
-                        for (String string : allPath) {
-                            if (string != null) {
-                                CustomGallery item = new CustomGallery();
-                                item.sdcardPath = string;
-                                item.sdCardUri = Uri.parse(string);
-                                dataT.put(string, item);
-                            }
-                        }
+                        new ProcessAllImages(allPath).execute();
+//                        for (String string : allPath) {
+//                            if (string != null) {
+//                                CustomGallery item = new CustomGallery();
+//                                item.sdcardPath = string;
+//                                item.sdCardUri = Uri.parse(string);
+//                                dataT.put(string, item);
+//                            }
+//                        }
                     }
-                    adapter.customNotify(dataT);
-                    mImageListAdapter.customNotify(dataT);
+//                    adapter.customNotify(dataT);
+//                    mImageListAdapter.customNotify(dataT);
                 }
             } else if (requestCode == Crop.REQUEST_CROP) {
                 try {
@@ -268,7 +318,13 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
                 Glide.with(MultipleImagePreviewActivity.this)
                         .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
                         .asBitmap()
-                        .into(imageView);
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+//                                MediaSingleTon.getInstance().getBitmapHashMap().put(dataT.get(position).sdcardPath, resource);
+                                imageView.setImageBitmap(resource); // Possibly runOnUiThread()
+                            }
+                        });
 
                 /*Picasso.with(MultipleImagePreviewActivity.this)
                         .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
