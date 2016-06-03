@@ -18,6 +18,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.luminous.pick.R;
 import com.msupport.MSupport;
 import com.msupport.MSupportConstants;
@@ -45,12 +46,14 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Fresco.shutDown();
         Glide.get(this).clearMemory();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fresco.initialize(this);
         setContentView(R.layout.activity_photo_picker);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

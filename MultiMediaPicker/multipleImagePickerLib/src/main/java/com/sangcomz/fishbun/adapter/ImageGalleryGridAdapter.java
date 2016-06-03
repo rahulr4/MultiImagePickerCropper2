@@ -1,26 +1,23 @@
 package com.sangcomz.fishbun.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.luminous.pick.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.sangcomz.fishbun.bean.MediaObject;
 import com.sangcomz.fishbun.util.SquareImageView;
 
@@ -83,11 +80,11 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
         final ViewHolder holder;
 
         if (convertView == null) {
-            LayoutInflater vi = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater vi = LayoutInflater.from(mContext);
             holder = new ViewHolder();
             holder.position = position;
-            convertView = vi.inflate(R.layout.list_item_gallery, null);
-            holder.imgThumb = (SquareImageView) convertView.findViewById(R.id.imgThumbnail);
+            convertView = vi.inflate(R.layout.list_image_item_gallery, null);
+            holder.imgThumb = (SimpleDraweeView) convertView.findViewById(R.id.imgThumbnail);
             holder.videoDuration = (TextView) convertView.findViewById(R.id.txtDuration);
             holder.selectIv = (CheckBox) convertView
                     .findViewById(R.id.imgQueueMultiSelected);
@@ -127,7 +124,8 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
             loadImage(mediaObjectArrayList.get(position).getPath(), holder.imgThumb);
         }*/
 
-        loadImage(mediaObjectArrayList.get(position).getPath(), holder.imgThumb);
+        holder.imgThumb.setImageURI(Uri.parse("file://" + mediaObjectArrayList.get(position).getPath()));
+//        loadImage(mediaObjectArrayList.get(position).getPath(), holder.imgThumb);
 
         holder.selectIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,7 +148,7 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
 
     private void loadImage(final String path, final SquareImageView imgThumb) {
 
-        ImageLoader.getInstance().displayImage("file://" + path, new ImageView(mContext), options, new ImageLoadingListener() {
+        /*ImageLoader.getInstance().displayImage("file://" + path, new ImageView(mContext), options, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String s, View view) {
 
@@ -170,7 +168,7 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
             public void onLoadingCancelled(String s, View view) {
 
             }
-        });
+        });*/
         /*Glide.with(imgThumb.getContext())
                 .load(path)
                 .asBitmap()
@@ -216,7 +214,7 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
 
     public static class ViewHolder {
         public CheckBox selectIv;
-        public SquareImageView imgThumb;
+        public SimpleDraweeView imgThumb;
         public TextView videoDuration;
         public MediaObject object;
         public int position;
