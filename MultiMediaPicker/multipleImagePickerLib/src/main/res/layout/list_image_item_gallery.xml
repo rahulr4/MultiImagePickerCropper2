@@ -16,7 +16,7 @@
         fresco:placeholderImage="@drawable/no_media" />
 
     <!--
-        <com.sangcomz.fishbun.util.SquareImageView
+        <com.rahul.media.utils.SquareImageView
             android:id="@+id/imgThumbnail"
             android:layout_width="80dp"
             android:layout_height="80dp"

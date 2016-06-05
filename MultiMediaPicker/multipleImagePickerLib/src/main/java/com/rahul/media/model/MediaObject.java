@@ -1,4 +1,4 @@
-package com.sangcomz.fishbun.bean;
+package com.rahul.media.model;
 
 public class MediaObject implements Comparable<MediaObject> {
     public boolean isSelected = false;

@@ -30,7 +30,7 @@ import com.rahul.media.model.CustomGallery;
 import com.rahul.media.utils.BitmapDecoder;
 import com.rahul.media.utils.MediaUtility;
 import com.rahul.media.utils.ViewPagerSwipeLess;
-import com.sangcomz.fishbun.define.Define;
+import com.rahul.media.model.Define;
 
 import java.io.IOException;
 import java.util.ArrayList;

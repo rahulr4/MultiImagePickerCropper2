@@ -9,9 +9,9 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.rahul.media.R;
-import com.sangcomz.fishbun.bean.MediaObject;
-import com.sangcomz.fishbun.util.ProcessGalleryFile;
-import com.sangcomz.fishbun.util.SquareImageView;
+import com.rahul.media.model.MediaObject;
+import com.rahul.media.utils.ProcessGalleryFile;
+import com.rahul.media.utils.SquareImageView;
 
 import java.util.ArrayList;
 import java.util.Collections;

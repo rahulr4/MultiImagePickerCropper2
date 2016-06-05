@@ -1,4 +1,4 @@
-package com.sangcomz.fishbun.ui.album;
+package com.rahul.media.imagemodule;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -22,10 +22,9 @@ import android.widget.Toast;
 import com.msupport.MSupport;
 import com.msupport.MSupportConstants;
 import com.rahul.media.R;
-import com.sangcomz.fishbun.ItemDecoration.DividerItemDecoration;
-import com.sangcomz.fishbun.adapter.ImageAlbumListAdapter;
-import com.sangcomz.fishbun.bean.Album;
-import com.sangcomz.fishbun.define.Define;
+import com.rahul.media.imagemodule.adapter.ImageAlbumListAdapter;
+import com.rahul.media.model.Album;
+import com.rahul.media.model.Define;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +54,6 @@ public class ImageAlbumListActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
         pickCount = getIntent().getIntExtra("pickCount", 1);
 

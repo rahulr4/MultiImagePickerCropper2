@@ -12,7 +12,7 @@ import com.rahul.media.model.VideoQuality;
 import com.rahul.media.utils.MediaSingleTon;
 import com.rahul.media.utils.MediaUtility;
 import com.rahul.media.videomodule.VideoAlbumActivity;
-import com.sangcomz.fishbun.define.Define;
+import com.rahul.media.model.Define;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.sangcomz.fishbun.util;
+package com.rahul.media.utils;
 
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
@@ -16,7 +16,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.rahul.media.R;
-import com.sangcomz.fishbun.bean.MediaType;
+import com.rahul.media.model.MediaType;
 
 import java.io.File;
 

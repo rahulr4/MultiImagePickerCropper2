@@ -22,9 +22,8 @@ import com.msupport.MSupport;
 import com.msupport.MSupportConstants;
 import com.rahul.media.R;
 import com.rahul.media.videomodule.adapter.VideoAlbumListAdapter;
-import com.sangcomz.fishbun.ItemDecoration.DividerItemDecoration;
-import com.sangcomz.fishbun.bean.GalleryPhotoAlbum;
-import com.sangcomz.fishbun.define.Define;
+import com.rahul.media.model.GalleryPhotoAlbum;
+import com.rahul.media.model.Define;
 
 import java.util.ArrayList;
 
@@ -51,7 +50,6 @@ public class VideoAlbumActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             boolean isStoragePermissionGiven = MSupport.checkPermissionWithRationale(VideoAlbumActivity.this,

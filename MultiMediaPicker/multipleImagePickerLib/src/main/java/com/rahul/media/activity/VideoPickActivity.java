@@ -38,8 +38,8 @@ import com.rahul.media.adapters.VideoPreviewAdapter;
 import com.rahul.media.model.CustomGallery;
 import com.rahul.media.model.VideoQuality;
 import com.rahul.media.utils.ViewPagerSwipeLess;
-import com.sangcomz.fishbun.define.Define;
-import com.sangcomz.fishbun.util.ProcessGalleryFile;
+import com.rahul.media.model.Define;
+import com.rahul.media.utils.ProcessGalleryFile;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.sangcomz.fishbun.util;
+package com.rahul.media.utils;
 
 import android.graphics.Bitmap;
 

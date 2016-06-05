@@ -17,7 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.rahul.media.R;
-import com.sangcomz.fishbun.define.Define;
+import com.rahul.media.model.Define;
 
 import java.io.IOException;
 import java.io.InputStream;

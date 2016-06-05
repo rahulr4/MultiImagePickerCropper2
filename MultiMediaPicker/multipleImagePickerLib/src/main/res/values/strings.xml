@@ -3,7 +3,9 @@
     <string name="crop__saving">Saving picture…</string>
     <string name="crop__wait">Please wait…</string>
     <string name="crop__pick_error">No image sources available</string>
-
+    <string name="btn_ok">OK</string>
+    <string name="btn_pick">Pick From Gallery</string>
+    <string name="btn_pick_mul">Pick From Gallery (Multiple)</string>
     <string name="crop__done">DONE</string>
     <string name="crop__cancel" tools:ignore="ButtonCase">CANCEL</string>
 

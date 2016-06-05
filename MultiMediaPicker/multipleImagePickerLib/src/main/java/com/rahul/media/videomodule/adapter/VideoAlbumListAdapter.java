@@ -12,8 +12,8 @@ import android.widget.TextView;
 
 import com.rahul.media.R;
 import com.rahul.media.videomodule.VideoAlbumGalleryActivity;
-import com.sangcomz.fishbun.bean.GalleryPhotoAlbum;
-import com.sangcomz.fishbun.define.Define;
+import com.rahul.media.model.GalleryPhotoAlbum;
+import com.rahul.media.model.Define;
 
 import java.util.ArrayList;
 

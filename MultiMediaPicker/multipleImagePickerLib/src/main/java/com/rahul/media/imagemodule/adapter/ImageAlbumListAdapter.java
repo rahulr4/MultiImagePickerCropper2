@@ -1,4 +1,4 @@
-package com.sangcomz.fishbun.adapter;
+package com.rahul.media.imagemodule.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.rahul.media.R;
-import com.sangcomz.fishbun.bean.Album;
-import com.sangcomz.fishbun.define.Define;
-import com.sangcomz.fishbun.ui.picker.ImageGalleryPickerActivity;
+import com.rahul.media.model.Album;
+import com.rahul.media.model.Define;
+import com.rahul.media.imagemodule.ImageGalleryPickerActivity;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="80dp"
     android:layout_height="80dp">
 
-    <com.facebook.drawee.view.SimpleDraweeView
+    <com.rahul.media.utils.SquareImageView
         android:id="@+id/imgThumbnail"
         android:layout_width="80dp"
         android:layout_height="130dp"
@@ -12,8 +11,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        fresco:actualImageScaleType="centerCrop"
-        fresco:placeholderImage="@drawable/no_media" />
+        android:scaleType="centerCrop"
+        android:src="@drawable/no_media" />
 
     <TextView
         android:id="@+id/txtDuration"

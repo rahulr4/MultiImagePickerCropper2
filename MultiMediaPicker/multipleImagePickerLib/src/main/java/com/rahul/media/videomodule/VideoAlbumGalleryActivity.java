@@ -28,10 +28,10 @@ import com.msupport.MSupport;
 import com.msupport.MSupportConstants;
 import com.rahul.media.R;
 import com.rahul.media.videomodule.adapter.VideoGalleryAdapter;
-import com.sangcomz.fishbun.bean.MediaObject;
-import com.sangcomz.fishbun.bean.MediaType;
-import com.sangcomz.fishbun.define.Define;
-import com.sangcomz.fishbun.util.ProcessGalleryFile;
+import com.rahul.media.model.MediaObject;
+import com.rahul.media.model.MediaType;
+import com.rahul.media.model.Define;
+import com.rahul.media.utils.ProcessGalleryFile;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -176,7 +176,7 @@ public class VideoAlbumGalleryActivity extends AppCompatActivity {
                                                 holder.object
                                                         .getMediaType());
                                         if (tasks == null) {
-                                            tasks = new HashSet<ProcessGalleryFile>();
+                                            tasks = new HashSet<>();
                                         }
                                         if (!tasks
                                                 .contains(processGalleryFile)) {

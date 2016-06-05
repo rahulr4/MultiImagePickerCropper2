@@ -1,4 +1,4 @@
-package com.sangcomz.fishbun.ui.picker;
+package com.rahul.media.imagemodule;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,11 +21,11 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.msupport.MSupport;
 import com.msupport.MSupportConstants;
 import com.rahul.media.R;
-import com.sangcomz.fishbun.adapter.ImageGalleryGridAdapter;
-import com.sangcomz.fishbun.bean.Album;
-import com.sangcomz.fishbun.bean.MediaObject;
-import com.sangcomz.fishbun.bean.MediaType;
-import com.sangcomz.fishbun.define.Define;
+import com.rahul.media.imagemodule.adapter.ImageGalleryGridAdapter;
+import com.rahul.media.model.Album;
+import com.rahul.media.model.MediaObject;
+import com.rahul.media.model.MediaType;
+import com.rahul.media.model.Define;
 
 import java.io.File;
 import java.util.ArrayList;

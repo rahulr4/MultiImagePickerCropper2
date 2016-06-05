@@ -1,4 +1,4 @@
-package com.sangcomz.fishbun.define;
+package com.rahul.media.model;
 
 import android.graphics.Color;
 
@@ -14,10 +14,4 @@ public class Define {
     public static final String INTENT_PATH = "all_path";
     public static int ENTER_ALBUM_REQUEST_CODE = 123;
 
-    /*public static void setActionbarTitle(int total) {
-        if (pickCount == 1)
-            actionBar.setTitle(bucketTitle);
-        else
-            actionBar.setTitle(bucketTitle + "(" + String.valueOf(total) + "/" + pickCount + ")");
-    }*/
 }

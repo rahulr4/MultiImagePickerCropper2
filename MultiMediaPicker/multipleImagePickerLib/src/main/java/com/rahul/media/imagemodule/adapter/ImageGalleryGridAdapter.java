@@ -1,4 +1,4 @@
-package com.sangcomz.fishbun.adapter;
+package com.rahul.media.imagemodule.adapter;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
@@ -17,7 +17,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.rahul.media.R;
-import com.sangcomz.fishbun.bean.MediaObject;
+import com.rahul.media.model.MediaObject;
 
 import java.util.ArrayList;
 import java.util.HashSet;
