@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.luminous.pick.R;
+import com.rahul.media.R;
 import com.sangcomz.fishbun.bean.MediaObject;
 import com.sangcomz.fishbun.util.ProcessGalleryFile;
 import com.sangcomz.fishbun.util.SquareImageView;

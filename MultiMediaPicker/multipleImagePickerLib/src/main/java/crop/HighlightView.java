@@ -15,7 +15,7 @@ import android.os.Build;
 import android.util.TypedValue;
 import android.view.View;
 
-import com.luminous.pick.R;
+import com.rahul.media.R;
 
 class HighlightView {
 

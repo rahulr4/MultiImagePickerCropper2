@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.rahul.media.R;
 import com.rahul.media.model.CustomGallery;
-import com.luminous.pick.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;

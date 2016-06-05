@@ -24,14 +24,14 @@ import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.luminous.pick.R;
 import com.msupport.MSupport;
 import com.msupport.MSupportConstants;
+import com.rahul.media.R;
+import com.rahul.media.videomodule.adapter.VideoGalleryAdapter;
 import com.sangcomz.fishbun.bean.MediaObject;
 import com.sangcomz.fishbun.bean.MediaType;
 import com.sangcomz.fishbun.define.Define;
 import com.sangcomz.fishbun.util.ProcessGalleryFile;
-import com.rahul.media.videomodule.adapter.VideoGalleryAdapter;
 
 import java.io.File;
 import java.util.ArrayList;

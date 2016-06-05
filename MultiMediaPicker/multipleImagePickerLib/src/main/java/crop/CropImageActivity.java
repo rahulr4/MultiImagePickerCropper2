@@ -16,7 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.luminous.pick.R;
+import com.rahul.media.R;
 import com.sangcomz.fishbun.define.Define;
 
 import java.io.IOException;

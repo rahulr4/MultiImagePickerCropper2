@@ -3,21 +3,17 @@ package com.rahul.media.adapters;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.luminous.pick.R;
-import com.rahul.media.activity.VideoPickActivity;
+import com.rahul.media.R;
 import com.rahul.media.model.CustomGallery;
-import com.rahul.media.utils.MediaSingleTon;
 
 import java.util.ArrayList;
 import java.util.HashMap;

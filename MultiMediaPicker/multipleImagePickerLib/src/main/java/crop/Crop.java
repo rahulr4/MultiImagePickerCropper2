@@ -9,7 +9,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
-import com.luminous.pick.R;
+import com.rahul.media.R;
 
 public class Crop {
 

@@ -12,7 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 
-import com.luminous.pick.R;
+import com.rahul.media.R;
 
 import java.util.ArrayList;
 import java.util.List;

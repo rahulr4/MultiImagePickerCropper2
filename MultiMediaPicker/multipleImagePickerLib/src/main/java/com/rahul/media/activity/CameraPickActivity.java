@@ -21,15 +21,15 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.rahul.media.model.CustomGallery;
-import com.rahul.media.adapters.ImageListRecycleAdapter;
-import com.luminous.pick.R;
-import com.rahul.media.adapters.ImagePreviewAdapter;
-import com.rahul.media.utils.BitmapDecoder;
-import com.rahul.media.utils.ViewPagerSwipeLess;
 import com.msupport.MSupport;
 import com.msupport.MSupportConstants;
+import com.rahul.media.R;
+import com.rahul.media.adapters.ImageListRecycleAdapter;
+import com.rahul.media.adapters.ImagePreviewAdapter;
+import com.rahul.media.model.CustomGallery;
+import com.rahul.media.utils.BitmapDecoder;
 import com.rahul.media.utils.MediaUtility;
+import com.rahul.media.utils.ViewPagerSwipeLess;
 import com.sangcomz.fishbun.define.Define;
 
 import java.io.IOException;

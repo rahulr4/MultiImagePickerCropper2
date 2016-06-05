@@ -18,13 +18,13 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.luminous.pick.R;
 import com.msupport.MSupport;
 import com.msupport.MSupportConstants;
+import com.rahul.media.R;
+import com.rahul.media.videomodule.adapter.VideoAlbumListAdapter;
 import com.sangcomz.fishbun.ItemDecoration.DividerItemDecoration;
 import com.sangcomz.fishbun.bean.GalleryPhotoAlbum;
 import com.sangcomz.fishbun.define.Define;
-import com.rahul.media.videomodule.adapter.VideoAlbumListAdapter;
 
 import java.util.ArrayList;
 

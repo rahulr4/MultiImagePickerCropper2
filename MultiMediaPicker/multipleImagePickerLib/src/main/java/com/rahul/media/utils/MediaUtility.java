@@ -19,6 +19,18 @@ import static android.os.Environment.MEDIA_MOUNTED;
  */
 
 public class MediaUtility {
+    public static String getUserImageDir(Context mContext) {
+        return Environment.getExternalStorageDirectory().getAbsolutePath()
+                + "/MultipleImageCache/data/" + mContext.getPackageName() + "/images";
+    }
+
+    public static File initializeImageLoader(Context mContext) {
+        File cacheDir = new File(getUserImageDir(mContext));
+        if (!cacheDir.exists())
+            cacheDir.mkdirs();
+        return cacheDir;
+    }
+
     public static Uri createImageFile(Context mContext) throws IOException {
 
         File image = null;

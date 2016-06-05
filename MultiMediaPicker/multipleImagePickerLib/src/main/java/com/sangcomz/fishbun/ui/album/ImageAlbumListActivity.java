@@ -19,9 +19,9 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.luminous.pick.R;
 import com.msupport.MSupport;
 import com.msupport.MSupportConstants;
+import com.rahul.media.R;
 import com.sangcomz.fishbun.ItemDecoration.DividerItemDecoration;
 import com.sangcomz.fishbun.adapter.ImageAlbumListAdapter;
 import com.sangcomz.fishbun.bean.Album;

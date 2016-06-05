@@ -29,10 +29,10 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.luminous.pick.R;
 import com.msupport.MSupport;
 import com.msupport.MSupportConstants;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.rahul.media.R;
 import com.rahul.media.adapters.ImageListRecycleAdapter;
 import com.rahul.media.adapters.VideoPreviewAdapter;
 import com.rahul.media.model.CustomGallery;

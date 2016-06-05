@@ -25,7 +25,7 @@ import android.widget.LinearLayout;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.luminous.pick.R;
+import com.rahul.media.R;
 import com.rahul.media.adapters.ImageListRecycleAdapter;
 import com.rahul.media.model.CustomGallery;
 import com.rahul.media.utils.BitmapDecoder;

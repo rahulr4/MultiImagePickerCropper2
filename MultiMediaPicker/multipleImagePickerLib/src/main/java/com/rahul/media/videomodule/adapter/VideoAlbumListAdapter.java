@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.luminous.pick.R;
+import com.rahul.media.R;
 import com.rahul.media.videomodule.VideoAlbumGalleryActivity;
 import com.sangcomz.fishbun.bean.GalleryPhotoAlbum;
 import com.sangcomz.fishbun.define.Define;

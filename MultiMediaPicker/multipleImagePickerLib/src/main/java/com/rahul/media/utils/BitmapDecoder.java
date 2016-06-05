@@ -7,12 +7,14 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.media.ExifInterface;
-import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import static com.rahul.media.utils.MediaUtility.getUserImageDir;
+import static com.rahul.media.utils.MediaUtility.initializeImageLoader;
 
 public class BitmapDecoder {
 
@@ -261,18 +263,6 @@ public class BitmapDecoder {
             }
         }
         return filePath;*/
-
-    }
-
-    private static String getUserImageDir(Context mContext) {
-        return Environment.getExternalStorageDirectory().getAbsolutePath()
-                + "/MultipleImageCache/data/" + mContext.getPackageName() + "/images";
-    }
-
-    private static void initializeImageLoader(Context mContext) {
-        File cacheDir = new File(getUserImageDir(mContext));
-        if (!cacheDir.exists())
-            cacheDir.mkdirs();
 
     }
 

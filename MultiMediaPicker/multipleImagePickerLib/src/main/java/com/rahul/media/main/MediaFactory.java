@@ -8,10 +8,11 @@ import android.os.Bundle;
 import com.rahul.media.activity.CameraPickActivity;
 import com.rahul.media.activity.MultipleImagePreviewActivity;
 import com.rahul.media.activity.VideoPickActivity;
-import com.rahul.media.utils.MediaSingleTon;
 import com.rahul.media.model.VideoQuality;
-import com.sangcomz.fishbun.define.Define;
+import com.rahul.media.utils.MediaSingleTon;
+import com.rahul.media.utils.MediaUtility;
 import com.rahul.media.videomodule.VideoAlbumActivity;
+import com.sangcomz.fishbun.define.Define;
 
 import java.util.ArrayList;
 
@@ -31,6 +32,18 @@ public class MediaFactory {
         if (mMediaFactory == null)
             mMediaFactory = new MediaFactory();
         return mMediaFactory;
+    }
+
+    /**
+     * Method to clear cached images stored in sd card
+     *
+     * @param context
+     */
+    public void clearCache(Context context) {
+        try {
+            MediaUtility.initializeImageLoader(context).delete();
+        } catch (Exception ignored) {
+        }
     }
 
     public static class MediaBuilder {
