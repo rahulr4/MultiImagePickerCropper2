@@ -4,7 +4,7 @@ You can also crop multiple images from gallery or camera.
 
 
 # Version
-1.2.5
+1.2.7
 
 # Installation
 
@@ -12,7 +12,7 @@ To use this library in your android project, just simply add the following depen
 
 ```java
 dependencies {
-    compile 'com.crop.multiple:multipleImagePickerLib:1.2.5'
+    compile 'com.crop.multiple:multipleImagePickerLib:1.2.7'
 }
 ```
 
@@ -22,9 +22,9 @@ This library uses the following third parties
 
 ```java
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.2.1'
-    compile 'com.android.support:design:23.2.1'
-    compile 'com.android.support:recyclerview-v7:23.2.1'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:recyclerview-v7:23.4.0'
     compile files('libs/universal-image-loader-1.9.4.jar')
     compile 'com.facebook.fresco:fresco:0.7.0'
 }
@@ -32,7 +32,7 @@ dependencies {
 
 ```java
 dependencies {
-    compile 'com.crop.multiple:multipleImagePickerLib:1.2.5'
+    compile 'com.crop.multiple:multipleImagePickerLib:1.2.7'
 }
 ```
 # ToolBar Color
@@ -55,14 +55,13 @@ MediaBuilder Specifications :-
     fromGallery() // Picks media file from gallery
     fromCamera() //Captures media file from camera. Default is gallery
     doCropping() // Cropping functionality for images only. Default is false
-    getSingleMediaFiles() // Picks single media from said location
-    getMultipleMediaFiles()// Picks multiple media from said location. Default is Single Media
-    
+
     MediaFactory start(MediaBuilder mediaBuilder) // Takes the builder object and starts the media capturing process
 
+    MediaFactory.create().clearCache(MainActivity.this); // Clears local cache of compressed images from sd card
 ```
 
-And to get the images, you have to add this piece of code to Activity's `onActivityResult` in your app.
+And to get the files, you have to add this piece of code to Activity's `onActivityResult` in your app.
 ```java
 ArrayList<String> pathArrayList = mediaFactory.onActivityResult(requestCode, resultCode, data);
 ```
