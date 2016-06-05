@@ -12,14 +12,12 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.luminous.pick.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.sangcomz.fishbun.bean.MediaObject;
-import com.sangcomz.fishbun.util.SquareImageView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -98,34 +96,7 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
         } else
             selectedPositions.remove(position);
 
-        /*if (!TextUtils.isEmpty(mediaObjectArrayList.get(position).getPath())) {
-            Bitmap bitmap = MediaSingleTon.getInstance().getImage(mediaObjectArrayList.get(position).getPath());
-            if (bitmap != null) {
-                try {
-                    Log.i("Image", "Set From Bitmap");
-                    holder.imgThumb.setImageBitmap(bitmap);
-                } catch (Exception e) {
-                    Log.i("Image", "Set From Bitmap Failed");
-                    loadImage(mediaObjectArrayList.get(position).getPath(), holder.imgThumb);
-                }
-            } else {
-                loadImage(mediaObjectArrayList.get(position).getPath(), holder.imgThumb);
-            }
-        } else {
-            holder.imgThumb.setImageResource(R.drawable.loading_img);
-        }*/
-
-        /*Bitmap bitmap = MediaSingleTon.getInstance().getImage(mediaObjectArrayList.get(position).getPath());
-        if (bitmap != null) {
-            holder.imgThumb.setImageBitmap(bitmap);
-            Log.i("Image", "Set From Bitmap : " + position);
-        } else {
-            Log.i("Image", "Set From Glide  : " + position);
-            loadImage(mediaObjectArrayList.get(position).getPath(), holder.imgThumb);
-        }*/
-
         holder.imgThumb.setImageURI(Uri.parse("file://" + mediaObjectArrayList.get(position).getPath()));
-//        loadImage(mediaObjectArrayList.get(position).getPath(), holder.imgThumb);
 
         holder.selectIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,54 +117,6 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void loadImage(final String path, final SquareImageView imgThumb) {
-
-        /*ImageLoader.getInstance().displayImage("file://" + path, new ImageView(mContext), options, new ImageLoadingListener() {
-            @Override
-            public void onLoadingStarted(String s, View view) {
-
-            }
-
-            @Override
-            public void onLoadingFailed(String s, View view, FailReason failReason) {
-
-            }
-
-            @Override
-            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-                Log.i("Image", "UIL Bitmap Loaded");
-            }
-
-            @Override
-            public void onLoadingCancelled(String s, View view) {
-
-            }
-        });*/
-        /*Glide.with(imgThumb.getContext())
-                .load(path)
-                .asBitmap()
-                .placeholder(R.drawable.loading_img)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap bitmap, GlideAnimation glideAnimation) {
-                        Log.i("Image", "Bitmap Loaded");
-                        MediaSingleTon.getInstance().putImage(path, bitmap);
-                        imgThumb.setImageBitmap(bitmap);
-                    }
-                });*/
-        Glide.with(imgThumb.getContext())
-                .load(path)
-                .asBitmap()
-                .override(150, 150)
-                .placeholder(R.drawable.loading_img)
-                .into(imgThumb);
-//        Picasso.with(imgThumb.getContext())
-//                .load(new File(path))
-//                .placeholder(R.drawable.loading_img)
-//                .into(imgThumb);
-
-    }
-
     private void performCheck(ViewHolder holder, int position) {
         if (selectedPositions.size() == pickCount && !mediaObjectArrayList.get(position).isSelected) {
             if (pickCount == 1)
@@ -212,15 +135,14 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
         holder.selectIv.setChecked(mediaObjectArrayList.get(position).isSelected);
     }
 
-    public static class ViewHolder {
-        public CheckBox selectIv;
-        public SimpleDraweeView imgThumb;
-        public TextView videoDuration;
-        public MediaObject object;
+    private static class ViewHolder {
+        CheckBox selectIv;
+        SimpleDraweeView imgThumb;
+        TextView videoDuration;
         public int position;
     }
 
-    public void setActionbarTitle(int total) {
+    private void setActionbarTitle(int total) {
         if (pickCount == 1)
             actionBar.setTitle(bucketTitle);
         else

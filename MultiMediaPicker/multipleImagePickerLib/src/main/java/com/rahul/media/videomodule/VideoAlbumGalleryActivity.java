@@ -1,4 +1,4 @@
-package com.sangcomz.fishbun.videomodule;
+package com.rahul.media.videomodule;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -31,7 +31,7 @@ import com.sangcomz.fishbun.bean.MediaObject;
 import com.sangcomz.fishbun.bean.MediaType;
 import com.sangcomz.fishbun.define.Define;
 import com.sangcomz.fishbun.util.ProcessGalleryFile;
-import com.sangcomz.fishbun.videomodule.adapter.VideoGalleryAdapter;
+import com.rahul.media.videomodule.adapter.VideoGalleryAdapter;
 
 import java.io.File;
 import java.util.ArrayList;

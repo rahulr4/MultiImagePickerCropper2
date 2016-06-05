@@ -21,17 +21,9 @@
     <application
         android:allowBackup="true"
         android:theme="@style/AppTheme">
-        <activity android:name="CustomGalleryActivity">
-            <intent-filter>
-                <action android:name="luminous.ACTION_PICK" />
-                <action android:name="luminous.ACTION_MULTIPLE_PICK" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
 
         <activity
-            android:name="com.luminous.pick.MultipleImagePreviewActivity"
+            android:name="com.rahul.media.activity.MultipleImagePreviewActivity"
             android:label="Gallery"
             android:screenOrientation="portrait" />
         <activity
@@ -39,21 +31,21 @@
             android:label="Crop"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.luminous.pick.CameraPickActivity"
+            android:name="com.rahul.media.activity.CameraPickActivity"
             android:label="Camera"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.luminous.pick.VideoPickActivity"
+            android:name="com.rahul.media.activity.VideoPickActivity"
             android:label="@string/video_preview"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.sangcomz.fishbun.videomodule.VideoAlbumActivity"
+            android:name="com.rahul.media.videomodule.VideoAlbumActivity"
             android:label="@string/video_gallery"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.sangcomz.fishbun.videomodule.VideoAlbumGalleryActivity"
+            android:name="com.rahul.media.videomodule.VideoAlbumGalleryActivity"
             android:label="@string/video_gallery"
             android:screenOrientation="portrait" />
 
@@ -61,7 +53,9 @@
             android:name="com.sangcomz.fishbun.ui.album.ImageAlbumListActivity"
             android:label="@string/album"
             android:screenOrientation="portrait" />
-        <activity android:name="com.sangcomz.fishbun.ui.picker.ImageGalleryPickerActivity" />
+        <activity
+            android:name="com.sangcomz.fishbun.ui.picker.ImageGalleryPickerActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

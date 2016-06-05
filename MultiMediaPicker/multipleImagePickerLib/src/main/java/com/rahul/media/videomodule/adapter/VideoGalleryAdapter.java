@@ -1,4 +1,4 @@
-package com.sangcomz.fishbun.videomodule.adapter;
+package com.rahul.media.videomodule.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

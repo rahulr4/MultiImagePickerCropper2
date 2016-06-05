@@ -1,8 +1,7 @@
-package com.luminous.pick;
+package com.rahul.media.activity;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,33 +16,32 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.luminous.pick.controller.MediaSingleTon;
-import com.luminous.pick.utils.VideoQuality;
-import com.luminous.pick.utils.ViewPagerSwipeLess;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.luminous.pick.R;
 import com.msupport.MSupport;
 import com.msupport.MSupportConstants;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.rahul.media.adapters.ImageListRecycleAdapter;
+import com.rahul.media.adapters.VideoPreviewAdapter;
+import com.rahul.media.model.CustomGallery;
+import com.rahul.media.model.VideoQuality;
+import com.rahul.media.utils.ViewPagerSwipeLess;
 import com.sangcomz.fishbun.define.Define;
+import com.sangcomz.fishbun.util.ProcessGalleryFile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -53,18 +51,17 @@ import java.util.HashMap;
 public class VideoPickActivity extends AppCompatActivity {
     private static final int ACTION_REQUEST_VIDEO_FROM_CAMERA = 201;
     private static final int ACTION_REQUEST_VIDEO_FROM_GALLERY = 202;
-    private static AlertDialog alertDialog;
-    String action = Action.ACTION_PICK;
+    private AlertDialog alertDialog;
     private ViewPagerSwipeLess mPager;
     private HashMap<String, CustomGallery> dataT;
-    private CustomPagerAdapter adapter;
+    private VideoPreviewAdapter adapter;
     private ImageListRecycleAdapter mImageListAdapter;
     private long videoSize;
     private int videoDuration;
     private int videoQuality = VideoQuality.HIGH_QUALITY.getQuality();
+    private int pickCount;
 
-
-    public static void showAlertDialog(Context mContext, String text) {
+    private void showAlertDialog(Context mContext, String text) {
 
         alertDialog = new AlertDialog.Builder(mContext)
                 .setMessage(text)
@@ -76,6 +73,12 @@ public class VideoPickActivity extends AppCompatActivity {
                             }
                         }).create();
         alertDialog.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Fresco.initialize(this);
     }
 
     @Override
@@ -92,8 +95,8 @@ public class VideoPickActivity extends AppCompatActivity {
         progressDialog.setMessage("Please wait ...");
         progressDialog.setCancelable(false);
         mPager = (ViewPagerSwipeLess) findViewById(R.id.pager);
-        dataT = new HashMap<String, CustomGallery>();
-        adapter = new CustomPagerAdapter(dataT);
+        dataT = new HashMap<>();
+        adapter = new VideoPreviewAdapter(VideoPickActivity.this, dataT);
         mPager.setAdapter(adapter);
         mImageListAdapter = new ImageListRecycleAdapter(this, dataT);
         RecyclerView mRecycleView = (RecyclerView) findViewById(R.id.image_hlistview);
@@ -106,21 +109,18 @@ public class VideoPickActivity extends AppCompatActivity {
             }
         });
 
-        if (getIntent().getAction() != null)
-            action = getIntent().getAction();
-
         try {
             videoSize = getIntent().getExtras().getLong("videoSize");
             videoDuration = (int) getIntent().getExtras().getLong("videoDuration");
             videoQuality = getIntent().getExtras().getInt("videoQuality");
-
+            pickCount = getIntent().getIntExtra("pickCount", 1);
         } catch (Exception e) {
             e.printStackTrace();
         }
         openVideoFromCamera(false);
     }
 
-    public void openVideoFromCamera(boolean isPermission) {
+    private void openVideoFromCamera(boolean isPermission) {
         String[] permissionSet = {MSupportConstants.WRITE_EXTERNAL_STORAGE, MSupportConstants.CAMERA};
         if (isPermission) {
             openVideoCamera();
@@ -192,20 +192,34 @@ public class VideoPickActivity extends AppCompatActivity {
         }
     }
 
-    Bitmap thumbnail = null;
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
-    void getBitmapFromPath(final CustomGallery item) {
+    private void getBitmapFromPath(final CustomGallery item) {
         progressDialog.show();
         try {
             final Handler mHandler = new Handler();
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
+                    Bitmap bmp = null;
                     try {
-                        thumbnail = ThumbnailUtils.createVideoThumbnail(item.sdcardPath,
-                                MediaStore.Images.Thumbnails.MINI_KIND);
-                        item.bitmap = thumbnail;
+                        bmp = ImageLoader.getInstance().getMemoryCache().get(Uri.fromFile(new File(item.sdcardPath)).toString() + "_");
+                    } catch (Exception e) {
+                        Log.e(ProcessGalleryFile.class.getSimpleName(), "" + e);
+                    }
+                    if (bmp == null) {
+                        try {
+                            bmp = ThumbnailUtils.createVideoThumbnail(item.sdcardPath, MediaStore.Images.Thumbnails.MINI_KIND);
+                            if (bmp != null) {
+                                ImageLoader.getInstance().getMemoryCache().put(Uri.fromFile(new File(item.sdcardPath)).toString() + "_", bmp);
+                            }
+                        } catch (Exception e) {
+                            Log.e(getClass().getSimpleName(), "Exception when rotating thumbnail for gallery", e);
+                        } catch (OutOfMemoryError e) {
+                            Log.e(ProcessGalleryFile.class.getSimpleName(), "" + e);
+                        }
+                    }
+                    try {
                         dataT.put(item.sdcardPath, item);
                         mImageListAdapter.customNotify(dataT);
                         adapter.customNotify(dataT);
@@ -230,7 +244,7 @@ public class VideoPickActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             String videoUriFromCamera = "";
-            if (action.equals(Action.ACTION_PICK)) {
+            if (pickCount == 1) {
                 dataT.clear();
             }
             if (requestCode == ACTION_REQUEST_VIDEO_FROM_CAMERA) {
@@ -304,112 +318,10 @@ public class VideoPickActivity extends AppCompatActivity {
         return path;
     }
 
-    class CustomPagerAdapter extends PagerAdapter {
-
-        LayoutInflater mLayoutInflater;
-        ArrayList<CustomGallery> dataT;
-
-        public CustomPagerAdapter(HashMap<String, CustomGallery> dataT) {
-            this.dataT = new ArrayList<CustomGallery>(dataT.values());
-            mLayoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        }
-
-        public void customNotify(HashMap<String, CustomGallery> dataHashmap) {
-            dataT.clear();
-            ArrayList<CustomGallery> dataT2 = new ArrayList<CustomGallery>(dataHashmap.values());
-            this.dataT.addAll(dataT2);
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public int getCount() {
-            return dataT.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == ((FrameLayout) object);
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            return POSITION_NONE;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, final int position) {
-            View itemView = mLayoutInflater.inflate(R.layout.video_image_pager_item, container, false);
-
-            final ImageView imageView = (ImageView) itemView.findViewById(R.id.full_screen_image);
-
-            if (dataT.get(position).bitmap != null) {
-                imageView.setImageBitmap(dataT.get(position).bitmap);
-            } else {
-
-                Glide.with(VideoPickActivity.this)
-                        .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
-                        .asBitmap()
-                        .into(new SimpleTarget<Bitmap>(100, 100) {
-                            @Override
-                            public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                                MediaSingleTon.getInstance().getBitmapHashMap().put(dataT.get(position).sdcardPath, resource);
-                                imageView.setImageBitmap(resource); // Possibly runOnUiThread()
-                            }
-                        });
-
-                /*if (MediaSingleTon.getInstance().getBitmapHashMap().containsKey(dataT.get(position).sdcardPath)) {
-                    imageView.setImageBitmap(MediaSingleTon.getInstance().getBitmapHashMap().get((dataT.get(position).sdcardPath)));
-                } else
-                    Glide.with(VideoPickActivity.this)
-                            .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
-                            .asBitmap()
-                            .into(new SimpleTarget<Bitmap>(100, 100) {
-                                @Override
-                                public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                                    MediaSingleTon.getInstance().getBitmapHashMap().put(dataT.get(position).sdcardPath, resource);
-                                    imageView.setImageBitmap(resource); // Possibly runOnUiThread()
-                                }
-                            });*/
-            }
-
-            container.addView(itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.parse(dataT.get(position).sdcardPath), "video/*");
-                        startActivity(Intent.createChooser(intent, "Complete action using .."));
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        if (e instanceof ActivityNotFoundException) {
-                            showAlertDialog(VideoPickActivity.this, "Video Player not found");
-                        }
-
-                    }
-                }
-            });
-            return itemView;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((FrameLayout) object);
-        }
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (dataT != null && dataT.size() > 0) {
-            ArrayList<CustomGallery> dataT2 = new ArrayList<CustomGallery>(dataT.values());
-            for (int i = 0; i < dataT2.size(); i++) {
-                if (null != dataT2.get(i).bitmap) {
-                    dataT2.get(i).bitmap.recycle();
-                }
-            }
-        }
+//        Fresco.shutDown();
     }
 
     @Override

@@ -8,8 +8,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
 
-import com.luminous.pick.CustomGallery;
-import com.luminous.pick.controller.MediaFactory;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.rahul.media.main.MediaFactory;
+import com.rahul.media.model.CustomGallery;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +20,17 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     private ImageAdapter mImageAdapter;
     private MediaFactory mediaFactory;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        Fresco.shutDown();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Fresco.initialize(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         switch (v.getId()) {
             case R.id.img_single_pick:
                 mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
-                        .getSingleMediaFiles()
                         .setPickCount(1)
                         .doCropping()
                         .fromGallery();
@@ -57,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 break;
             case R.id.img_multiple_pick:
                 mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
-                        .getMultipleMediaFiles()
                         .fromGallery()
                         .setPickCount(10)
                         .doCropping();
@@ -65,40 +75,34 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 break;
             case R.id.img_single_pick_camera:
                 mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
-                        .getSingleMediaFiles()
                         .fromCamera();
                 mediaFactory = MediaFactory.create().start(mediaBuilder);
                 break;
             case R.id.img_multiple_pick_camera:
                 mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
-                        .getMultipleMediaFiles()
                         .fromCamera();
                 mediaFactory = MediaFactory.create().start(mediaBuilder);
                 break;
             case R.id.vid_single_pick:
                 mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
-                        .getSingleMediaFiles()
                         .takeVideo()
                         .fromGallery();
                 mediaFactory = MediaFactory.create().start(mediaBuilder);
                 break;
             case R.id.vid_multiple_pick:
                 mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
-                        .getMultipleMediaFiles()
                         .takeVideo()
                         .fromGallery();
                 mediaFactory = MediaFactory.create().start(mediaBuilder);
                 break;
             case R.id.vid_single_pick_camera:
                 mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
-                        .getSingleMediaFiles()
                         .takeVideo()
                         .fromCamera();
                 mediaFactory = MediaFactory.create().start(mediaBuilder);
                 break;
             case R.id.vid_multiple_pick_camera:
                 mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
-                        .getMultipleMediaFiles()
                         .takeVideo()
                         .fromCamera();
                 mediaFactory = MediaFactory.create().start(mediaBuilder);

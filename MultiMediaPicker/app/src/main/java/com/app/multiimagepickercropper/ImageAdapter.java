@@ -1,18 +1,14 @@
 package com.app.multiimagepickercropper;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -56,7 +52,7 @@ public class ImageAdapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.adapter_create_tikkrr_images,
                     null);
-            holder.imageView = (ImageView) convertView
+            holder.imageView = (SimpleDraweeView) convertView
                     .findViewById(R.id.image);
             holder.imagePathTv = (TextView) convertView
                     .findViewById(R.id.image_path);
@@ -74,17 +70,7 @@ public class ImageAdapter extends BaseAdapter {
 
         holder.imageSize.setText("Size :- " + length + " KB");
 
-        
-        Glide.with(mContext)
-                .load(Uri.parse("file://" + mMediaPathArrayList2.get(position).getImagePath()))
-                .asBitmap()
-                .into(new SimpleTarget<Bitmap>(100, 100) {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                        holder.imageView.setImageBitmap(resource); // Possibly runOnUiThread()
-                    }
-                });
-
+        holder.imageView.setImageURI(Uri.parse("file://" + mMediaPathArrayList2.get(position).getImagePath()));
         return convertView;
     }
 
@@ -96,7 +82,7 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        ImageView imageView;
+        SimpleDraweeView imageView;
         TextView imagePathTv, imageSize;
     }
 

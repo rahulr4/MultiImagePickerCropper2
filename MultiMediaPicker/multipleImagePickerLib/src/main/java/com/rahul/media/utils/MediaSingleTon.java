@@ -1,4 +1,4 @@
-package com.luminous.pick.controller;
+package com.rahul.media.utils;
 
 import android.graphics.Bitmap;
 

@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.luminous.pick.R;
 import com.msupport.MSupport;
@@ -46,8 +45,7 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Fresco.shutDown();
-        Glide.get(this).clearMemory();
+//        Fresco.shutDown();
     }
 
     @Override

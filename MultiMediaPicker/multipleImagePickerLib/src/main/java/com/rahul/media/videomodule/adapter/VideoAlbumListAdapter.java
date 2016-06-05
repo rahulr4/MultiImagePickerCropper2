@@ -1,4 +1,4 @@
-package com.sangcomz.fishbun.videomodule.adapter;
+package com.rahul.media.videomodule.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,9 +11,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.luminous.pick.R;
+import com.rahul.media.videomodule.VideoAlbumGalleryActivity;
 import com.sangcomz.fishbun.bean.GalleryPhotoAlbum;
 import com.sangcomz.fishbun.define.Define;
-import com.sangcomz.fishbun.videomodule.VideoAlbumGalleryActivity;
 
 import java.util.ArrayList;
 

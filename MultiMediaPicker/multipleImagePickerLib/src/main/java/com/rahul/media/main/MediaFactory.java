@@ -1,17 +1,17 @@
-package com.luminous.pick.controller;
+package com.rahul.media.main;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.luminous.pick.Action;
-import com.luminous.pick.CameraPickActivity;
-import com.luminous.pick.MultipleImagePreviewActivity;
-import com.luminous.pick.VideoPickActivity;
-import com.luminous.pick.utils.VideoQuality;
+import com.rahul.media.activity.CameraPickActivity;
+import com.rahul.media.activity.MultipleImagePreviewActivity;
+import com.rahul.media.activity.VideoPickActivity;
+import com.rahul.media.utils.MediaSingleTon;
+import com.rahul.media.model.VideoQuality;
 import com.sangcomz.fishbun.define.Define;
-import com.sangcomz.fishbun.videomodule.VideoAlbumActivity;
+import com.rahul.media.videomodule.VideoAlbumActivity;
 
 import java.util.ArrayList;
 
@@ -21,9 +21,8 @@ import java.util.ArrayList;
  */
 public class MediaFactory {
 
-    private static final int GALLERY_APP = 111;
-    private static final int CAMERA_APP = 222;
-    public static MediaFactory mMediaFactory;
+    private static final int MEDIA_REQUEST_CODE = 222;
+    private static MediaFactory mMediaFactory;
 
     private MediaFactory() {
     }
@@ -35,14 +34,12 @@ public class MediaFactory {
     }
 
     public static class MediaBuilder {
-        String action = Action.ACTION_PICK;
         boolean isCrop = false;
         boolean fromGallery = true;
         boolean takeVideo = false;
         long videoSize = -1;
         long videoDuration = -1;
         private final Context mContext;
-        int imageQuality = 100;
         private VideoQuality videoQuality = VideoQuality.HIGH_QUALITY;
         private int pickCount = 1;
 
@@ -81,19 +78,6 @@ public class MediaFactory {
          */
         public MediaBuilder setVideoSize(int size) {
             videoSize = size * 1000000L;
-            return this;
-        }
-
-        /**
-         * Sets the quality of image.
-         *
-         * @param imageQuality Quality of image between 0 to 100
-         * @return current instance of MediaBuilder
-         */
-        public MediaBuilder setImageQuality(int imageQuality) {
-            if (imageQuality < 0 || imageQuality > 100)
-                imageQuality = 100;
-            this.imageQuality = imageQuality;
             return this;
         }
 
@@ -140,16 +124,6 @@ public class MediaFactory {
             return this;
         }
 
-        /**
-         * Flag to select only one media.
-         *
-         * @return current instance of MediaBuilder
-         */
-        public MediaBuilder getSingleMediaFiles() {
-            this.action = Action.ACTION_PICK;
-            return this;
-        }
-
         public MediaBuilder setPickCount(int count) {
             if (count <= 0)
                 count = 1;
@@ -157,15 +131,6 @@ public class MediaFactory {
             return this;
         }
 
-        /**
-         * Flag to select only multiple media files.
-         *
-         * @return current instance of MediaBuilder
-         */
-        public MediaBuilder getMultipleMediaFiles() {
-            this.action = Action.ACTION_MULTIPLE_PICK;
-            return this;
-        }
     }
 
     /**
@@ -191,23 +156,21 @@ public class MediaFactory {
             intent.putExtra("videoSize", mediaBuilder.videoSize);
             intent.putExtra("videoDuration", mediaBuilder.videoDuration);
             intent.putExtra("videoQuality", mediaBuilder.videoQuality.getQuality());
-            ((Activity) mediaBuilder.mContext).startActivityForResult(intent, GALLERY_APP);
+            intent.putExtra("pickCount", mediaBuilder.pickCount);
+
+            ((Activity) mediaBuilder.mContext).startActivityForResult(intent, MEDIA_REQUEST_CODE);
         } else {
             bundle.putBoolean("crop", mediaBuilder.isCrop);
-            bundle.putInt("imageQuality", mediaBuilder.imageQuality);
             bundle.putInt("pickCount", mediaBuilder.pickCount);
             if (mediaBuilder.fromGallery) {
-
                 intent = new Intent(mediaBuilder.mContext, MultipleImagePreviewActivity.class);
-                intent.setAction(mediaBuilder.action);
                 intent.putExtras(bundle);
-                ((Activity) mediaBuilder.mContext).startActivityForResult(intent, GALLERY_APP);
+                ((Activity) mediaBuilder.mContext).startActivityForResult(intent, MEDIA_REQUEST_CODE);
 
             } else {
                 intent = new Intent(mediaBuilder.mContext, CameraPickActivity.class);
-                intent.setAction(mediaBuilder.action);
                 intent.putExtras(bundle);
-                ((Activity) mediaBuilder.mContext).startActivityForResult(intent, CAMERA_APP);
+                ((Activity) mediaBuilder.mContext).startActivityForResult(intent, MEDIA_REQUEST_CODE);
             }
         }
 
@@ -217,9 +180,8 @@ public class MediaFactory {
     public ArrayList<String> onActivityResult(int requestCode, int resultCode, Intent data) {
         ArrayList<String> all_path = new ArrayList<>();
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == GALLERY_APP || requestCode == CAMERA_APP) {
+            if (requestCode == MEDIA_REQUEST_CODE) {
                 all_path = data.getStringArrayListExtra(Define.INTENT_PATH);
-
             }
         }
         return all_path;

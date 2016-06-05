@@ -1,4 +1,4 @@
-package com.luminous.pick.utils;
+package com.rahul.media.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,7 +16,7 @@ import java.io.IOException;
 
 public class BitmapDecoder {
 
-    public static String compressImage(String filePath, int outputQuality, Context mContext) {
+    private static String compressImage(String filePath, Context mContext) {
 
         try {
             initializeImageLoader(mContext);
@@ -151,7 +151,7 @@ public class BitmapDecoder {
 
     }
 
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;
@@ -174,12 +174,11 @@ public class BitmapDecoder {
      * This method is depreciated. use compressImage()
      *
      * @param filePath
-     * @param outputQuality
      * @param mContext
      * @return
      */
-    public static String getBitmap(String filePath, int outputQuality, Context mContext) {
-        return compressImage(filePath, outputQuality, mContext);
+    public static String getBitmap(String filePath, Context mContext) {
+        return compressImage(filePath, mContext);
         /*if (filePath != null) {
             FileInputStream stream = null;
             File file = null;

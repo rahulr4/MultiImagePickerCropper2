@@ -1,4 +1,4 @@
-package com.luminous.pick.utils;
+package com.rahul.media.model;
 
 /**
  * Created by rahul on 14/9/15.

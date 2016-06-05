@@ -19,7 +19,7 @@ import java.util.List;
 
 public class MSupport {
 
-    public static boolean isMSupportDevice(Context ctx) {
+    private static boolean isMSupportDevice(Context ctx) {
         return Build.VERSION.SDK_INT >= MSupportConstants.SDK_VERSION;
     }
 
@@ -181,7 +181,7 @@ public class MSupport {
             , DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(new ContextThemeWrapper(activity, R.style.Theme_AppCompat_Dialog_Alert))
                 .setMessage(message)
-                .setPositiveButton(activity.getString(R.string.btn_ok), okListener)
+                .setPositiveButton("OK", okListener)
                 .create()
                 .show();
     }

@@ -1,72 +1,59 @@
-package com.luminous.pick;
+package com.rahul.media.activity;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.luminous.pick.controller.MediaSingleTon;
-import com.luminous.pick.utils.BitmapDecoder;
-import com.luminous.pick.utils.CameraUtils;
-import com.luminous.pick.utils.ViewPagerSwipeLess;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.rahul.media.model.CustomGallery;
+import com.rahul.media.adapters.ImageListRecycleAdapter;
+import com.luminous.pick.R;
+import com.rahul.media.adapters.ImagePreviewAdapter;
+import com.rahul.media.utils.BitmapDecoder;
+import com.rahul.media.utils.ViewPagerSwipeLess;
 import com.msupport.MSupport;
 import com.msupport.MSupportConstants;
+import com.rahul.media.utils.MediaUtility;
 import com.sangcomz.fishbun.define.Define;
-import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 import crop.Crop;
 
-import static android.os.Environment.MEDIA_MOUNTED;
-
 /**
+ * Class to pick image from camera
  * Created by rahul on 22/5/15.
  */
 public class CameraPickActivity extends AppCompatActivity {
     private static final int ACTION_REQUEST_CAMERA = 201;
-    private static AlertDialog alertDialog;
-    String action = Action.ACTION_PICK;
     private ViewPagerSwipeLess mPager;
     private HashMap<String, CustomGallery> dataT;
-    private CustomPagerAdapter adapter;
+    private ImagePreviewAdapter imagePreviewAdapter;
     private ImageListRecycleAdapter mImageListAdapter;
     private Uri userPhotoUri;
-    private int imageQuality = 100;
     private boolean isCrop;
+    private int pickCount = 1;
+    private AlertDialog alertDialog;
 
-    public static void showAlertDialog(Context mContext, String text) {
+    private void showAlertDialog(Context mContext, String text) {
 
         alertDialog = new AlertDialog.Builder(mContext)
                 .setMessage(text)
@@ -81,6 +68,17 @@ public class CameraPickActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        Fresco.shutDown();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Fresco.initialize(this);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_preview);
@@ -91,9 +89,9 @@ public class CameraPickActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mPager = (ViewPagerSwipeLess) findViewById(R.id.pager);
-        dataT = new HashMap<String, CustomGallery>();
-        adapter = new CustomPagerAdapter(dataT);
-        mPager.setAdapter(adapter);
+        dataT = new HashMap<>();
+        imagePreviewAdapter = new ImagePreviewAdapter(CameraPickActivity.this, dataT);
+        mPager.setAdapter(imagePreviewAdapter);
         mImageListAdapter = new ImageListRecycleAdapter(this, dataT);
         RecyclerView mRecycleView = (RecyclerView) findViewById(R.id.image_hlistview);
         mRecycleView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -111,11 +109,9 @@ public class CameraPickActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if (getIntent().getExtras().containsKey("imageQuality")) {
-            imageQuality = getIntent().getExtras().getInt("imageQuality");
+        if (getIntent().getExtras().containsKey("pickCount")) {
+            pickCount = getIntent().getIntExtra("pickCount", 1);
         }
-        if (getIntent().getAction() != null)
-            action = getIntent().getAction();
         openCamera(false);
     }
 
@@ -126,7 +122,7 @@ public class CameraPickActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    void openCamera(boolean isPermission) {
+    private void openCamera(boolean isPermission) {
         String[] permissionSet = {MSupportConstants.WRITE_EXTERNAL_STORAGE, MSupportConstants.CAMERA};
         if (isPermission) {
             try {
@@ -134,7 +130,7 @@ public class CameraPickActivity extends AppCompatActivity {
 
                 if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 
-                    createImageFile();
+                    userPhotoUri = MediaUtility.createImageFile(CameraPickActivity.this);
 
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, userPhotoUri);
                     startActivityForResult(takePictureIntent, ACTION_REQUEST_CAMERA);
@@ -155,7 +151,7 @@ public class CameraPickActivity extends AppCompatActivity {
 
                     if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 
-                        createImageFile();
+                        userPhotoUri = MediaUtility.createImageFile(CameraPickActivity.this);
 
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, userPhotoUri);
                         startActivityForResult(takePictureIntent, ACTION_REQUEST_CAMERA);
@@ -201,40 +197,7 @@ public class CameraPickActivity extends AppCompatActivity {
         }
     }
 
-    private void createImageFile() throws IOException {
-
-        File image = null;
-
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-
-        if (MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-
-            File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            image = File.createTempFile(
-                    imageFileName,  /* prefix */
-                    ".jpg",         /* suffix */
-                    storageDir      /* directory */
-            );
-
-        } else {
-
-            File storageDir = getFilesDir();
-            image = File.createTempFile(
-                    imageFileName,  /* prefix */
-                    ".jpg",         /* suffix */
-                    storageDir      /* directory */
-            );
-
-        }
-
-        // Save a file: path for use with ACTION_VIEW intents
-        Log.d(CameraPickActivity.class.getSimpleName(), "file:" + image.getAbsolutePath());
-        userPhotoUri = Uri.fromFile(image);
-    }
-
-    class ProcessImageView extends AsyncTask<Void, Void, Void> {
+    private class ProcessImageView extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -248,7 +211,7 @@ public class CameraPickActivity extends AppCompatActivity {
             item.sdcardPath = userPhotoUri.getPath();
             item.sdCardUri = userPhotoUri;
 
-            item.sdcardPath = BitmapDecoder.getBitmap(userPhotoUri.getPath(), imageQuality, CameraPickActivity.this);
+            item.sdcardPath = BitmapDecoder.getBitmap(userPhotoUri.getPath(), CameraPickActivity.this);
             item.sdCardUri = (Uri.parse(item.sdcardPath));
 
             dataT.put(item.sdcardPath, item);
@@ -258,7 +221,7 @@ public class CameraPickActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            adapter.customNotify(dataT);
+            imagePreviewAdapter.customNotify(dataT);
             mImageListAdapter.customNotify(dataT);
         }
     }
@@ -270,7 +233,7 @@ public class CameraPickActivity extends AppCompatActivity {
 
             if (requestCode == ACTION_REQUEST_CAMERA) {
 
-                if (action.equals(Action.ACTION_PICK)) {
+                if (pickCount == 1) {
                     dataT.clear();
                 }
                 if (userPhotoUri != null) {
@@ -289,7 +252,7 @@ public class CameraPickActivity extends AppCompatActivity {
                         item.sdCardUri = mTargetImageUri;
                         dataT.remove(imagePath);
                         dataT.put(mTargetImageUri.getPath(), item);
-                        adapter.customNotify(dataT);
+                        imagePreviewAdapter.customNotify(dataT);
                         mImageListAdapter.customNotify(dataT);
                     }
                 } catch (Exception e) {
@@ -304,132 +267,6 @@ public class CameraPickActivity extends AppCompatActivity {
                 setResult(RESULT_CANCELED, data2);
                 finish();
             }
-        }
-    }
-
-    class CustomPagerAdapter extends PagerAdapter {
-
-        LayoutInflater mLayoutInflater;
-        ArrayList<CustomGallery> dataT;
-        MediaSingleTon mediaSingleTon;
-
-        public CustomPagerAdapter(HashMap<String, CustomGallery> dataT) {
-            this.dataT = new ArrayList<CustomGallery>(dataT.values());
-            mLayoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            mediaSingleTon = MediaSingleTon.getInstance();
-        }
-
-        public void customNotify(HashMap<String, CustomGallery> dataHashmap) {
-            dataT.clear();
-            ArrayList<CustomGallery> dataT2 = new ArrayList<CustomGallery>(dataHashmap.values());
-            this.dataT.addAll(dataT2);
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public int getCount() {
-            return dataT.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            return POSITION_NONE;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, final int position) {
-            View itemView = mLayoutInflater.inflate(R.layout.image_pager_item, container, false);
-
-            final ImageView imageView = (ImageView) itemView.findViewById(R.id.full_screen_image);
-
-            if (!TextUtils.isEmpty(dataT.get(position).sdcardPath))
-                Picasso.with(CameraPickActivity.this)
-                        .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
-                        .placeholder(R.drawable.placeholder_470x352)
-                        .error(R.drawable.placeholder_470x352)
-                        .into(imageView);
-            else
-                imageView.setImageResource(R.drawable.placeholder_470x352);
-
-            /*Glide.with(CameraPickActivity.this)
-                    .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
-                    .asBitmap()
-                    .into(new BitmapImageViewTarget(imageView) {
-                        @Override
-                        protected void setResource(Bitmap resource) {
-                            super.setResource(resource);
-                            mediaSingleTon.getBitmapHashMap().put(dataT.get(position).sdcardPath, resource);
-//                                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                            imageView.setImageBitmap(resource); // Possibly runOnUiThread()
-                        }
-                    });*/
-
-            /*if (mediaSingleTon.getBitmapHashMap().containsKey(dataT.get(position).sdcardPath)) {
-                imageView.setImageBitmap(mediaSingleTon.getBitmapHashMap().get((dataT.get(position).sdcardPath)));
-            } else {
-              *//*  Glide.with(CameraPickActivity.this)
-                        .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
-                        .asBitmap()
-                        .override(Target.SIZE_ORIGINAL, imageView.getHeight())
-                        .into(new BitmapImageViewTarget(imageView))
-                        .into(new BitmapImageViewTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                                mediaSingleTon.getBitmapHashMap().put(dataT.get(position).sdcardPath, resource);
-//                                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                                imageView.setImageBitmap(resource); // Possibly runOnUiThread()
-                            }
-                        });*//*
-
-                Glide.with(CameraPickActivity.this)
-                        .load(Uri.parse("file://" + dataT.get(position).sdcardPath))
-                        .asBitmap()
-                        .into(new BitmapImageViewTarget(imageView) {
-                            @Override
-                            protected void setResource(Bitmap resource) {
-                                super.setResource(resource);
-                                mediaSingleTon.getBitmapHashMap().put(dataT.get(position).sdcardPath, resource);
-//                                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                                imageView.setImageBitmap(resource); // Possibly runOnUiThread()
-                            }
-                        });
-*//*
-                Uri uri = Uri.fromFile(new File(dataT.get(position).sdcardPath));
-
-                Picasso.with(CameraPickActivity.this)
-                        .load(uri)
-                        .placeholder(R.drawable.placeholder_470x352)
-                        .error(R.drawable.placeholder_470x352)
-                        .into(new Target() {
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                mediaSingleTon.getBitmapHashMap().put(dataT.get(position).sdcardPath, bitmap);
-                                imageView.setImageBitmap(bitmap);
-                            }
-
-                            @Override
-                            public void onBitmapFailed(Drawable errorDrawable) {
-                                Log.i("Bitmap", "Failed :- "+errorDrawable.toString());
-                            }
-
-                            @Override
-                            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                                Log.i("Bitmap", "Prepared :- "+placeHolderDrawable.toString());
-                            }
-                        });*//*
-            }*/
-            container.addView(itemView);
-            return itemView;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((LinearLayout) object);
         }
     }
 
@@ -465,12 +302,12 @@ public class CameraPickActivity extends AppCompatActivity {
         } else if (id == R.id.action_camera) {
             openCamera(false);
         } else if (id == R.id.action_crop) {
-            if (adapter != null && adapter.getCount() > 0) {
+            if (imagePreviewAdapter != null && imagePreviewAdapter.getCount() > 0) {
                 String imagePath = mImageListAdapter.mItems.get(mPager.getCurrentItem()).sdcardPath;
 
-                Uri destination = null;
+                Uri destination;
                 try {
-                    destination = CameraUtils.createImageFile(CameraPickActivity.this);
+                    destination = MediaUtility.createImageFile(CameraPickActivity.this);
                     Crop.of((Uri.parse("file://" + imagePath)), destination).
                             asSquare().start(CameraPickActivity.this);
                 } catch (IOException e) {

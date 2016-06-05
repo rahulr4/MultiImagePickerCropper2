@@ -25,9 +25,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.android.support:design:23.2.1'
     compile 'com.android.support:recyclerview-v7:23.2.1'
-    compile 'com.github.bumptech.glide:glide:3.6.0'
     compile files('libs/universal-image-loader-1.9.4.jar')
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.facebook.fresco:fresco:0.7.0'
 }
 ```
 

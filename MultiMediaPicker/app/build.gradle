@@ -24,4 +24,5 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 //        compile 'com.crop.multiple:multipleImagePickerLib:1.1.5'
     compile project(':multipleImagePickerLib')
+    compile 'com.facebook.fresco:fresco:0.7.0'
 }

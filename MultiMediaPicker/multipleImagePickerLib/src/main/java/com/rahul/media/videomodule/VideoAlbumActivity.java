@@ -1,4 +1,4 @@
-package com.sangcomz.fishbun.videomodule;
+package com.rahul.media.videomodule;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,7 +24,7 @@ import com.msupport.MSupportConstants;
 import com.sangcomz.fishbun.ItemDecoration.DividerItemDecoration;
 import com.sangcomz.fishbun.bean.GalleryPhotoAlbum;
 import com.sangcomz.fishbun.define.Define;
-import com.sangcomz.fishbun.videomodule.adapter.VideoAlbumListAdapter;
+import com.rahul.media.videomodule.adapter.VideoAlbumListAdapter;
 
 import java.util.ArrayList;
 
