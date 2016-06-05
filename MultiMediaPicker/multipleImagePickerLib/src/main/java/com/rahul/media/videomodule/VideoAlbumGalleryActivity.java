@@ -238,7 +238,10 @@ public class VideoAlbumGalleryActivity extends AppCompatActivity {
             if (!allPath.isEmpty()) {
 
                 if (allPath.size() > mPickCount) {
-                    Snackbar.make(findViewById(R.id.parent), "You can select only 1 video", Snackbar.LENGTH_SHORT).show();
+                    if (mPickCount == 1)
+                        Toast.makeText(VideoAlbumGalleryActivity.this, "You can select max " + mPickCount + " video", Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(VideoAlbumGalleryActivity.this, "You can select max " + mPickCount + " videos", Toast.LENGTH_SHORT).show();
                 } else {
                     Intent data = new Intent().putStringArrayListExtra(Define.INTENT_PATH, allPath);
                     setResult(RESULT_OK, data);

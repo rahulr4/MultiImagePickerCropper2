@@ -146,43 +146,6 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
         startActivityForResult(i, PICK_IMAGE);
     }
 
-    class ProcessImageView extends AsyncTask<Uri, Void, Void> {
-
-        private ProgressDialog mProgressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mProgressDialog = new ProgressDialog(MultipleImagePreviewActivity.this);
-            mProgressDialog.setMessage("Processing image ...");
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.setCanceledOnTouchOutside(false);
-            mProgressDialog.show();
-        }
-
-        @Override
-        protected Void doInBackground(Uri... params) {
-            CustomGallery item = new CustomGallery();
-
-            item.sdcardPath = params[0].getPath();
-            item.sdCardUri = params[0];
-
-            item.sdcardPath = BitmapDecoder.getBitmap(params[0].getPath(), MultipleImagePreviewActivity.this);
-            item.sdCardUri = (Uri.parse(item.sdcardPath));
-
-            dataT.put(item.sdcardPath, item);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            mProgressDialog.dismiss();
-            adapter.customNotify(dataT);
-            mImageListAdapter.customNotify(dataT);
-        }
-    }
-
     private class ProcessAllImages extends AsyncTask<Void, Void, Void> {
 
         private ArrayList<String> stringArrayList;

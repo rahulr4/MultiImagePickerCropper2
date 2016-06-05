@@ -40,6 +40,7 @@ import com.rahul.media.model.VideoQuality;
 import com.rahul.media.utils.ViewPagerSwipeLess;
 import com.rahul.media.model.Define;
 import com.rahul.media.utils.ProcessGalleryFile;
+import com.rahul.media.videomodule.VideoAlbumActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -60,6 +61,7 @@ public class VideoPickActivity extends AppCompatActivity {
     private int videoDuration;
     private int videoQuality = VideoQuality.HIGH_QUALITY.getQuality();
     private int pickCount;
+    private boolean pickFromGallery;
 
     private void showAlertDialog(Context mContext, String text) {
 
@@ -114,10 +116,17 @@ public class VideoPickActivity extends AppCompatActivity {
             videoDuration = (int) getIntent().getExtras().getLong("videoDuration");
             videoQuality = getIntent().getExtras().getInt("videoQuality");
             pickCount = getIntent().getIntExtra("pickCount", 1);
+            pickFromGallery = getIntent().getBooleanExtra("from", false);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        openVideoFromCamera(false);
+        if (pickFromGallery) {
+            Intent intent = new Intent(VideoPickActivity.this, VideoAlbumActivity.class);
+            intent.putExtra("pickCount", pickCount);
+            startActivityForResult(intent, ACTION_REQUEST_VIDEO_FROM_GALLERY);
+        } else {
+            openVideoFromCamera(false);
+        }
     }
 
     private void openVideoFromCamera(boolean isPermission) {
@@ -153,7 +162,9 @@ public class VideoPickActivity extends AppCompatActivity {
                     }
                 }
                 if (isAllPermissionGranted) {
-                    openVideoFromCamera(true);
+                    if (!pickFromGallery) {
+                        openVideoFromCamera(true);
+                    }
                 } else {
                     String message = "Requested Permission not granted";
                     if (!deniedPermissionList.isEmpty()) {
@@ -176,8 +187,6 @@ public class VideoPickActivity extends AppCompatActivity {
         values.put(MediaStore.Video.Media.TITLE, fileName);
         values.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4");
         try {
-            Uri videoUriFromCamera = getContentResolver().insert(
-                    MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values);
             Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, videoQuality);
             if (videoSize != -1)
@@ -194,33 +203,41 @@ public class VideoPickActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 
-    private void getBitmapFromPath(final CustomGallery item) {
+    private void getBitmapFromPath(final ArrayList<String> stringArrayList) {
         progressDialog.show();
         try {
             final Handler mHandler = new Handler();
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Bitmap bmp = null;
-                    try {
-                        bmp = ImageLoader.getInstance().getMemoryCache().get(Uri.fromFile(new File(item.sdcardPath)).toString() + "_");
-                    } catch (Exception e) {
-                        Log.e(ProcessGalleryFile.class.getSimpleName(), "" + e);
-                    }
-                    if (bmp == null) {
+                    for (int i = 0; i < stringArrayList.size(); i++) {
+
+                        CustomGallery item = new CustomGallery();
+                        item.sdcardPath = stringArrayList.get(i);
+                        item.sdCardUri = Uri.parse(stringArrayList.get(i));
+
+                        Bitmap bmp = null;
                         try {
-                            bmp = ThumbnailUtils.createVideoThumbnail(item.sdcardPath, MediaStore.Images.Thumbnails.MINI_KIND);
-                            if (bmp != null) {
-                                ImageLoader.getInstance().getMemoryCache().put(Uri.fromFile(new File(item.sdcardPath)).toString() + "_", bmp);
-                            }
+                            bmp = ImageLoader.getInstance().getMemoryCache().get(Uri.fromFile(new File(item.sdcardPath)).toString() + "_");
                         } catch (Exception e) {
-                            Log.e(getClass().getSimpleName(), "Exception when rotating thumbnail for gallery", e);
-                        } catch (OutOfMemoryError e) {
                             Log.e(ProcessGalleryFile.class.getSimpleName(), "" + e);
                         }
+                        if (bmp == null) {
+                            try {
+                                bmp = ThumbnailUtils.createVideoThumbnail(item.sdcardPath, MediaStore.Images.Thumbnails.MINI_KIND);
+                                if (bmp != null) {
+                                    ImageLoader.getInstance().getMemoryCache().put(Uri.fromFile(new File(item.sdcardPath)).toString() + "_", bmp);
+                                }
+                            } catch (Exception e) {
+                                Log.e(getClass().getSimpleName(), "Exception when rotating thumbnail for gallery", e);
+                            } catch (OutOfMemoryError e) {
+                                Log.e(ProcessGalleryFile.class.getSimpleName(), "" + e);
+                            }
+                        }
+                        dataT.put(item.sdcardPath, item);
                     }
                     try {
-                        dataT.put(item.sdcardPath, item);
+
                         mImageListAdapter.customNotify(dataT);
                         adapter.customNotify(dataT);
                         progressDialog.dismiss();
@@ -231,7 +248,6 @@ public class VideoPickActivity extends AppCompatActivity {
                     }
                 }
             });
-            Log.w("videoPath", item.sdcardPath);
         } catch (Exception e) {
             progressDialog.dismiss();
             e.printStackTrace();
@@ -243,7 +259,7 @@ public class VideoPickActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            String videoUriFromCamera = "";
+            ArrayList<String> pickedVideoList = new ArrayList<>();
             if (pickCount == 1) {
                 dataT.clear();
             }
@@ -251,26 +267,20 @@ public class VideoPickActivity extends AppCompatActivity {
 
                 String[] projection = {MediaStore.Video.Media.DATA};
                 Cursor cursor = getContentResolver().query(data.getData(), projection, null, null, null);
-                int column_index_data = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
-                cursor.moveToFirst();
-                videoUriFromCamera = cursor.getString(column_index_data);
-
+                if (cursor != null) {
+                    int column_index_data = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
+                    cursor.moveToFirst();
+                    pickedVideoList.add(cursor.getString(column_index_data));
+                    cursor.close();
+                }
 
             } else if (requestCode == ACTION_REQUEST_VIDEO_FROM_GALLERY) {
-                Cursor cursor = getContentResolver().query(
-                        data.getData(),
-                        new String[]{MediaStore.Video.Media.DATA, MediaStore.Video.Media.DURATION,
-                                MediaStore.Video.Media.SIZE}, null, null, null);
-                cursor.moveToFirst();
-                videoUriFromCamera = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
-                if (videoUriFromCamera == null)
-                    videoUriFromCamera = getPath(data.getData(), VideoPickActivity.this);
+                ArrayList<String> allPath = data.getStringArrayListExtra(Define.INTENT_PATH);
+                if (allPath != null)
+                    pickedVideoList.addAll(allPath);
             }
-            if (videoUriFromCamera != null) {
-                CustomGallery item = new CustomGallery();
-                item.sdcardPath = videoUriFromCamera;
-                item.sdCardUri = Uri.parse(videoUriFromCamera);
-                getBitmapFromPath(item);
+            if (!pickedVideoList.isEmpty()) {
+                getBitmapFromPath(pickedVideoList);
             }
         } else {
             if (dataT == null || dataT.size() == 0) {
@@ -353,7 +363,13 @@ public class VideoPickActivity extends AppCompatActivity {
             setResult(RESULT_CANCELED, data);
             finish();
         } else if (id == R.id.action_pick) {
-            openVideoFromCamera(false);
+            if (pickFromGallery) {
+                Intent intent = new Intent(VideoPickActivity.this, VideoAlbumActivity.class);
+                intent.putExtra("pickCount", pickCount);
+                startActivityForResult(intent, ACTION_REQUEST_VIDEO_FROM_GALLERY);
+            } else {
+                openVideoFromCamera(false);
+            }
         } else if (id == R.id.delete) {
             if (adapter != null && adapter.getCount() > 0) {
                 String imagePath = mImageListAdapter.mItems.get(mPager.getCurrentItem()).sdcardPath;

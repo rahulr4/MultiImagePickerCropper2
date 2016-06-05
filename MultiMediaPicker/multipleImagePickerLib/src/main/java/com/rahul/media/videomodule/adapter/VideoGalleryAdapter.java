@@ -55,7 +55,7 @@ public class VideoGalleryAdapter extends BaseAdapter {
     // int in its constructor.
 
     public static class ViewHolder {
-        public CheckBox selectIv;
+        CheckBox selectIv;
         public SquareImageView imgThumb;
         public TextView videoDuration;
         public MediaObject object;

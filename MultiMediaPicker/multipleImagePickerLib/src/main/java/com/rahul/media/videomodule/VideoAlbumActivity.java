@@ -27,19 +27,22 @@ import com.rahul.media.model.Define;
 
 import java.util.ArrayList;
 
+import static com.rahul.media.model.Define.ENTER_ALBUM_REQUEST_CODE;
+
 
 public class VideoAlbumActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RelativeLayout noAlbum;
     private ArrayList<GalleryPhotoAlbum> arrayListAlbums = new ArrayList<>();
+    private int pickCount;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_album);
-
+        pickCount = getIntent().getIntExtra("pickCount", 1);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         noAlbum = (RelativeLayout) findViewById(R.id.no_album);
         setSupportActionBar(toolbar);
@@ -63,7 +66,7 @@ public class VideoAlbumActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Define.ENTER_ALBUM_REQUEST_CODE) {
+        if (requestCode == ENTER_ALBUM_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 setResult(RESULT_OK, data);
                 finish();
@@ -190,7 +193,7 @@ public class VideoAlbumActivity extends AppCompatActivity {
     }
 
 
-    public class GetVideoListAsync extends AsyncTask<Void, Void, Boolean> {
+    private class GetVideoListAsync extends AsyncTask<Void, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(Void... params) {
@@ -205,7 +208,15 @@ public class VideoAlbumActivity extends AppCompatActivity {
             if (result) {
                 noAlbum.setVisibility(View.GONE);
                 VideoAlbumListAdapter galleryAlbumAdapter = new VideoAlbumListAdapter(
-                        VideoAlbumActivity.this, arrayListAlbums);
+                        VideoAlbumActivity.this, arrayListAlbums) {
+                    @Override
+                    public void onItemClick(ViewHolder holder) {
+                        Intent intent = new Intent(VideoAlbumActivity.this, VideoAlbumGalleryActivity.class);
+                        intent.putExtra("bucketName", arrayListAlbums.get(holder.getAdapterPosition()).getBucketName());
+                        intent.putExtra("pickCount", pickCount);
+                        startActivityForResult(intent, ENTER_ALBUM_REQUEST_CODE);
+                    }
+                };
                 recyclerView.setAdapter(galleryAlbumAdapter);
             } else {
                 noAlbum.setVisibility(View.VISIBLE);

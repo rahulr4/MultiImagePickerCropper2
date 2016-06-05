@@ -8,11 +8,10 @@ import android.os.Bundle;
 import com.rahul.media.activity.CameraPickActivity;
 import com.rahul.media.activity.MultipleImagePreviewActivity;
 import com.rahul.media.activity.VideoPickActivity;
+import com.rahul.media.model.Define;
 import com.rahul.media.model.VideoQuality;
 import com.rahul.media.utils.MediaSingleTon;
 import com.rahul.media.utils.MediaUtility;
-import com.rahul.media.videomodule.VideoAlbumActivity;
-import com.rahul.media.model.Define;
 
 import java.util.ArrayList;
 
@@ -159,12 +158,7 @@ public class MediaFactory {
         Bundle bundle = new Bundle();
         if (mediaBuilder.takeVideo) {
 
-            if (mediaBuilder.fromGallery) {
-                intent = new Intent(mediaBuilder.mContext, VideoAlbumActivity.class);
-            } else {
-                intent = new Intent(mediaBuilder.mContext, VideoPickActivity.class);
-            }
-
+            intent = new Intent(mediaBuilder.mContext, VideoPickActivity.class);
             intent.putExtra("from", mediaBuilder.fromGallery);
             intent.putExtra("videoSize", mediaBuilder.videoSize);
             intent.putExtra("videoDuration", mediaBuilder.videoDuration);

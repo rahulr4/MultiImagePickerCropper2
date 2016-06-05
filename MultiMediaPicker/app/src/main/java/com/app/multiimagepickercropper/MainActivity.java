@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             case R.id.vid_multiple_pick:
                 mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
                         .takeVideo()
+                        .setPickCount(5)
                         .fromGallery();
                 mediaFactory = MediaFactory.create().start(mediaBuilder);
                 break;

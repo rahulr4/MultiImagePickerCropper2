@@ -1,7 +1,6 @@
 package com.rahul.media.videomodule.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,14 +10,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rahul.media.R;
-import com.rahul.media.videomodule.VideoAlbumGalleryActivity;
-import com.rahul.media.model.GalleryPhotoAlbum;
 import com.rahul.media.model.Define;
+import com.rahul.media.model.GalleryPhotoAlbum;
 
 import java.util.ArrayList;
 
 
-public class VideoAlbumListAdapter
+public abstract class VideoAlbumListAdapter
         extends RecyclerView.Adapter<VideoAlbumListAdapter.ViewHolder> {
 
     private ArrayList<GalleryPhotoAlbum> albumList;
@@ -65,10 +63,7 @@ public class VideoAlbumListAdapter
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, VideoAlbumGalleryActivity.class);
-                intent.putExtra("bucketName", albumList.get(position).getBucketName());
-
-                mContext.startActivity(intent);
+                onItemClick(holder);
             }
         });
     }
@@ -78,7 +73,7 @@ public class VideoAlbumListAdapter
         return albumList.size();
     }
 
-
+    public abstract void onItemClick(ViewHolder holder);
 }
 
 
