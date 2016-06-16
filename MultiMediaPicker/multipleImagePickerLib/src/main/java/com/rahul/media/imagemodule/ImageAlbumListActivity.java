@@ -11,7 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -25,6 +25,7 @@ import com.rahul.media.R;
 import com.rahul.media.imagemodule.adapter.ImageAlbumListAdapter;
 import com.rahul.media.model.Album;
 import com.rahul.media.model.Define;
+import com.rahul.media.utils.MeasureUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,9 +52,8 @@ public class ImageAlbumListActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, MeasureUtils.getAlbumsColumns(getApplicationContext())));
 
         pickCount = getIntent().getIntExtra("pickCount", 1);
 

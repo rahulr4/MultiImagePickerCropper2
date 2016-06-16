@@ -10,7 +10,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rahul.media.R;
-import com.rahul.media.model.Define;
 import com.rahul.media.model.GalleryPhotoAlbum;
 
 import java.util.ArrayList;
@@ -34,7 +33,6 @@ public abstract class VideoAlbumListAdapter
             super(view);
             this.view = view;
             imgAlbum = (ImageView) view.findViewById(R.id.img_album);
-            imgAlbum.setLayoutParams(new RelativeLayout.LayoutParams(Define.ALBUM_THUMBNAIL_SIZE, Define.ALBUM_THUMBNAIL_SIZE));
             txtAlbum = (TextView) view.findViewById(R.id.txt_album);
             txtAlbumCount = (TextView) view.findViewById(R.id.txt_album_count);
             areaAlbum = (RelativeLayout) view.findViewById(R.id.area_album);

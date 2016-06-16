@@ -4,17 +4,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.rahul.media.R;
+import com.rahul.media.imagemodule.ImageGalleryPickerActivity;
 import com.rahul.media.model.Album;
 import com.rahul.media.model.Define;
-import com.rahul.media.imagemodule.ImageGalleryPickerActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,17 +31,17 @@ public class ImageAlbumListAdapter
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private SimpleDraweeView imgAlbum;
-        private TextView txtAlbum;
-        private TextView txtAlbumCount;
-        private RelativeLayout areaAlbum;
+        private TextView albumNameTv;
+        private TextView albumCountTv;
+        private LinearLayout areaAlbum;
 
 
         public ViewHolder(View view) {
             super(view);
             imgAlbum = (SimpleDraweeView) view.findViewById(R.id.img_album);
-            txtAlbum = (TextView) view.findViewById(R.id.txt_album);
-            txtAlbumCount = (TextView) view.findViewById(R.id.txt_album_count);
-            areaAlbum = (RelativeLayout) view.findViewById(R.id.area_album);
+            albumNameTv = (TextView) view.findViewById(R.id.album_name);
+            albumCountTv = (TextView) view.findViewById(R.id.album_photos_count);
+            areaAlbum = (LinearLayout) view.findViewById(R.id.area_album);
         }
     }
 
@@ -73,9 +74,10 @@ public class ImageAlbumListAdapter
 
         holder.areaAlbum.setTag(albumList.get(position));
         Album a = (Album) holder.areaAlbum.getTag();
-        holder.txtAlbum.setText(albumList.get(position).bucketname);
-        holder.txtAlbumCount.setText(String.valueOf(a.counter));
+        holder.albumNameTv.setText(albumList.get(position).bucketname);
 
+        holder.albumCountTv.setText(Html.fromHtml("<b><font color='#03A9F4'>" + a.counter + "</font></b>" + "<font " +
+                "color='#FFFFFF'> Media </font>"));
 
         holder.areaAlbum.setOnClickListener(new View.OnClickListener() {
             @Override

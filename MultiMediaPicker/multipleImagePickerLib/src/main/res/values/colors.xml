@@ -8,4 +8,7 @@
     <color name="crop__button_text">#666666</color>
     <color name="crop__selector_pressed">#1a000000</color>
     <color name="crop__selector_focused">#77000000</color>
+    <color name="color_303030">#303030</color>
+    <color name="color_424242">#424242</color>
+    <color name="blue_03A9F4">#03A9F4</color>
 </resources>

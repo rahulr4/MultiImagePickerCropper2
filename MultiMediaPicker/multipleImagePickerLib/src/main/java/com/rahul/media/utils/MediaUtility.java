@@ -63,4 +63,5 @@ public class MediaUtility {
         Log.d(CameraPickActivity.class.getSimpleName(), "file:" + image.getAbsolutePath());
         return Uri.fromFile(image);
     }
+
 }
