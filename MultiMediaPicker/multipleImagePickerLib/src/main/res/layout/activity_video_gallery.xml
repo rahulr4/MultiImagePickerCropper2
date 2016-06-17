@@ -4,6 +4,7 @@
     android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_303030"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -22,7 +23,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:background="@color/color_303030">
 
         <GridView
             android:id="@+id/gridview"
@@ -40,7 +42,6 @@
             android:id="@+id/no_album"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#ffffff"
             android:visibility="visible">
 
             <LinearLayout
@@ -60,8 +61,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="@string/no_media_found"
-                    android:textColor="?android:textColorSecondary"
-                    android:textSize="23dp" />
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp" />
             </LinearLayout>
 
         </RelativeLayout>

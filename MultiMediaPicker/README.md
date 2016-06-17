@@ -27,6 +27,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.4.0'
     compile files('libs/universal-image-loader-1.9.4.jar')
     compile 'com.facebook.fresco:fresco:0.7.0'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 }
 ```
 
@@ -42,6 +43,10 @@ To match your app toolbar color, set this attribute in your application.
 ```java
 Define.ACTIONBAR_COLOR = getResources().getColor(R.color.colorPrimary);
 ```
+
+# Theme Support
+All activities uses a custom toolbar with NoActionBar Theme, please use this theme in your main app otherwise app will crash.
+To, override this, please declare all activities in your manifest with NoActionBar Theme.
 
 # Usage
 Features supported in this library

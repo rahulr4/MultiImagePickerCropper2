@@ -25,6 +25,7 @@ import com.rahul.media.R;
 import com.rahul.media.imagemodule.adapter.ImageAlbumListAdapter;
 import com.rahul.media.model.Album;
 import com.rahul.media.model.Define;
+import com.rahul.media.utils.ItemOffsetDecoration;
 import com.rahul.media.utils.MeasureUtils;
 
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class ImageAlbumListActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(new GridLayoutManager(this, MeasureUtils.getAlbumsColumns(getApplicationContext())));
-
+        recyclerView.addItemDecoration(new ItemOffsetDecoration(4));
         pickCount = getIntent().getIntExtra("pickCount", 1);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

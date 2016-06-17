@@ -8,6 +8,7 @@ public class GalleryPhotoAlbum {
     private String dateTaken;
     private String data;
     private int totalCount;
+    private String filePath;
 
 
     public int getTotalCount() {
@@ -50,4 +51,11 @@ public class GalleryPhotoAlbum {
         this.data = data;
     }
 
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
 }

@@ -9,7 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -21,9 +21,11 @@ import android.widget.Toast;
 import com.msupport.MSupport;
 import com.msupport.MSupportConstants;
 import com.rahul.media.R;
-import com.rahul.media.videomodule.adapter.VideoAlbumListAdapter;
-import com.rahul.media.model.GalleryPhotoAlbum;
 import com.rahul.media.model.Define;
+import com.rahul.media.model.GalleryPhotoAlbum;
+import com.rahul.media.utils.ItemOffsetDecoration;
+import com.rahul.media.utils.MeasureUtils;
+import com.rahul.media.videomodule.adapter.VideoAlbumListAdapter;
 
 import java.util.ArrayList;
 
@@ -50,9 +52,9 @@ public class VideoAlbumActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, MeasureUtils.getAlbumsColumns(getApplicationContext())));
+        recyclerView.addItemDecoration(new ItemOffsetDecoration(4));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             boolean isStoragePermissionGiven = MSupport.checkPermissionWithRationale(VideoAlbumActivity.this,
@@ -152,7 +154,7 @@ public class VideoAlbumActivity extends AppCompatActivity {
                     album.setBucketName(bucket);
                     album.setDateTaken(date);
                     album.setData(data);
-                    album.setTotalCount(videoCountByAlbum(bucket));
+                    videoCountByAlbum(album);
                     arrayListAlbums.add(album);
                     // Do something with the values.
                     Log.v("ListingImages", " bucket=" + bucket
@@ -165,12 +167,12 @@ public class VideoAlbumActivity extends AppCompatActivity {
         cur.close();
     }
 
-    private int videoCountByAlbum(String bucketName) {
+    private void videoCountByAlbum(GalleryPhotoAlbum bucketName) {
 
         try {
             final String orderBy = MediaStore.Video.Media.DATE_TAKEN;
             String searchParams = null;
-            String bucket = bucketName;
+            String bucket = bucketName.getBucketName();
             searchParams = "bucket_display_name = \"" + bucket + "\"";
 
             // final String[] columns = { MediaStore.Video.Media.DATA,
@@ -179,16 +181,17 @@ public class VideoAlbumActivity extends AppCompatActivity {
                     MediaStore.Video.Media.EXTERNAL_CONTENT_URI, null,
                     searchParams, null, orderBy + " DESC");
 
-            if (mVideoCursor.getCount() > 0) {
+            if (mVideoCursor != null && mVideoCursor.moveToFirst()) {
+                String filePath = mVideoCursor.getString(mVideoCursor.getColumnIndex(MediaStore.Video.Media.DATA));
+                bucketName.setTotalCount(mVideoCursor.getCount());
+                bucketName.setFilePath(filePath);
 
-                return mVideoCursor.getCount();
+                return;
             }
             mVideoCursor.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return 0;
 
     }
 
@@ -218,6 +221,8 @@ public class VideoAlbumActivity extends AppCompatActivity {
                     }
                 };
                 recyclerView.setAdapter(galleryAlbumAdapter);
+//                GetVideoThumbnailAsync thumbnailAsync = new GetVideoThumbnailAsync();
+//                thumbnailAsync.execute();
             } else {
                 noAlbum.setVisibility(View.VISIBLE);
             }
@@ -235,4 +240,32 @@ public class VideoAlbumActivity extends AppCompatActivity {
     }
 
 
+    /*private class GetVideoThumbnailAsync extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            for (int i = 0; i < arrayListAlbums.size(); i++) {
+
+            }
+            Bitmap bmp = null;
+            try {
+                bmp = ImageLoader.getInstance().getMemoryCache().get(Uri.fromFile(new File(filePath)).toString() + "_");
+            } catch (Exception e) {
+                Log.e(ProcessGalleryFile.class.getSimpleName(), "" + e);
+            }
+            if (bmp == null) {
+                try {
+                    bmp = ThumbnailUtils.createVideoThumbnail(filePath, MediaStore.Images.Thumbnails.MINI_KIND);
+                    if (bmp != null) {
+                        ImageLoader.getInstance().getMemoryCache().put(Uri.fromFile(new File(filePath)).toString() + "_", bmp);
+                    }
+                } catch (Exception e) {
+                    Log.e(getClass().getSimpleName(), "Exception when rotating thumbnail for gallery", e);
+                } catch (OutOfMemoryError e) {
+                    Log.e(ProcessGalleryFile.class.getSimpleName(), "" + e);
+                }
+            }
+
+            return null;
+        }
+    }*/
 }

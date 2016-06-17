@@ -30,7 +30,7 @@
         android:id="@+id/no_album"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffff"
+        android:background="@color/color_303030"
         android:visibility="visible"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -51,8 +51,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/msg_no_image"
-                android:textColor="?android:textColorSecondary"
-                android:textSize="23dp" />
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
         </LinearLayout>
     </RelativeLayout>
 
