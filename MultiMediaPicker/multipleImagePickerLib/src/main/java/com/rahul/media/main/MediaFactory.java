@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.rahul.media.activity.CameraPickActivity;
 import com.rahul.media.activity.MultipleImagePreviewActivity;
 import com.rahul.media.activity.VideoPickActivity;
@@ -156,6 +157,7 @@ public class MediaFactory {
         MediaSingleTon.getInstance();
         Intent intent;
         Bundle bundle = new Bundle();
+        Fresco.initialize(mediaBuilder.mContext.getApplicationContext());
         if (mediaBuilder.takeVideo) {
 
             intent = new Intent(mediaBuilder.mContext, VideoPickActivity.class);

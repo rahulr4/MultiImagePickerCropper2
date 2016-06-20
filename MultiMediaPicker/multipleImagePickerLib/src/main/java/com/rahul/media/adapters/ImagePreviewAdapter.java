@@ -1,16 +1,16 @@
 package com.rahul.media.adapters;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.bumptech.glide.Glide;
 import com.rahul.media.R;
 import com.rahul.media.model.CustomGallery;
+import com.rahul.media.utils.SquareImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,8 +57,12 @@ public class ImagePreviewAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
         View itemView = mLayoutInflater.inflate(R.layout.image_pager_item, container, false);
 
-        final SimpleDraweeView imageView = (SimpleDraweeView) itemView.findViewById(R.id.full_screen_image);
-        imageView.setImageURI(Uri.parse("file://" + dataT.get(position).sdcardPath));
+        final SquareImageView imageView = (SquareImageView) itemView.findViewById(R.id.full_screen_image);
+        Glide.with(mContext)
+                .load("file://" + dataT.get(position).sdcardPath)
+                .asBitmap()
+                .into(imageView);
+//        imageView.setImageURI(Uri.parse("file://" + dataT.get(position).sdcardPath));
         container.addView(itemView);
         return itemView;
     }

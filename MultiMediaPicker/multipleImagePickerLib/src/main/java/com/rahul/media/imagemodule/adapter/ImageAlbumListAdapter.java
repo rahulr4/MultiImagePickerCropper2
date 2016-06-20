@@ -1,6 +1,7 @@
 package com.rahul.media.imagemodule.adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -11,11 +12,15 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.rahul.media.R;
 import com.rahul.media.imagemodule.ImageGalleryPickerActivity;
 import com.rahul.media.model.Album;
 import com.rahul.media.model.Define;
+import com.rahul.media.utils.MediaSingleTon;
+import com.rahul.media.utils.MediaUtility;
+import com.rahul.media.utils.SquareImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +35,7 @@ public class ImageAlbumListAdapter
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private SimpleDraweeView imgAlbum;
+        private SquareImageView imgAlbum;
         private TextView albumNameTv;
         private TextView albumCountTv;
         private LinearLayout areaAlbum;
@@ -38,7 +43,7 @@ public class ImageAlbumListAdapter
 
         public ViewHolder(View view) {
             super(view);
-            imgAlbum = (SimpleDraweeView) view.findViewById(R.id.img_album);
+            imgAlbum = (SquareImageView) view.findViewById(R.id.img_album);
             albumNameTv = (TextView) view.findViewById(R.id.album_name);
             albumCountTv = (TextView) view.findViewById(R.id.album_photos_count);
             areaAlbum = (LinearLayout) view.findViewById(R.id.area_album);
@@ -53,7 +58,7 @@ public class ImageAlbumListAdapter
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.album_item, parent, false);
+                .inflate(R.layout.image_album_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -92,8 +97,36 @@ public class ImageAlbumListAdapter
         });
     }
 
-    private void loadImage(String thumbPath, final SimpleDraweeView imgAlbum) {
-        imgAlbum.setImageURI(Uri.parse("file://" + thumbPath));
+    private void loadImage(String thumbPath, final SquareImageView imgAlbum) {
+        Context mContext = imgAlbum.getContext();
+        byte[] imageByte = MediaSingleTon.getInstance().getImageByte(thumbPath);
+        if (imageByte != null) {
+            Glide.with(mContext)
+                    .load(imageByte)
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .into(imgAlbum);
+        } else {
+            byte[] thumbnail = MediaUtility.getThumbnail(thumbPath);
+            if (thumbnail != null) {
+                MediaSingleTon.getInstance().putImageByte(thumbPath, thumbnail);
+                Glide.with(mContext)
+                        .load(thumbnail)
+                        .centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .into(imgAlbum);
+            } else {
+                Glide.with(mContext)
+                        .load(Uri.parse("file://" + thumbPath))
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .override(200, 200) // resizes the image to these dimensions (in pixel). does not respect aspect ratio
+                        .centerCrop() // this cropping technique scales the image so that it fills the requested bounds and then crops the extra.
+                        .into(imgAlbum);
+
+            }
+        }
+//        imgAlbum.setImageURI(Uri.parse("file://" + thumbPath));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.rahul.media.imagemodule;
 
+import android.content.ComponentCallbacks2;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -17,15 +18,15 @@ import android.view.MenuItem;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
+import com.bumptech.glide.Glide;
 import com.msupport.MSupport;
 import com.msupport.MSupportConstants;
 import com.rahul.media.R;
 import com.rahul.media.imagemodule.adapter.ImageGalleryGridAdapter;
 import com.rahul.media.model.Album;
+import com.rahul.media.model.Define;
 import com.rahul.media.model.MediaObject;
 import com.rahul.media.model.MediaType;
-import com.rahul.media.model.Define;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,15 +44,8 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
     private int pickCount;
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-//        Fresco.shutDown();
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fresco.initialize(this);
         setContentView(R.layout.activity_photo_picker);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -161,6 +155,12 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        new GlideClearAsync().execute();
     }
 
     @Override
@@ -278,4 +278,18 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
         return pathDir;
     }
 
+    private class GlideClearAsync extends AsyncTask<Void, Void, Void>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Glide.get(getApplicationContext()).clearMemory();
+            Glide.get(getApplicationContext()).trimMemory(ComponentCallbacks2.TRIM_MEMORY_COMPLETE);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Glide.get(getApplicationContext()).clearDiskCache();
+            return null;
+        }
+    }
 }

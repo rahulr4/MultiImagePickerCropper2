@@ -22,20 +22,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     private MediaFactory mediaFactory;
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-//        Fresco.shutDown();
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Fresco.initialize(this);
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Fresco.initialize(this);
         mMediaPathArrayList = new HashMap<>();
         mImageAdapter = new ImageAdapter(mMediaPathArrayList, this);
         ListView mListView = (ListView) findViewById(R.id.listview);

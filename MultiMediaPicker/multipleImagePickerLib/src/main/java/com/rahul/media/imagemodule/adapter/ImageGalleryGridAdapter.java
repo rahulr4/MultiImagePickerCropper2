@@ -12,12 +12,16 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.rahul.media.R;
 import com.rahul.media.model.MediaObject;
+import com.rahul.media.utils.MediaSingleTon;
+import com.rahul.media.utils.MediaUtility;
+import com.rahul.media.utils.SquareImageView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,6 +33,7 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
     private final int pickCount;
     private final Context mContext;
     private final DisplayImageOptions options;
+    private final ImageLoader imageLoader;
     String saveDir;
     ActionBar actionBar;
     private String bucketTitle;
@@ -41,7 +46,8 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
         this.pickCount = pickCount;
         this.actionBar = supportActionBar;
         this.bucketTitle = bucketTitle;
-        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
+        imageLoader = ImageLoader.getInstance();
+        imageLoader.init(ImageLoaderConfiguration.createDefault(context));
 
 
         BitmapFactory.Options resizeOptions = new BitmapFactory.Options();
@@ -82,7 +88,7 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.position = position;
             convertView = vi.inflate(R.layout.list_image_item_gallery, null);
-            holder.imgThumb = (SimpleDraweeView) convertView.findViewById(R.id.imgThumbnail);
+            holder.imgThumb = (SquareImageView) convertView.findViewById(R.id.imgThumbnail);
             holder.videoDuration = (TextView) convertView.findViewById(R.id.txtDuration);
             holder.selectIv = (CheckBox) convertView
                     .findViewById(R.id.imgQueueMultiSelected);
@@ -96,7 +102,34 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
         } else
             selectedPositions.remove(position);
 
-        holder.imgThumb.setImageURI(Uri.parse("file://" + mediaObjectArrayList.get(position).getPath()));
+        byte[] imageByte = MediaSingleTon.getInstance().getImageByte(mediaObjectArrayList.get(position).getPath());
+        if (imageByte != null) {
+            Glide.with(mContext)
+                    .load(imageByte)
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .into(holder.imgThumb);
+        } else {
+            byte[] thumbnail = MediaUtility.getThumbnail(mediaObjectArrayList.get(position).getPath());
+            if (thumbnail != null) {
+                MediaSingleTon.getInstance().putImageByte(mediaObjectArrayList.get(position).getPath(), thumbnail);
+                Glide.with(mContext)
+                        .load(thumbnail)
+                        .centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .into(holder.imgThumb);
+            } else {
+                Glide.with(mContext)
+                        .load(Uri.parse("file://" + mediaObjectArrayList.get(position).getPath()))
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .override(200, 200) // resizes the image to these dimensions (in pixel). does not respect aspect ratio
+                        .centerCrop() // this cropping technique scales the image so that it fills the requested bounds and then crops the extra.
+                        .into(holder.imgThumb);
+
+            }
+        }
+//        holder.imgThumb.setImageURI(Uri.parse("file://" + mediaObjectArrayList.get(position).getPath()));
 
         holder.selectIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,7 +170,7 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
 
     private static class ViewHolder {
         CheckBox selectIv;
-        SimpleDraweeView imgThumb;
+        /*SimpleDraweeView*/ SquareImageView imgThumb;
         TextView videoDuration;
         public int position;
     }

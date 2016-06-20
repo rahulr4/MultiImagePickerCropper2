@@ -20,17 +20,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.msupport.MSupport;
 import com.msupport.MSupportConstants;
 import com.rahul.media.R;
 import com.rahul.media.adapters.ImageListRecycleAdapter;
 import com.rahul.media.adapters.ImagePreviewAdapter;
 import com.rahul.media.model.CustomGallery;
+import com.rahul.media.model.Define;
 import com.rahul.media.utils.BitmapDecoder;
 import com.rahul.media.utils.MediaUtility;
 import com.rahul.media.utils.ViewPagerSwipeLess;
-import com.rahul.media.model.Define;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,17 +64,6 @@ public class CameraPickActivity extends AppCompatActivity {
                             }
                         }).create();
         alertDialog.show();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-//        Fresco.shutDown();
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Fresco.initialize(this);
     }
 
     @Override

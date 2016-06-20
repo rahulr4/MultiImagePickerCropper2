@@ -1,6 +1,7 @@
 package com.rahul.media.utils;
 
 import android.content.Context;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
@@ -63,5 +64,16 @@ public class MediaUtility {
         Log.d(CameraPickActivity.class.getSimpleName(), "file:" + image.getAbsolutePath());
         return Uri.fromFile(image);
     }
-
+    public static byte[] getThumbnail(String path) {
+        ExifInterface exif;
+        try {
+            exif = new ExifInterface(path);
+        } catch (IOException e) {
+            return null;
+        }
+        byte[] imageData = exif.getThumbnail();
+        if (imageData != null)
+            return imageData;
+        return null;
+    }
 }

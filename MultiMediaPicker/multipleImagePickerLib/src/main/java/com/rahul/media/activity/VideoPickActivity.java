@@ -28,7 +28,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.msupport.MSupport;
 import com.msupport.MSupportConstants;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -36,10 +35,10 @@ import com.rahul.media.R;
 import com.rahul.media.adapters.ImageListRecycleAdapter;
 import com.rahul.media.adapters.VideoPreviewAdapter;
 import com.rahul.media.model.CustomGallery;
-import com.rahul.media.model.VideoQuality;
-import com.rahul.media.utils.ViewPagerSwipeLess;
 import com.rahul.media.model.Define;
+import com.rahul.media.model.VideoQuality;
 import com.rahul.media.utils.ProcessGalleryFile;
+import com.rahul.media.utils.ViewPagerSwipeLess;
 import com.rahul.media.videomodule.VideoAlbumActivity;
 
 import java.io.File;
@@ -75,12 +74,6 @@ public class VideoPickActivity extends AppCompatActivity {
                             }
                         }).create();
         alertDialog.show();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Fresco.initialize(this);
     }
 
     @Override
@@ -326,12 +319,6 @@ public class VideoPickActivity extends AppCompatActivity {
                 cursor.close();
         }
         return path;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-//        Fresco.shutDown();
     }
 
     @Override

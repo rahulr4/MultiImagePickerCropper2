@@ -23,16 +23,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.bumptech.glide.Glide;
 import com.rahul.media.R;
 import com.rahul.media.adapters.ImageListRecycleAdapter;
+import com.rahul.media.imagemodule.ImageAlbumListActivity;
 import com.rahul.media.model.CustomGallery;
+import com.rahul.media.model.Define;
 import com.rahul.media.utils.BitmapDecoder;
 import com.rahul.media.utils.MediaUtility;
+import com.rahul.media.utils.SquareImageView;
 import com.rahul.media.utils.ViewPagerSwipeLess;
-import com.rahul.media.model.Define;
-import com.rahul.media.imagemodule.ImageAlbumListActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -72,18 +72,6 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
         Intent data2 = new Intent();
         setResult(RESULT_CANCELED, data2);
         super.onBackPressed();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-//        Fresco.shutDown();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Fresco.initialize(this);
     }
 
     @Override
@@ -283,8 +271,11 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
         public Object instantiateItem(ViewGroup container, final int position) {
             View itemView = mLayoutInflater.inflate(R.layout.image_pager_item, container, false);
 
-            final SimpleDraweeView imageView = (SimpleDraweeView) itemView.findViewById(R.id.full_screen_image);
-            imageView.setImageURI(Uri.parse("file://" + dataT.get(position).sdcardPath));
+            final SquareImageView imageView = (SquareImageView) itemView.findViewById(R.id.full_screen_image);
+            Glide.with(imageView.getContext())
+                    .load("file://" + dataT.get(position).sdcardPath)
+                    .asBitmap()
+                    .into(imageView);
 
             container.addView(itemView);
             return itemView;

@@ -21,16 +21,8 @@ public class MediaSingleTon {
         return mediaSingleTon;
     }
 
-    HashMap<String, Bitmap> bitmapHashMap = new HashMap<>();
-
-
-    public HashMap<String, Bitmap> getBitmapHashMap() {
-        return bitmapHashMap;
-    }
-
-    public void setBitmapHashMap(HashMap<String, Bitmap> bitmapHashMap) {
-        this.bitmapHashMap = bitmapHashMap;
-    }
+    private HashMap<String, Bitmap> bitmapHashMap = new HashMap<>();
+    private HashMap<String, byte[]> byteBitmapHashMap = new HashMap<>();
 
 
     public void putImage(String key, Bitmap value) {
@@ -45,4 +37,12 @@ public class MediaSingleTon {
         return bitmap;
     }
 
+    public byte[] getImageByte(String key) {
+        byte[] aByte = byteBitmapHashMap.get(key);
+        return aByte;
+    }
+
+    public void putImageByte(String key, byte[] value) {
+        byteBitmapHashMap.put(key, value);
+    }
 }
