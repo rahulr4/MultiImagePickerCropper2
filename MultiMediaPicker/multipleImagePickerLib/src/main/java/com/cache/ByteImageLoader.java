@@ -57,6 +57,7 @@ public class ByteImageLoader {
         byte[] imageByte = memoryCache.get(url);
 
         if (imageByte != null) {
+            Log.i("ByteImageLoader", "Load from byte");
             Glide.with(imageView.getContext())
                     .load(imageByte)
                     .centerCrop()
@@ -115,10 +116,8 @@ public class ByteImageLoader {
                 byte[] thumbnail = getBitmap(photoToLoad.url);
 
                 // set image data in Memory Cache
-                memoryCache.put(photoToLoad.url, thumbnail);
-
-                if (imageViewReused(photoToLoad))
-                    return;
+                if (thumbnail != null)
+                    memoryCache.put(photoToLoad.url, thumbnail);
 
                 // Get bitmap to display
                 BitmapDisplayer bd = new BitmapDisplayer(thumbnail, photoToLoad);
@@ -147,8 +146,6 @@ public class ByteImageLoader {
             // Reads up to certain bytes of data from this input stream into an array of bytes.
             fin.read(fileContent);
             //create string from byte array
-            String s = new String(fileContent);
-            System.out.println("File content: " + s);
             Log.i("ByteImageLoader", "Read file from cache :- " + f.getName());
             return fileContent;
         } catch (FileNotFoundException e) {
@@ -212,12 +209,14 @@ public class ByteImageLoader {
 
             // Show bitmap on UI
             if (bitmap != null) {
+                Log.i("ByteImageLoader", "Load from byte");
                 Glide.with(photoToLoad.imageView.getContext())
                         .load(bitmap)
                         .centerCrop()
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .into(photoToLoad.imageView);
             } else {
+                Log.i("ByteImageLoader", "Load from uri direct");
                 Glide.with(photoToLoad.imageView.getContext())
                         .load(Uri.parse("file://" + photoToLoad.url))
                         .asBitmap()

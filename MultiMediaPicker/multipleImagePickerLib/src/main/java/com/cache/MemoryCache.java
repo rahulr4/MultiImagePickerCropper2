@@ -86,6 +86,8 @@ class MemoryCache {
     }
 
     private long getSizeInBytes(byte[] imageData) {
+        if (imageData == null)
+            return 0;
         Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
 
         if (bitmap == null)
