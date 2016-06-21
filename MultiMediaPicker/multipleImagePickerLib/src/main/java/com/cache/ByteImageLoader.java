@@ -1,6 +1,8 @@
 package com.cache;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
@@ -25,8 +27,9 @@ import java.util.concurrent.Executors;
 
 public class ByteImageLoader {
 
+    private final MemoryCache memoryCache = new MemoryCache();
     // Initialize MemoryCache
-    private MemoryCache memoryCache = new MemoryCache();
+    private BitmapMemoryCache bitmapMemoryCache = new BitmapMemoryCache();
 
     private FileCache fileCache;
 
@@ -36,6 +39,8 @@ public class ByteImageLoader {
 
     //handler to display images in UI thread
     private Handler handler = new Handler();
+    private int reqWidth = 100;
+    private int reqHeight = 100;
 
     public ByteImageLoader(Context context) {
 
@@ -57,7 +62,7 @@ public class ByteImageLoader {
         byte[] imageByte = memoryCache.get(url);
 
         if (imageByte != null) {
-            Log.i("ByteImageLoader", "Load from byte");
+            Log.i("ByteImageLoader", "Load from byte cache");
             Glide.with(imageView.getContext())
                     .load(imageByte)
                     .centerCrop()
@@ -66,11 +71,17 @@ public class ByteImageLoader {
             // if image is stored in MemoryCache Map then
             // Show image in listview row
         } else {
-            //queue Photo to download from url
-            queuePhoto(url, imageView);
+            Bitmap bitmap = bitmapMemoryCache.get(url);
+            if (bitmap == null) {
+                //queue Photo to download from url
+                queuePhoto(url, imageView);
 
-            //Before downloading image show default image 
-            imageView.setImageResource(stub_id);
+                //Before downloading image show default image
+                imageView.setImageResource(stub_id);
+            } else {
+                Log.i("ByteImageLoader", "Load from bitmap cache");
+                imageView.setImageBitmap(bitmap);
+            }
         }
     }
 
@@ -113,19 +124,35 @@ public class ByteImageLoader {
 //                byte[] thumbnail = MediaUtility.getThumbnail(photoToLoad.url);
 
                 // download image from web url
-                byte[] thumbnail = getBitmap(photoToLoad.url);
+                byte[] thumbnail = getBitmapByte(photoToLoad.url);
 
                 // set image data in Memory Cache
-                if (thumbnail != null)
+                if (thumbnail != null) {
                     memoryCache.put(photoToLoad.url, thumbnail);
+                    // Get bitmap to display
+                    BitmapDisplayer bd = new BitmapDisplayer(thumbnail, photoToLoad);
+                    // Causes the Runnable bd (BitmapDisplayer) to be added to the message queue.
+                    // The runnable will be run on the thread to which this handler is attached.
+                    // BitmapDisplayer run method will call
+                    handler.post(bd);
+                } else {
+                    // Get bitmap and store it in pool
+                    // download image from web url
+                    Bitmap bmp = getBitmap(photoToLoad.url);
+                    // set image data in Memory Cache
+                    bitmapMemoryCache.put(photoToLoad.url, bmp);
+                    if (imageViewReused(photoToLoad))
+                        return;
 
-                // Get bitmap to display
-                BitmapDisplayer bd = new BitmapDisplayer(thumbnail, photoToLoad);
+                    // Get bitmap to display
+                    BitmapDisplayer bd = new BitmapDisplayer(bmp, photoToLoad);
 
-                // Causes the Runnable bd (BitmapDisplayer) to be added to the message queue. 
-                // The runnable will be run on the thread to which this handler is attached.
-                // BitmapDisplayer run method will call
-                handler.post(bd);
+                    // Causes the Runnable bd (BitmapDisplayer) to be added to the message queue.
+                    // The runnable will be run on the thread to which this handler is attached.
+                    // BitmapDisplayer run method will call
+                    handler.post(bd);
+                }
+
 
             } catch (Throwable th) {
                 th.printStackTrace();
@@ -133,8 +160,114 @@ public class ByteImageLoader {
         }
     }
 
-    private byte[] getBitmap(String url) {
-        File f = fileCache.getFile(url);
+    private static String PREFIX_BYTE = "byte_";
+    private static String PREFIX_BITMAP = "bitmap_";
+
+    private Bitmap getBitmap(String url) {
+        File f = fileCache.getFile(url, PREFIX_BITMAP);
+
+        //from SD cache
+        //CHECK : if trying to decode file which not exist in cache return null
+        Bitmap b = decodeFile(f);
+        if (b != null) {
+            Log.i("ByteImageLoader", "Read bitmap file from cache :- " + f.getName());
+            return b;
+        }
+
+        try {
+            Bitmap bitmap = decodeFile(new File(url));
+            FileOutputStream out = null;
+            try {
+                out = new FileOutputStream(f);
+                Log.i("ByteImageLoader", "Write bitmap file from cache :- " + f.getName());
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                // PNG is a lossless format, the compression factor (100) is ignored
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (out != null) {
+                        out.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            /*final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(url, options);
+        options.inSampleSize = MediaUtility.calculateInSampleSize(options, reqWidth, reqHeight);
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
+            options.inMutable = true;
+            Bitmap inBitmap = GlideBitmapPool.getBitmap(options.outWidth, options.outHeight, options.inPreferredConfig);
+            if (inBitmap != null && Util.canUseForInBitmap(inBitmap, options)) {
+                options.inBitmap = inBitmap;
+            }
+        }
+        options.inJustDecodeBounds = false;
+        try {
+            return BitmapFactory.decodeFile(url, options);
+        } catch (Exception e) {
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
+                options.inBitmap = null;
+            }
+            return BitmapFactory.decodeFile(url, options);
+        }*/
+
+            return bitmap;
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+            if (ex instanceof OutOfMemoryError)
+                memoryCache.clear();
+            return null;
+        }
+    }
+
+    //Decodes image and scales it to reduce memory consumption
+    private Bitmap decodeFile(File f) {
+
+        try {
+
+            //Decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            FileInputStream stream1 = new FileInputStream(f);
+            BitmapFactory.decodeStream(stream1, null, o);
+            stream1.close();
+
+            //Find the correct scale value. It should be the power of 2.
+
+            // Set width/height of recreated image
+            final int REQUIRED_SIZE = reqWidth;
+
+            int width_tmp = o.outWidth, height_tmp = o.outHeight;
+            int scale = 1;
+            while (true) {
+                if (width_tmp / 2 < REQUIRED_SIZE || height_tmp / 2 < REQUIRED_SIZE)
+                    break;
+                width_tmp /= 2;
+                height_tmp /= 2;
+                scale *= 2;
+            }
+
+            //decode with current scale values
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            FileInputStream stream2 = new FileInputStream(f);
+            Bitmap bitmap = BitmapFactory.decodeStream(stream2, null, o2);
+            stream2.close();
+            return bitmap;
+
+        } catch (FileNotFoundException ignored) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private byte[] getBitmapByte(String url) {
+        File f = fileCache.getFile(url, PREFIX_BYTE);
         FileInputStream fin = null;
         byte[] fileContent;
         try {
@@ -146,7 +279,7 @@ public class ByteImageLoader {
             // Reads up to certain bytes of data from this input stream into an array of bytes.
             fin.read(fileContent);
             //create string from byte array
-            Log.i("ByteImageLoader", "Read file from cache :- " + f.getName());
+            Log.i("ByteImageLoader", "Read byte file from cache :- " + f.getName());
             return fileContent;
         } catch (FileNotFoundException e) {
             System.out.println("File not found" + e);
@@ -173,15 +306,17 @@ public class ByteImageLoader {
                 bos.write(thumbnail);
                 bos.flush();
                 bos.close();
-                Log.i("ByteImageLoader", "Write to file in cache :- " + f.getName());
+                Log.i("ByteImageLoader", "Write byte to file in cache :- " + f.getName());
             }
 
             return thumbnail;
 
         } catch (Throwable ex) {
             ex.printStackTrace();
-            if (ex instanceof OutOfMemoryError)
+            if (ex instanceof OutOfMemoryError) {
                 memoryCache.clear();
+                bitmapMemoryCache.clear();
+            }
             return null;
         }
     }
@@ -195,28 +330,38 @@ public class ByteImageLoader {
 
     //Used to display bitmap in the UI thread
     private class BitmapDisplayer implements Runnable {
-        byte[] bitmap;
+        private Bitmap bitmap;
+        byte[] byteBitmap;
         PhotoToLoad photoToLoad;
 
-        BitmapDisplayer(byte[] b, PhotoToLoad p) {
-            bitmap = b;
+        BitmapDisplayer(byte[] byteBitmap, PhotoToLoad p) {
+            this.byteBitmap = byteBitmap;
             photoToLoad = p;
         }
 
+        BitmapDisplayer(Bitmap bitmap, PhotoToLoad p) {
+            this.bitmap = bitmap;
+            photoToLoad = p;
+        }
+
+        @Override
         public void run() {
             if (imageViewReused(photoToLoad))
                 return;
 
             // Show bitmap on UI
-            if (bitmap != null) {
+            if (byteBitmap != null) {
                 Log.i("ByteImageLoader", "Load from byte");
                 Glide.with(photoToLoad.imageView.getContext())
-                        .load(bitmap)
+                        .load(byteBitmap)
                         .centerCrop()
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
                         .into(photoToLoad.imageView);
+            } else if (bitmap != null) {
+                Log.i("ByteImageLoader", "Load from bitmap");
+                photoToLoad.imageView.setImageBitmap(bitmap);
             } else {
-                Log.i("ByteImageLoader", "Load from uri direct");
+                Log.i("ByteImageLoader", "Load from glide uri direct");
                 Glide.with(photoToLoad.imageView.getContext())
                         .load(Uri.parse("file://" + photoToLoad.url))
                         .asBitmap()
@@ -231,6 +376,7 @@ public class ByteImageLoader {
     public void clearCache() {
         //Clear cache directory downloaded images and stored data in maps
         memoryCache.clear();
+        bitmapMemoryCache.clear();
         fileCache.clear();
     }
 

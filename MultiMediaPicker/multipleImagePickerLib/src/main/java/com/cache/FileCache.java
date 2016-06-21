@@ -26,11 +26,11 @@ class FileCache {
         }
     }
 
-    public File getFile(String url) {
+    public File getFile(String url, String prefix) {
         //Identify images by hashcode or encode by URLEncoder.encode.
         String filename = String.valueOf(url.hashCode());
 
-        return new File(cacheDir, filename);
+        return new File(cacheDir, prefix + filename);
 
     }
 
