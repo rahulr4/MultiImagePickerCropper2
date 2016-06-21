@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.cache.ByteImageLoader;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -34,6 +35,7 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
     private final Context mContext;
     private final DisplayImageOptions options;
     private final ImageLoader imageLoader;
+    private final ByteImageLoader byteImageLoader;
     String saveDir;
     ActionBar actionBar;
     private String bucketTitle;
@@ -60,6 +62,7 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
                 .showImageOnFail(R.drawable.placeholder_470x352)
                 .decodingOptions(resizeOptions)
                 .cacheOnDisk(true).build();
+        byteImageLoader = new ByteImageLoader(context);
     }
 
     HashSet<Integer> selectedPositions = new HashSet<>();
@@ -102,6 +105,29 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
         } else
             selectedPositions.remove(position);
 
+        byteImageLoader.DisplayImage(mediaObjectArrayList.get(position).getPath(), holder.imgThumb);
+//        loadThumbnail(holder, position);
+
+        holder.selectIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                performCheck(holder, position);
+            }
+        });
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                performCheck(holder, position);
+            }
+        });
+
+        holder.selectIv.setChecked(mediaObjectArrayList.get(position).isSelected);
+
+        return convertView;
+    }
+
+    private void loadThumbnail(ViewHolder holder, int position) {
         byte[] imageByte = MediaSingleTon.getInstance().getImageByte(mediaObjectArrayList.get(position).getPath());
         if (imageByte != null) {
             Glide.with(mContext)
@@ -131,23 +157,6 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
         }
 //        holder.imgThumb.setImageURI(Uri.parse("file://" + mediaObjectArrayList.get(position).getPath()));
 
-        holder.selectIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                performCheck(holder, position);
-            }
-        });
-
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                performCheck(holder, position);
-            }
-        });
-
-        holder.selectIv.setChecked(mediaObjectArrayList.get(position).isSelected);
-
-        return convertView;
     }
 
     private void performCheck(ViewHolder holder, int position) {

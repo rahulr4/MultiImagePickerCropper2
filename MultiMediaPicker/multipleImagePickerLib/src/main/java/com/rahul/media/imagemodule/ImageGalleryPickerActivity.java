@@ -1,6 +1,5 @@
 package com.rahul.media.imagemodule;
 
-import android.content.ComponentCallbacks2;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -283,7 +282,7 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             Glide.get(getApplicationContext()).clearMemory();
-            Glide.get(getApplicationContext()).trimMemory(ComponentCallbacks2.TRIM_MEMORY_COMPLETE);
+
         }
 
         @Override

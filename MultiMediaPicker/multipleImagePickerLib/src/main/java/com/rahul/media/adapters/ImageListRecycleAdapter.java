@@ -100,7 +100,7 @@ public class ImageListRecycleAdapter extends RecyclerView.Adapter<ImageListRecyc
                         .load(imageByte)
                         .centerCrop()
                         .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                        .override(100, 100)
+                        .override(200, 200)
                         .into(imageView);
             } else {
                 byte[] thumbnail = MediaUtility.getThumbnail(thumbPath);
@@ -110,7 +110,7 @@ public class ImageListRecycleAdapter extends RecyclerView.Adapter<ImageListRecyc
                             .load(thumbnail)
                             .centerCrop()
                             .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                            .override(100, 100)
+                            .override(200, 200)
                             .into(imageView);
                 } else {
                     Glide.with(mContext)
