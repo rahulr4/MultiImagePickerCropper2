@@ -26,6 +26,10 @@ public class BitmapMemoryCache {
     //max memory cache folder used to download images in bytes
     private long limit = 1000000;
 
+    public Map<String, Bitmap> getCache() {
+        return cache;
+    }
+
     public BitmapMemoryCache() {
 
         //use 25% of available heap size
@@ -82,6 +86,7 @@ public class BitmapMemoryCache {
             //NullPointerException sometimes happen here http://code.google.com/p/osmdroid/issues/detail?id=78
             cache.clear();
             size = 0;
+            cache = null;
         } catch (NullPointerException ex) {
             ex.printStackTrace();
         }

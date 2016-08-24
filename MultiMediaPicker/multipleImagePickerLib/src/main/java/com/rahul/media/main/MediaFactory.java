@@ -48,6 +48,7 @@ public class MediaFactory {
 
     public static class MediaBuilder {
         boolean isCrop = false;
+        boolean isSquareCrop = true;
         boolean fromGallery = true;
         boolean takeVideo = false;
         long videoSize = -1;
@@ -137,6 +138,17 @@ public class MediaFactory {
             return this;
         }
 
+        /**
+         * Sets the cropping feature enabled or disabled.
+         * Works only for camera image
+         *
+         * @return current instance of MediaBuilder
+         */
+        public MediaBuilder isSquareCrop(boolean isSquareCrop) {
+            this.isSquareCrop = isSquareCrop;
+            return this;
+        }
+
         public MediaBuilder setPickCount(int count) {
             if (count <= 0)
                 count = 1;
@@ -170,6 +182,7 @@ public class MediaFactory {
             ((Activity) mediaBuilder.mContext).startActivityForResult(intent, MEDIA_REQUEST_CODE);
         } else {
             bundle.putBoolean("crop", mediaBuilder.isCrop);
+            bundle.putBoolean("isSquareCrop", mediaBuilder.isSquareCrop);
             bundle.putInt("pickCount", mediaBuilder.pickCount);
             if (mediaBuilder.fromGallery) {
                 intent = new Intent(mediaBuilder.mContext, MultipleImagePreviewActivity.class);

@@ -51,6 +51,7 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
     private CustomPagerAdapter adapter;
     private ImageListRecycleAdapter mImageListAdapter;
     private boolean isCrop;
+    private boolean isSquareCrop;
     private int pickCount;
 
     public void showAlertDialog(Context mContext, String text) {
@@ -117,6 +118,7 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
 
         try {
             isCrop = getIntent().getExtras().getBoolean("crop");
+            isSquareCrop = getIntent().getExtras().getBoolean("isSquareCrop");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -323,8 +325,14 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
                 Uri destination = null;
                 try {
                     destination = MediaUtility.createImageFile(MultipleImagePreviewActivity.this);
-                    Crop.of((Uri.parse("file://" + imagePath)), destination).
-                            asSquare().start(MultipleImagePreviewActivity.this);
+
+                    if (isSquareCrop) {
+                        Crop.of((Uri.parse("file://" + imagePath)), destination).
+                                asSquare().start(MultipleImagePreviewActivity.this);
+                    } else {
+                        Crop.of((Uri.parse("file://" + imagePath)), destination).start(MultipleImagePreviewActivity.this);
+                    }
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

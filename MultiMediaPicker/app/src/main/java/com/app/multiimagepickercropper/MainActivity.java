@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
                         .setPickCount(1)
                         .doCropping()
+                        .isSquareCrop(false)
                         .fromGallery();
                 mediaFactory = MediaFactory.create().start(mediaBuilder);
                 break;

@@ -3,6 +3,7 @@ package com.rahul.media.imagemodule;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -18,6 +19,8 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.cache.BitmapMemoryCache;
+import com.cache.ByteImageLoader;
 import com.msupport.MSupport;
 import com.msupport.MSupportConstants;
 import com.rahul.media.R;
@@ -29,6 +32,7 @@ import com.rahul.media.model.MediaType;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Map;
 
 
 public class ImageGalleryPickerActivity extends AppCompatActivity {
@@ -41,6 +45,7 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
 
     private String pathDir = "";
     private int pickCount;
+    private ByteImageLoader byteImageLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,8 +152,9 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
             super.onPostExecute(result);
             if (result != null) {
                 if (result) {
+                    byteImageLoader = new ByteImageLoader(ImageGalleryPickerActivity.this);
                     adapter = new ImageGalleryGridAdapter(ImageGalleryPickerActivity.this,
-                            mGalleryImageArrayList, getPathDir(), pickCount, getSupportActionBar(), a.bucketname);
+                            mGalleryImageArrayList, getPathDir(), pickCount, getSupportActionBar(), a.bucketname, byteImageLoader);
                     gridView.setAdapter(adapter);
 //                    new ProcessImages().execute();
                 }
@@ -277,7 +283,7 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
         return pathDir;
     }
 
-    private class GlideClearAsync extends AsyncTask<Void, Void, Void>{
+    private class GlideClearAsync extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -288,6 +294,26 @@ public class ImageGalleryPickerActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             Glide.get(getApplicationContext()).clearDiskCache();
+            if (byteImageLoader != null) {
+                BitmapMemoryCache bitmapMemoryCache = byteImageLoader.getBitmapMemoryCache();
+                if (bitmapMemoryCache != null) {
+                    Map<String, Bitmap> cache = bitmapMemoryCache.getCache();
+                    if (cache != null) {
+                        ArrayList<Bitmap> bitmapArrayList = new ArrayList<>(cache.values());
+
+                        for (Bitmap bitmap : bitmapArrayList) {
+                            if (bitmap != null && !bitmap.isRecycled()) {
+                                bitmap.recycle();
+                            }
+                        }
+                        bitmapMemoryCache.clear();
+                        byteImageLoader.clearCache();
+                        byteImageLoader = null;
+                        System.gc();
+                    }
+                }
+
+            }
             return null;
         }
     }

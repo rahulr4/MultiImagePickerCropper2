@@ -42,6 +42,10 @@ public class ByteImageLoader {
     private int reqWidth = 100;
     private int reqHeight = 100;
 
+    public BitmapMemoryCache getBitmapMemoryCache() {
+        return bitmapMemoryCache;
+    }
+
     public ByteImageLoader(Context context) {
 
         fileCache = new FileCache(context);

@@ -35,19 +35,20 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
     private final Context mContext;
     private final DisplayImageOptions options;
     private final ImageLoader imageLoader;
-    private final ByteImageLoader byteImageLoader;
+    private ByteImageLoader byteImageLoader;
     String saveDir;
     ActionBar actionBar;
     private String bucketTitle;
 
     public ImageGalleryGridAdapter(Context context, ArrayList<MediaObject> pickedImageBeans,
-                                   String saveDir, int pickCount, ActionBar supportActionBar, String bucketTitle) {
+                                   String saveDir, int pickCount, ActionBar supportActionBar, String bucketTitle, ByteImageLoader byteImageLoader) {
         this.mContext = context;
         this.mediaObjectArrayList = pickedImageBeans;
         this.saveDir = saveDir;
         this.pickCount = pickCount;
         this.actionBar = supportActionBar;
         this.bucketTitle = bucketTitle;
+        this.byteImageLoader = byteImageLoader;
         imageLoader = ImageLoader.getInstance();
         imageLoader.init(ImageLoaderConfiguration.createDefault(context));
 
@@ -62,7 +63,7 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
                 .showImageOnFail(R.drawable.placeholder_470x352)
                 .decodingOptions(resizeOptions)
                 .cacheOnDisk(true).build();
-        byteImageLoader = new ByteImageLoader(context);
+
     }
 
     HashSet<Integer> selectedPositions = new HashSet<>();

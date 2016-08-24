@@ -48,7 +48,7 @@ public class CameraPickActivity extends AppCompatActivity {
     private ImagePreviewAdapter imagePreviewAdapter;
     private ImageListRecycleAdapter mImageListAdapter;
     private Uri userPhotoUri;
-    private boolean isCrop;
+    private boolean isCrop, isSquareCrop;
     private int pickCount = 1;
     private AlertDialog alertDialog;
 
@@ -93,6 +93,7 @@ public class CameraPickActivity extends AppCompatActivity {
 
         try {
             isCrop = getIntent().getExtras().getBoolean("crop");
+            isSquareCrop = getIntent().getExtras().getBoolean("isSquareCrop");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -296,8 +297,13 @@ public class CameraPickActivity extends AppCompatActivity {
                 Uri destination;
                 try {
                     destination = MediaUtility.createImageFile(CameraPickActivity.this);
-                    Crop.of((Uri.parse("file://" + imagePath)), destination).
-                            asSquare().start(CameraPickActivity.this);
+                    if (isSquareCrop) {
+                        Crop.of((Uri.parse("file://" + imagePath)), destination).
+                                asSquare().start(CameraPickActivity.this);
+                    } else {
+                        Crop.of((Uri.parse("file://" + imagePath)), destination).
+                                start(CameraPickActivity.this);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
