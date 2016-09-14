@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="crop__saving">ذخیره سازی عکس</string>
+    <string name="crop__wait">لطفا منتظر بمانید</string>
+    <string name="crop__pick_error">محلی برای انتخاب عکس وجود ندارد</string>
+    <string name="btn_ok">تایید</string>
+    <string name="btn_pick">استفاده از گالری</string>
+    <string name="btn_pick_mul">انتخاب متعدد از گالری</string>
+    <string name="crop__done">انجام شد</string>
+    <string name="crop__cancel" tools:ignore="ButtonCase">لغو</string>
+
+    <string name="album">آلبوم</string>
+    <string name="camera">دوربین</string>
+    <string name="done">انجام شد</string>
+    <string name="msg_no_slected">عکسی انتخاب نشد</string>
+    <string name="select_video">ویدیو مورد نظر را انتخاب نمایید</string>
+    <string name="str_all_view">نمایش همه</string>
+    <string name="msg_permisssion">محدودیت دسترسی</string>
+    <string name="msg_no_image">فایلی یافت نشد</string>
+    <string name="no_media_found">فایلی یافت نشد</string>
+    <string name="video_gallery">گالری ویدیو</string>
+    <string name="video_preview">پیش نمایش ویدیو</string>
+    <string name="video_albums">آلبوم ویدیو</string>
+    <string name="video">ویدیو</string>
+    <string name="delete">حذف</string>
+    <string name="sd_card_not_avail">حافظه جانبی یافت نشد</string>
+    <string name="done_caps">انجام شد</string>
+
+    <string name="camera_permission_rationale">لطفا دسترسی به دوربین را تایید فرمایید</string>
+    <string name="storage_permission_rationale">لطفا دسترسی به گالری را تایید فرمایید</string>
+    <string name="preview">پیش نمایش</string>
+</resources>
