@@ -12,7 +12,7 @@ To use this library in your android project, just simply add the following depen
 
 ```java
 dependencies {
-    compile 'com.crop.multiple:multipleImagePickerLib:1.2.7'
+    compile 'com.crop.multiple:multipleImagePickerLib:1.3.4'
 }
 ```
 
@@ -33,7 +33,7 @@ dependencies {
 
 ```java
 dependencies {
-    compile 'com.crop.multiple:multipleImagePickerLib:1.2.7'
+    compile 'com.crop.multiple:multipleImagePickerLib:1.3.4'
 }
 ```
 # ToolBar Color
