@@ -51,6 +51,7 @@ public class CameraPickActivity extends AppCompatActivity {
     private boolean isCrop, isSquareCrop;
     private int pickCount = 1;
     private AlertDialog alertDialog;
+    private int aspectX, aspectY;
 
     private void showAlertDialog(Context mContext, String text) {
 
@@ -91,6 +92,12 @@ public class CameraPickActivity extends AppCompatActivity {
             }
         });
 
+        try {
+            aspectX = getIntent().getIntExtra("aspect_x", 1);
+            aspectY = getIntent().getIntExtra("aspect_y", 1);
+        } catch (Exception ignored) {
+
+        }
         try {
             isCrop = getIntent().getExtras().getBoolean("crop");
             isSquareCrop = getIntent().getExtras().getBoolean("isSquareCrop");
@@ -302,6 +309,7 @@ public class CameraPickActivity extends AppCompatActivity {
                                 asSquare().start(CameraPickActivity.this);
                     } else {
                         Crop.of((Uri.parse("file://" + imagePath)), destination).
+                                withAspect(aspectX, aspectY).
                                 start(CameraPickActivity.this);
                     }
                 } catch (IOException e) {

@@ -53,6 +53,7 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
     private boolean isCrop;
     private boolean isSquareCrop;
     private int pickCount;
+    private int aspectX, aspectY;
 
     public void showAlertDialog(Context mContext, String text) {
 
@@ -115,7 +116,12 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
                 mPager.setCurrentItem(position);
             }
         });
+        try {
+            aspectX = getIntent().getIntExtra("aspect_x", 1);
+            aspectY = getIntent().getIntExtra("aspect_y", 1);
+        } catch (Exception ignored) {
 
+        }
         try {
             isCrop = getIntent().getExtras().getBoolean("crop");
             isSquareCrop = getIntent().getExtras().getBoolean("isSquareCrop");
@@ -330,7 +336,9 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
                         Crop.of((Uri.parse("file://" + imagePath)), destination).
                                 asSquare().start(MultipleImagePreviewActivity.this);
                     } else {
-                        Crop.of((Uri.parse("file://" + imagePath)), destination).start(MultipleImagePreviewActivity.this);
+                        Crop.of((Uri.parse("file://" + imagePath)), destination).
+                                withAspect(aspectX, aspectY).
+                                start(MultipleImagePreviewActivity.this);
                     }
 
                 } catch (IOException e) {

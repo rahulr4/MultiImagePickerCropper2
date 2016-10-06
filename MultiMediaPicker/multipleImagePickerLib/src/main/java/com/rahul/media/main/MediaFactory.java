@@ -56,6 +56,8 @@ public class MediaFactory {
         private final Context mContext;
         private VideoQuality videoQuality = VideoQuality.HIGH_QUALITY;
         private int pickCount = 1;
+        private int x = 1;
+        private int y = 1;
 
         public MediaBuilder(Context mContext) {
             this.mContext = mContext;
@@ -156,6 +158,12 @@ public class MediaFactory {
             return this;
         }
 
+        public MediaBuilder withAspectRatio(int x, int y) {
+            this.x = x;
+            this.y = y;
+            return this;
+        }
+
     }
 
     /**
@@ -184,6 +192,8 @@ public class MediaFactory {
             bundle.putBoolean("crop", mediaBuilder.isCrop);
             bundle.putBoolean("isSquareCrop", mediaBuilder.isSquareCrop);
             bundle.putInt("pickCount", mediaBuilder.pickCount);
+            bundle.putInt("aspect_x", mediaBuilder.x);
+            bundle.putInt("aspect_y", mediaBuilder.y);
             if (mediaBuilder.fromGallery) {
                 intent = new Intent(mediaBuilder.mContext, MultipleImagePreviewActivity.class);
                 intent.putExtras(bundle);

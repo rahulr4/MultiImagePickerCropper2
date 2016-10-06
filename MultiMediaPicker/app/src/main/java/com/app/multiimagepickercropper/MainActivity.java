@@ -1,15 +1,11 @@
 package com.app.multiimagepickercropper;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -58,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                         .setPickCount(1)
                         .doCropping()
                         .isSquareCrop(false)
+                        .withAspectRatio(16,9)
                         .fromGallery();
                 mediaFactory = MediaFactory.create().start(mediaBuilder);
                 break;
@@ -70,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 break;
             case R.id.img_single_pick_camera:
                 mediaBuilder = new MediaFactory.MediaBuilder(MainActivity.this)
+                        .isSquareCrop(false)
                         .fromCamera();
                 mediaFactory = MediaFactory.create().start(mediaBuilder);
                 break;

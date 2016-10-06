@@ -12,7 +12,7 @@ To use this library in your android project, just simply add the following depen
 
 ```java
 dependencies {
-    compile 'com.crop.multiple:multipleImagePickerLib:1.3.4'
+    compile 'com.crop.multiple:multipleImagePickerLib:1.3.5'
 }
 ```
 
@@ -33,7 +33,7 @@ dependencies {
 
 ```java
 dependencies {
-    compile 'com.crop.multiple:multipleImagePickerLib:1.3.4'
+    compile 'com.crop.multiple:multipleImagePickerLib:1.3.6'
 }
 ```
 # ToolBar Color
@@ -60,7 +60,8 @@ MediaBuilder Specifications :-
     fromGallery() // Picks media file from gallery
     fromCamera() //Captures media file from camera. Default is gallery
     doCropping() // Cropping functionality for images only. Default is false
-
+    isSquareCrop() // Crops the image in 1:1 ratio
+    withAspectRatio(int x, int y) // Custom aspect ratio. Set isSquareCrop() to false then only this method will work
     MediaFactory start(MediaBuilder mediaBuilder) // Takes the builder object and starts the media capturing process
 
     MediaFactory.create().clearCache(MainActivity.this); // Clears local cache of compressed images from sd card
