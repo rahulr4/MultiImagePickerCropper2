@@ -87,6 +87,39 @@ public class MediaUtility {
         return Uri.fromFile(image);
     }
 
+    public static Uri createVideoFile(Context mContext) throws IOException {
+
+        File image = null;
+
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "VID_" + timeStamp + "_";
+
+        if (MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+
+            File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            image = File.createTempFile(
+                    imageFileName,  /* prefix */
+                    ".mp4",         /* suffix */
+                    storageDir      /* directory */
+            );
+
+        } else {
+
+            File storageDir = mContext.getFilesDir();
+            image = File.createTempFile(
+                    imageFileName,  /* prefix */
+                    ".mp4",         /* suffix */
+                    storageDir      /* directory */
+            );
+
+        }
+
+        // Save a file: path for use with ACTION_VIEW intents
+        Log.d(CameraPickActivity.class.getSimpleName(), "file:" + image.getAbsolutePath());
+        return Uri.fromFile(image);
+    }
+
     public static byte[] getThumbnail(String path) {
         ExifInterface exif;
         try {

@@ -37,6 +37,7 @@ import com.rahul.media.adapters.VideoPreviewAdapter;
 import com.rahul.media.model.CustomGallery;
 import com.rahul.media.model.Define;
 import com.rahul.media.model.VideoQuality;
+import com.rahul.media.utils.MediaUtility;
 import com.rahul.media.utils.ProcessGalleryFile;
 import com.rahul.media.utils.ViewPagerSwipeLess;
 import com.rahul.media.videomodule.VideoAlbumActivity;
@@ -61,6 +62,7 @@ public class VideoPickActivity extends AppCompatActivity {
     private int videoQuality = VideoQuality.HIGH_QUALITY.getQuality();
     private int pickCount;
     private boolean pickFromGallery;
+    private Uri videoFile;
 
     private void showAlertDialog(Context mContext, String text) {
 
@@ -187,6 +189,9 @@ public class VideoPickActivity extends AppCompatActivity {
             if (videoDuration != -1)
                 intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, videoDuration);
 
+            videoFile = MediaUtility.createVideoFile(VideoPickActivity.this);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, MediaUtility.createVideoFile(VideoPickActivity.this));
+
             startActivityForResult(intent, ACTION_REQUEST_VIDEO_FROM_CAMERA);
         } catch (Exception e) {
             e.printStackTrace();
@@ -265,6 +270,8 @@ public class VideoPickActivity extends AppCompatActivity {
                     cursor.moveToFirst();
                     pickedVideoList.add(cursor.getString(column_index_data));
                     cursor.close();
+                } else {
+                    pickedVideoList.add(videoFile.getPath());
                 }
 
             } else if (requestCode == ACTION_REQUEST_VIDEO_FROM_GALLERY) {
