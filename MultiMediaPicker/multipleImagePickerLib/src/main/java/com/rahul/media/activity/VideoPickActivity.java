@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -189,10 +190,15 @@ public class VideoPickActivity extends AppCompatActivity {
             if (videoDuration != -1)
                 intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, videoDuration);
 
-            videoFile = MediaUtility.createVideoFile(VideoPickActivity.this);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, MediaUtility.createVideoFile(VideoPickActivity.this));
+            Uri videoFile2 = MediaUtility.createVideoFile(VideoPickActivity.this);
 
+            videoFile = FileProvider.getUriForFile(VideoPickActivity.this, Define.MEDIA_PROVIDER,
+                    new File(videoFile2.getPath()));
+
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, videoFile);
             startActivityForResult(intent, ACTION_REQUEST_VIDEO_FROM_CAMERA);
+            videoFile = videoFile2;
+
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(VideoPickActivity.this, "SD-Card not available", Toast.LENGTH_LONG).show();
@@ -263,14 +269,24 @@ public class VideoPickActivity extends AppCompatActivity {
             }
             if (requestCode == ACTION_REQUEST_VIDEO_FROM_CAMERA) {
 
-                String[] projection = {MediaStore.Video.Media.DATA};
-                Cursor cursor = getContentResolver().query(data.getData(), projection, null, null, null);
-                if (cursor != null) {
-                    int column_index_data = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
-                    cursor.moveToFirst();
-                    pickedVideoList.add(cursor.getString(column_index_data));
-                    cursor.close();
-                } else {
+                try {
+                    String[] projection = {MediaStore.Video.Media.DATA};
+                    Cursor cursor = getContentResolver().query(data.getData(), projection, null, null, null);
+                    if (cursor != null) {
+                        try {
+                            int column_index_data = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
+                            cursor.moveToFirst();
+                            pickedVideoList.add(cursor.getString(column_index_data));
+                            cursor.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            pickedVideoList.add(videoFile.getPath());
+                        }
+                    } else {
+                        pickedVideoList.add(videoFile.getPath());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                     pickedVideoList.add(videoFile.getPath());
                 }
 

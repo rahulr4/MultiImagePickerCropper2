@@ -3,6 +3,7 @@ package com.rahul.media.model;
 import android.graphics.Color;
 
 public class Define {
+    public static String MEDIA_PROVIDER = "";
     public static int ALBUM_THUMBNAIL_SIZE = 70;
 
 

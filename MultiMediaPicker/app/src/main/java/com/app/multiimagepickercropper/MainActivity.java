@@ -11,6 +11,7 @@ import android.widget.ListView;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.rahul.media.main.MediaFactory;
 import com.rahul.media.model.CustomGallery;
+import com.rahul.media.model.Define;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Define.MEDIA_PROVIDER = getString(R.string.image_provider);
         Fresco.initialize(this);
         mMediaPathArrayList = new HashMap<>();
         mImageAdapter = new ImageAdapter(mMediaPathArrayList, this);

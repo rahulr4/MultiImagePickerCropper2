@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="imagepicker_parent">multipleImagePickerLib/files</string>
     <string name="crop__saving">Saving picture…</string>
     <string name="crop__wait">Please wait…</string>
     <string name="crop__pick_error">No image sources available</string>

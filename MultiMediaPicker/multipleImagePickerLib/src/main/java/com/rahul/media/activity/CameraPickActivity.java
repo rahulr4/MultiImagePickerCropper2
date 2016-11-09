@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,6 +32,7 @@ import com.rahul.media.utils.BitmapDecoder;
 import com.rahul.media.utils.MediaUtility;
 import com.rahul.media.utils.ViewPagerSwipeLess;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -125,12 +127,13 @@ public class CameraPickActivity extends AppCompatActivity {
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
                 if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-
-                    userPhotoUri = MediaUtility.createImageFile(CameraPickActivity.this);
+                    Uri imageFile = MediaUtility.createImageFile(CameraPickActivity.this);
+                    userPhotoUri = FileProvider.getUriForFile(CameraPickActivity.this, Define.MEDIA_PROVIDER,
+                            new File(imageFile.getPath()));
 
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, userPhotoUri);
                     startActivityForResult(takePictureIntent, ACTION_REQUEST_CAMERA);
-
+                    userPhotoUri = imageFile;
                 }
             } catch (Exception e) {
                 showAlertDialog(CameraPickActivity.this, "Device does not support camera.");
@@ -146,14 +149,16 @@ public class CameraPickActivity extends AppCompatActivity {
                     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
                     if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-
-                        userPhotoUri = MediaUtility.createImageFile(CameraPickActivity.this);
+                        Uri imageFile = MediaUtility.createImageFile(CameraPickActivity.this);
+                        userPhotoUri = FileProvider.getUriForFile(CameraPickActivity.this, Define.MEDIA_PROVIDER,
+                                new File(imageFile.getPath()));
 
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, userPhotoUri);
                         startActivityForResult(takePictureIntent, ACTION_REQUEST_CAMERA);
-
+                        userPhotoUri = imageFile;
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                     showAlertDialog(CameraPickActivity.this, "Device does not support camera.");
                 }
             }
