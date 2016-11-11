@@ -195,10 +195,16 @@ public class VideoPickActivity extends AppCompatActivity {
             videoFile = FileProvider.getUriForFile(VideoPickActivity.this, Define.MEDIA_PROVIDER,
                     new File(videoFile2.getPath()));
 
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, videoFile);
-            startActivityForResult(intent, ACTION_REQUEST_VIDEO_FROM_CAMERA);
-            videoFile = videoFile2;
+            if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                // only for gingerbread and newer versions
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, videoFile);
+                videoFile = videoFile2;
+            } else {
+                videoFile = videoFile2;
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, videoFile);
+            }
 
+            startActivityForResult(intent, ACTION_REQUEST_VIDEO_FROM_CAMERA);
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(VideoPickActivity.this, "SD-Card not available", Toast.LENGTH_LONG).show();

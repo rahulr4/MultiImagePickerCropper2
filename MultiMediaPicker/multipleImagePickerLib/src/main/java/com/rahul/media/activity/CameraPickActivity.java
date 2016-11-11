@@ -123,21 +123,7 @@ public class CameraPickActivity extends AppCompatActivity {
     private void openCamera(boolean isPermission) {
         String[] permissionSet = {MSupportConstants.WRITE_EXTERNAL_STORAGE, MSupportConstants.CAMERA};
         if (isPermission) {
-            try {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    Uri imageFile = MediaUtility.createImageFile(CameraPickActivity.this);
-                    userPhotoUri = FileProvider.getUriForFile(CameraPickActivity.this, Define.MEDIA_PROVIDER,
-                            new File(imageFile.getPath()));
-
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, userPhotoUri);
-                    startActivityForResult(takePictureIntent, ACTION_REQUEST_CAMERA);
-                    userPhotoUri = imageFile;
-                }
-            } catch (Exception e) {
-                showAlertDialog(CameraPickActivity.this, "Device does not support camera.");
-            }
+            cameraIntent();
         } else {
             boolean isCameraPermissionGranted;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -145,23 +131,33 @@ public class CameraPickActivity extends AppCompatActivity {
             } else
                 isCameraPermissionGranted = true;
             if (isCameraPermissionGranted) {
-                try {
-                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                        Uri imageFile = MediaUtility.createImageFile(CameraPickActivity.this);
-                        userPhotoUri = FileProvider.getUriForFile(CameraPickActivity.this, Define.MEDIA_PROVIDER,
-                                new File(imageFile.getPath()));
-
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, userPhotoUri);
-                        startActivityForResult(takePictureIntent, ACTION_REQUEST_CAMERA);
-                        userPhotoUri = imageFile;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    showAlertDialog(CameraPickActivity.this, "Device does not support camera.");
-                }
+                cameraIntent();
             }
+        }
+    }
+
+    private void cameraIntent() {
+        try {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                Uri imageFile = MediaUtility.createImageFile(CameraPickActivity.this);
+                userPhotoUri = FileProvider.getUriForFile(CameraPickActivity.this, Define.MEDIA_PROVIDER,
+                        new File(imageFile.getPath()));
+
+                if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                    // only for gingerbread and newer versions
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, userPhotoUri);
+                    userPhotoUri = imageFile;
+                } else {
+                    userPhotoUri = imageFile;
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, userPhotoUri);
+                }
+
+                startActivityForResult(takePictureIntent, ACTION_REQUEST_CAMERA);
+            }
+        } catch (Exception e) {
+            showAlertDialog(CameraPickActivity.this, "Device does not support camera.");
         }
     }
 
