@@ -157,6 +157,7 @@ public class CameraPickActivity extends AppCompatActivity {
                 startActivityForResult(takePictureIntent, ACTION_REQUEST_CAMERA);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             showAlertDialog(CameraPickActivity.this, "Device does not support camera.");
         }
     }

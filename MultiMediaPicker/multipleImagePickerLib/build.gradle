@@ -19,7 +19,7 @@ ext {
     developerName       = 'Rahul Gupta'
     developerEmail      = 'rahul.r4@gmail.com'
 
-    libraryVersion      = '1.3.9'
+    libraryVersion      = '1.4.0'
 
     allLicenses         = ["Apache-2.0"]
 
