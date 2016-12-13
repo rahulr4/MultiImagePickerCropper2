@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.rahul.media.R;
 import com.rahul.media.activity.CameraPickActivity;
 import com.rahul.media.activity.MultipleImagePreviewActivity;
 import com.rahul.media.activity.VideoPickActivity;
@@ -58,6 +59,7 @@ public class MediaFactory {
         private int pickCount = 1;
         private int x = 1;
         private int y = 1;
+        private int playResId = R.drawable.video_play;
 
         public MediaBuilder(Context mContext) {
             this.mContext = mContext;
@@ -72,6 +74,18 @@ public class MediaFactory {
             takeVideo = true;
             return this;
         }
+
+        /**
+         * Sets type of media to be video
+         *
+         * @return current instance of MediaBuilder
+         */
+        public MediaBuilder setPlayIcon(int playResId) {
+            if (playResId > 0)
+                this.playResId = playResId;
+            return this;
+        }
+
 
         /**
          * Sets the size of video.
@@ -186,6 +200,8 @@ public class MediaFactory {
             intent.putExtra("videoDuration", mediaBuilder.videoDuration);
             intent.putExtra("videoQuality", mediaBuilder.videoQuality.getQuality());
             intent.putExtra("pickCount", mediaBuilder.pickCount);
+            intent.putExtra("playResId", mediaBuilder.playResId);
+
 
             ((Activity) mediaBuilder.mContext).startActivityForResult(intent, MEDIA_REQUEST_CODE);
         } else {

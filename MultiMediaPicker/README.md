@@ -4,7 +4,7 @@ You can also crop multiple images from gallery or camera.
 
 
 # Version
-1.3.6
+1.4.1
 
 # Installation
 
@@ -12,7 +12,7 @@ To use this library in your android project, just simply add the following depen
 
 ```java
 dependencies {
-    compile 'com.crop.multiple:multipleImagePickerLib:1.3.6'
+    compile 'com.crop.multiple:multipleImagePickerLib:1.4.1'
 }
 ```
 
@@ -22,18 +22,18 @@ This library uses the following third parties
 
 ```java
 dependencies {
-    compile 'com.android.support:appcompat-v7:24.1.1'
-    compile 'com.android.support:design:24.1.1'
-    compile 'com.android.support:recyclerview-v7:24.1.1'
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:design:25.0.0'
+    compile 'com.android.support:recyclerview-v7:25.0.0'
     compile files('libs/universal-image-loader-1.9.4.jar')
-    compile 'com.facebook.fresco:fresco:0.13.0'
+    compile 'com.facebook.fresco:fresco:0.14.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
 }
 ```
 
 ```java
 dependencies {
-    compile 'com.crop.multiple:multipleImagePickerLib:1.3.6'
+    compile 'com.crop.multiple:multipleImagePickerLib:1.4.1'
 }
 ```
 # ToolBar Color
@@ -55,6 +55,7 @@ MediaBuilder Specifications :-
 ```java
     takeVideo() // Takes a video. Default is image
     setImageQuality(int size) //Takes the size between 0 to 100
+    setPlayIcon(int playResId) //Sets the play icon preview. Have to be a valid resource id
     setVideoSize(int size) // Sets the size of video in MBs for camera. Default is -1
     setVideoDuration(long seconds)// Sets the duration of video in seconds for camera. Default is -1
     fromGallery() // Picks media file from gallery

@@ -62,6 +62,7 @@ public class VideoPickActivity extends AppCompatActivity {
     private int videoDuration;
     private int videoQuality = VideoQuality.HIGH_QUALITY.getQuality();
     private int pickCount;
+    private int playResId = R.drawable.video_play;
     private boolean pickFromGallery;
     private Uri videoFile;
 
@@ -95,6 +96,7 @@ public class VideoPickActivity extends AppCompatActivity {
         mPager = (ViewPagerSwipeLess) findViewById(R.id.pager);
         dataT = new HashMap<>();
         adapter = new VideoPreviewAdapter(VideoPickActivity.this, dataT);
+        adapter.setPlayResId(playResId);
         mPager.setAdapter(adapter);
         mImageListAdapter = new ImageListRecycleAdapter(this, dataT);
         RecyclerView mRecycleView = (RecyclerView) findViewById(R.id.image_hlistview);

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -27,11 +28,16 @@ public class VideoPreviewAdapter extends PagerAdapter {
     private final Context mContext;
     private LayoutInflater mLayoutInflater;
     private ArrayList<CustomGallery> dataT;
+    private int playResId = R.drawable.video_play;
 
     public VideoPreviewAdapter(Context mContext, HashMap<String, CustomGallery> dataT) {
         this.mContext = mContext;
         this.dataT = new ArrayList<>(dataT.values());
         mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public void setPlayResId(int playResId) {
+        this.playResId = playResId;
     }
 
     public void customNotify(HashMap<String, CustomGallery> dataHashmap) {
@@ -61,6 +67,9 @@ public class VideoPreviewAdapter extends PagerAdapter {
         View itemView = mLayoutInflater.inflate(R.layout.video_image_pager_item, container, false);
 
         final SimpleDraweeView imageView = (SimpleDraweeView) itemView.findViewById(R.id.full_screen_image);
+
+        final ImageView playIcon = (ImageView) itemView.findViewById(R.id.play_icon);
+        playIcon.setImageResource(playResId);
 
         imageView.setImageURI(Uri.parse("file://" + dataT.get(position).sdcardPath));
 
