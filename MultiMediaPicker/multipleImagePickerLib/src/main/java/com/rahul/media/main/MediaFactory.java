@@ -25,6 +25,11 @@ public class MediaFactory {
 
     private static final int MEDIA_REQUEST_CODE = 222;
     private static MediaFactory mMediaFactory;
+    private boolean isVideo;
+
+    public boolean isVideo() {
+        return isVideo;
+    }
 
     private MediaFactory() {
     }
@@ -193,6 +198,7 @@ public class MediaFactory {
         Bundle bundle = new Bundle();
         Fresco.initialize(mediaBuilder.mContext.getApplicationContext());
         if (mediaBuilder.takeVideo) {
+            isVideo = true;
 
             intent = new Intent(mediaBuilder.mContext, VideoPickActivity.class);
             intent.putExtra("from", mediaBuilder.fromGallery);
@@ -205,6 +211,7 @@ public class MediaFactory {
 
             ((Activity) mediaBuilder.mContext).startActivityForResult(intent, MEDIA_REQUEST_CODE);
         } else {
+            isVideo = false;
             bundle.putBoolean("crop", mediaBuilder.isCrop);
             bundle.putBoolean("isSquareCrop", mediaBuilder.isSquareCrop);
             bundle.putInt("pickCount", mediaBuilder.pickCount);
