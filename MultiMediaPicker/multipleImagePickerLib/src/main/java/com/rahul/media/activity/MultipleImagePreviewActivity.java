@@ -130,8 +130,12 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
         }
 
 
-        if (getIntent().getExtras().containsKey("pickCount")) {
-            pickCount = getIntent().getIntExtra("pickCount", 1);
+        try {
+            if (getIntent().getExtras().containsKey("pickCount")) {
+                pickCount = getIntent().getIntExtra("pickCount", 1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         openGallery();
     }
