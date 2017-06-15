@@ -61,7 +61,7 @@ public class VideoPickActivity extends AppCompatActivity {
     private long videoSize;
     private int videoDuration;
     private int videoQuality = VideoQuality.HIGH_QUALITY.getQuality();
-    private int pickCount;
+    private int pickCount = Define.MIN_MEDIA_COUNT;
     private int playResId = R.drawable.video_play;
     private boolean pickFromGallery;
     private Uri videoFile;
@@ -113,7 +113,7 @@ public class VideoPickActivity extends AppCompatActivity {
             videoSize = getIntent().getExtras().getLong("videoSize");
             videoDuration = (int) getIntent().getExtras().getLong("videoDuration");
             videoQuality = getIntent().getExtras().getInt("videoQuality");
-            pickCount = getIntent().getIntExtra("pickCount", 1);
+            pickCount = getIntent().getIntExtra("pickCount", Define.MIN_MEDIA_COUNT);
             pickFromGallery = getIntent().getBooleanExtra("from", false);
         } catch (Exception e) {
             e.printStackTrace();
@@ -381,9 +381,11 @@ public class VideoPickActivity extends AppCompatActivity {
             setResult(RESULT_CANCELED, data);
             finish();
         } else if (id == R.id.action_pick) {
-            if (pickFromGallery) {
+            if (dataT.size() == pickCount) {
+                showAlertDialog(VideoPickActivity.this, "You can select max " + pickCount + " videos.");
+            } else if (pickFromGallery) {
                 Intent intent = new Intent(VideoPickActivity.this, VideoAlbumActivity.class);
-                intent.putExtra("pickCount", pickCount);
+                intent.putExtra("pickCount", pickCount - dataT.size());
                 startActivityForResult(intent, ACTION_REQUEST_VIDEO_FROM_GALLERY);
             } else {
                 openVideoFromCamera(false);

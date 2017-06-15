@@ -52,7 +52,7 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
     private ImageListRecycleAdapter mImageListAdapter;
     private boolean isCrop;
     private boolean isSquareCrop;
-    private int pickCount;
+    private int pickCount = Define.MIN_MEDIA_COUNT;
     private int aspectX, aspectY;
 
     public void showAlertDialog(Context mContext, String text) {
@@ -129,21 +129,18 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
-        try {
-            if (getIntent().getExtras().containsKey("pickCount")) {
-                pickCount = getIntent().getIntExtra("pickCount", 1);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        pickCount = getIntent().getIntExtra("pickCount", Define.MIN_MEDIA_COUNT);
         openGallery();
     }
 
     private void openGallery() {
-        Intent i = new Intent(this, ImageAlbumListActivity.class);
-        i.putExtra("pickCount", pickCount);
-        startActivityForResult(i, PICK_IMAGE);
+        if (dataT.size() == pickCount) {
+            showAlertDialog(MultipleImagePreviewActivity.this, "You can select max " + pickCount + " images.");
+        } else {
+            Intent i = new Intent(this, ImageAlbumListActivity.class);
+            i.putExtra("pickCount", pickCount - dataT.size());
+            startActivityForResult(i, PICK_IMAGE);
+        }
     }
 
     private class ProcessAllImages extends AsyncTask<Void, Void, Void> {
@@ -205,17 +202,7 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
                         new ProcessAllImages(allPath).execute();
                     } else {
                         new ProcessAllImages(allPath).execute();
-//                        for (String string : allPath) {
-//                            if (string != null) {
-//                                CustomGallery item = new CustomGallery();
-//                                item.sdcardPath = string;
-//                                item.sdCardUri = Uri.parse(string);
-//                                dataT.put(string, item);
-//                            }
-//                        }
                     }
-//                    adapter.customNotify(dataT);
-//                    mImageListAdapter.customNotify(dataT);
                 }
             } else if (requestCode == Crop.REQUEST_CROP) {
                 try {
@@ -332,7 +319,7 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
             if (adapter != null && adapter.getCount() > 0) {
                 String imagePath = mImageListAdapter.mItems.get(mPager.getCurrentItem()).sdcardPath;
 
-                Uri destination = null;
+                Uri destination;
                 try {
                     destination = MediaUtility.createImageFile(MultipleImagePreviewActivity.this);
 

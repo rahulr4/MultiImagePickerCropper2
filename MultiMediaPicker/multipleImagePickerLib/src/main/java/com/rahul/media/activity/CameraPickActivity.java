@@ -107,9 +107,7 @@ public class CameraPickActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if (getIntent().getExtras().containsKey("pickCount")) {
-            pickCount = getIntent().getIntExtra("pickCount", 1);
-        }
+        pickCount = getIntent().getIntExtra("pickCount", Define.MIN_MEDIA_COUNT);
         openCamera(false);
     }
 
@@ -137,29 +135,32 @@ public class CameraPickActivity extends AppCompatActivity {
     }
 
     private void cameraIntent() {
-        try {
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (dataT.size() == pickCount) {
+            showAlertDialog(CameraPickActivity.this, "You can select max " + pickCount + " images.");
+        } else
+            try {
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                Uri imageFile = MediaUtility.createImageFile(CameraPickActivity.this);
-                userPhotoUri = FileProvider.getUriForFile(CameraPickActivity.this, Define.MEDIA_PROVIDER,
-                        new File(imageFile.getPath()));
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    Uri imageFile = MediaUtility.createImageFile(CameraPickActivity.this);
+                    userPhotoUri = FileProvider.getUriForFile(CameraPickActivity.this, Define.MEDIA_PROVIDER,
+                            new File(imageFile.getPath()));
 
-                if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-                    // only for gingerbread and newer versions
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, userPhotoUri);
-                    userPhotoUri = imageFile;
-                } else {
-                    userPhotoUri = imageFile;
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, userPhotoUri);
+                    if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                        // only for gingerbread and newer versions
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, userPhotoUri);
+                        userPhotoUri = imageFile;
+                    } else {
+                        userPhotoUri = imageFile;
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, userPhotoUri);
+                    }
+
+                    startActivityForResult(takePictureIntent, ACTION_REQUEST_CAMERA);
                 }
-
-                startActivityForResult(takePictureIntent, ACTION_REQUEST_CAMERA);
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlertDialog(CameraPickActivity.this, "Device does not support camera.");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlertDialog(CameraPickActivity.this, "Device does not support camera.");
-        }
     }
 
     @Override

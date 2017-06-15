@@ -61,7 +61,7 @@ public class MediaFactory {
         long videoDuration = -1;
         private final Context mContext;
         private VideoQuality videoQuality = VideoQuality.HIGH_QUALITY;
-        private int pickCount = 1;
+        private int pickCount = Define.MIN_MEDIA_COUNT;
         private int x = 1;
         private int y = 1;
         private int playResId = R.drawable.video_play;
@@ -170,6 +170,12 @@ public class MediaFactory {
             return this;
         }
 
+        /**
+         * Method to select max media files from mobile
+         *
+         * @param count Count
+         * @return MediaBuilder instance
+         */
         public MediaBuilder setPickCount(int count) {
             if (count <= 0)
                 count = 1;
@@ -207,7 +213,6 @@ public class MediaFactory {
             intent.putExtra("videoQuality", mediaBuilder.videoQuality.getQuality());
             intent.putExtra("pickCount", mediaBuilder.pickCount);
             intent.putExtra("playResId", mediaBuilder.playResId);
-
 
             ((Activity) mediaBuilder.mContext).startActivityForResult(intent, MEDIA_REQUEST_CODE);
         } else {
