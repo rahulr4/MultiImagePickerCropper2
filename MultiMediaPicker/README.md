@@ -4,7 +4,7 @@ You can also crop multiple images from gallery or camera.
 
 
 # Version
-1.4.1
+1.4.4
 
 # Installation
 
@@ -12,7 +12,7 @@ To use this library in your android project, just simply add the following depen
 
 ```java
 dependencies {
-    compile 'com.crop.multiple:multipleImagePickerLib:1.4.1'
+    compile 'com.crop.multiple:multipleImagePickerLib:1.4.4'
 }
 ```
 
@@ -31,11 +31,6 @@ dependencies {
 }
 ```
 
-```java
-dependencies {
-    compile 'com.crop.multiple:multipleImagePickerLib:1.4.1'
-}
-```
 # ToolBar Color
 
 To match your app toolbar color, set this attribute in your application.
@@ -72,6 +67,24 @@ And to get the files, you have to add this piece of code to Activity's `onActivi
 ```java
 ArrayList<String> pathArrayList = mediaFactory.onActivityResult(requestCode, resultCode, data);
 ```
+
+# Nougat Support
+Post nougat, process for selecting image from camera has been changed. You need to make the following changes to your manifest :-
+```java
+ <provider
+     android:name="android.support.v4.content.FileProvider"
+     android:authorities="com.app.multiimagepickercropper.provider"
+     android:exported="false"
+     android:grantUriPermissions="true">
+     <meta-data
+           android:name="android.support.FILE_PROVIDER_PATHS"
+           android:resource="@xml/provider_paths" />
+ </provider>
+
+ //Add this line of code anywhere in your class
+ Define.MEDIA_PROVIDER = getString(R.string.image_provider);
+ //image_provider should be same as the authorities you will give above in the provider
+```java
 
 # License
 
