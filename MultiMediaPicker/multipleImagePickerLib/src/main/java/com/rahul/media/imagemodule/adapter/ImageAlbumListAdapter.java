@@ -12,8 +12,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.rahul.media.R;
 import com.rahul.media.imagemodule.ImageGalleryPickerActivity;
 import com.rahul.media.model.Album;
@@ -21,10 +24,6 @@ import com.rahul.media.model.Define;
 import com.rahul.media.utils.MediaSingleTon;
 import com.rahul.media.utils.MediaUtility;
 import com.rahul.media.utils.SquareImageView;
-
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class ImageAlbumListAdapter
         extends RecyclerView.Adapter<ImageAlbumListAdapter.ViewHolder> {
@@ -39,7 +38,6 @@ public class ImageAlbumListAdapter
         private TextView albumNameTv;
         private TextView albumCountTv;
         private LinearLayout areaAlbum;
-
 
         public ViewHolder(View view) {
             super(view);
@@ -67,13 +65,13 @@ public class ImageAlbumListAdapter
         notifyDataSetChanged();
     }
 
-
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         String thumbPath = "";
-        if (thumbList != null && thumbList.size() > position)
+        if (thumbList != null && thumbList.size() > position) {
             thumbPath = thumbList.get(position);
+        }
 
         loadImage(thumbPath, holder.imgAlbum);
 
@@ -81,18 +79,21 @@ public class ImageAlbumListAdapter
         Album a = (Album) holder.areaAlbum.getTag();
         holder.albumNameTv.setText(albumList.get(position).bucketname);
 
-        holder.albumCountTv.setText(Html.fromHtml("<b><font color='#03A9F4'>" + a.counter + "</font></b>" + "<font " +
-                "color='#FFFFFF'> Media </font>"));
+        holder.albumCountTv.setText(
+                Html.fromHtml("<b><font color='#03A9F4'>" + a.counter + "</font></b>" + "<font " +
+                        "color='#FFFFFF'> Media </font>"));
 
         holder.areaAlbum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Album a = (Album) v.getTag();
-                Intent i = new Intent(holder.areaAlbum.getContext(), ImageGalleryPickerActivity.class);
+                Intent i = new Intent(holder.areaAlbum.getContext(),
+                        ImageGalleryPickerActivity.class);
                 i.putExtra("album", a);
                 i.putExtra("album_title", albumList.get(position).bucketname);
                 i.putExtra("pickCount", pickCount);
-                ((Activity) holder.areaAlbum.getContext()).startActivityForResult(i, Define.ENTER_ALBUM_REQUEST_CODE);
+                ((Activity) holder.areaAlbum.getContext())
+                        .startActivityForResult(i, Define.ENTER_ALBUM_REQUEST_CODE);
             }
         });
     }
@@ -103,8 +104,7 @@ public class ImageAlbumListAdapter
         if (imageByte != null) {
             Glide.with(mContext)
                     .load(imageByte)
-                    .centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .apply(new RequestOptions().centerCrop())
                     .into(imgAlbum);
         } else {
             byte[] thumbnail = MediaUtility.getThumbnail(thumbPath);
@@ -112,18 +112,15 @@ public class ImageAlbumListAdapter
                 MediaSingleTon.getInstance().putImageByte(thumbPath, thumbnail);
                 Glide.with(mContext)
                         .load(thumbnail)
-                        .centerCrop()
-                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .apply(new RequestOptions().centerCrop())
                         .into(imgAlbum);
             } else {
                 Glide.with(mContext)
                         .load(Uri.parse("file://" + thumbPath))
-                        .asBitmap()
-                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                        .override(200, 200) // resizes the image to these dimensions (in pixel). does not respect aspect ratio
-                        .centerCrop() // this cropping technique scales the image so that it fills the requested bounds and then crops the extra.
+                        .apply(new RequestOptions().centerCrop()
+                                .override(200,
+                                        200)) // resizes the image to these dimensions (in pixel). does not respect aspect ratio
                         .into(imgAlbum);
-
             }
         }
 //        imgAlbum.setImageURI(Uri.parse("file://" + thumbPath));
@@ -133,8 +130,6 @@ public class ImageAlbumListAdapter
     public int getItemCount() {
         return albumList.size();
     }
-
-
 }
 
 

@@ -12,8 +12,11 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.cache.ByteImageLoader;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -23,10 +26,6 @@ import com.rahul.media.model.MediaObject;
 import com.rahul.media.utils.MediaSingleTon;
 import com.rahul.media.utils.MediaUtility;
 import com.rahul.media.utils.SquareImageView;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-
 
 public class ImageGalleryGridAdapter extends BaseAdapter {
 
@@ -41,7 +40,8 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
     private String bucketTitle;
 
     public ImageGalleryGridAdapter(Context context, ArrayList<MediaObject> pickedImageBeans,
-                                   String saveDir, int pickCount, ActionBar supportActionBar, String bucketTitle, ByteImageLoader byteImageLoader) {
+            String saveDir, int pickCount, ActionBar supportActionBar, String bucketTitle,
+            ByteImageLoader byteImageLoader) {
         this.mContext = context;
         this.mediaObjectArrayList = pickedImageBeans;
         this.saveDir = saveDir;
@@ -51,7 +51,6 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
         this.byteImageLoader = byteImageLoader;
         imageLoader = ImageLoader.getInstance();
         imageLoader.init(ImageLoaderConfiguration.createDefault(context));
-
 
         BitmapFactory.Options resizeOptions = new BitmapFactory.Options();
         resizeOptions.inSampleSize = 3; // decrease size 3 times
@@ -63,7 +62,6 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
                 .showImageOnFail(R.drawable.placeholder_470x352)
                 .decodingOptions(resizeOptions)
                 .cacheOnDisk(true).build();
-
     }
 
     HashSet<Integer> selectedPositions = new HashSet<>();
@@ -103,8 +101,9 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
 
         if (mediaObjectArrayList.get(position).isSelected) {
             selectedPositions.add(position);
-        } else
+        } else {
             selectedPositions.remove(position);
+        }
 
         byteImageLoader.DisplayImage(mediaObjectArrayList.get(position).getPath(), holder.imgThumb);
 //        loadThumbnail(holder, position);
@@ -129,31 +128,30 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
     }
 
     private void loadThumbnail(ViewHolder holder, int position) {
-        byte[] imageByte = MediaSingleTon.getInstance().getImageByte(mediaObjectArrayList.get(position).getPath());
+        byte[] imageByte = MediaSingleTon.getInstance()
+                .getImageByte(mediaObjectArrayList.get(position).getPath());
         if (imageByte != null) {
             Glide.with(mContext)
                     .load(imageByte)
-                    .centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .apply(new RequestOptions().centerCrop())
                     .into(holder.imgThumb);
         } else {
-            byte[] thumbnail = MediaUtility.getThumbnail(mediaObjectArrayList.get(position).getPath());
+            byte[] thumbnail = MediaUtility
+                    .getThumbnail(mediaObjectArrayList.get(position).getPath());
             if (thumbnail != null) {
-                MediaSingleTon.getInstance().putImageByte(mediaObjectArrayList.get(position).getPath(), thumbnail);
+                MediaSingleTon.getInstance()
+                        .putImageByte(mediaObjectArrayList.get(position).getPath(), thumbnail);
                 Glide.with(mContext)
                         .load(thumbnail)
-                        .centerCrop()
-                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .apply(new RequestOptions().centerCrop())
                         .into(holder.imgThumb);
             } else {
                 Glide.with(mContext)
                         .load(Uri.parse("file://" + mediaObjectArrayList.get(position).getPath()))
-                        .asBitmap()
-                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                        .override(200, 200) // resizes the image to these dimensions (in pixel). does not respect aspect ratio
-                        .centerCrop() // this cropping technique scales the image so that it fills the requested bounds and then crops the extra.
+                        .apply(new RequestOptions().centerCrop()
+                                .override(200,
+                                        200)) // resizes the image to these dimensions (in pixel). does not respect aspect ratio
                         .into(holder.imgThumb);
-
             }
         }
 //        holder.imgThumb.setImageURI(Uri.parse("file://" + mediaObjectArrayList.get(position).getPath()));
@@ -161,24 +159,31 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
     }
 
     private void performCheck(ViewHolder holder, int position) {
-        if (selectedPositions.size() == pickCount && !mediaObjectArrayList.get(position).isSelected) {
-            if (pickCount == 1)
-                Toast.makeText(mContext, "You can select max " + pickCount + " image", Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(mContext, "You can select max " + pickCount + " images", Toast.LENGTH_SHORT).show();
+        if (selectedPositions.size() == pickCount && !mediaObjectArrayList
+                .get(position).isSelected) {
+            if (pickCount == 1) {
+                Toast.makeText(mContext, "You can select max " + pickCount + " image",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(mContext, "You can select max " + pickCount + " images",
+                        Toast.LENGTH_SHORT).show();
+            }
         } else {
             if (!mediaObjectArrayList.get(position).isSelected) {
                 selectedPositions.add(position);
-            } else
+            } else {
                 selectedPositions.remove(position);
+            }
 
-            mediaObjectArrayList.get(position).isSelected = !mediaObjectArrayList.get(position).isSelected;
+            mediaObjectArrayList.get(position).isSelected = !mediaObjectArrayList
+                    .get(position).isSelected;
             setActionbarTitle(getCount());
         }
         holder.selectIv.setChecked(mediaObjectArrayList.get(position).isSelected);
     }
 
     private static class ViewHolder {
+
         CheckBox selectIv;
         /*SimpleDraweeView*/ SquareImageView imgThumb;
         TextView videoDuration;
@@ -186,9 +191,12 @@ public class ImageGalleryGridAdapter extends BaseAdapter {
     }
 
     private void setActionbarTitle(int total) {
-        if (pickCount == 1)
+        if (pickCount == 1) {
             actionBar.setTitle(bucketTitle);
-        else
-            actionBar.setTitle(bucketTitle + " (" + selectedPositions.size() + "/" + String.valueOf(total) + ")");
+        } else {
+            actionBar.setTitle(
+                    bucketTitle + " (" + selectedPositions.size() + "/" + String.valueOf(total)
+                            + ")");
+        }
     }
 }

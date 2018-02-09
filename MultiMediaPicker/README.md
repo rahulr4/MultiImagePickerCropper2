@@ -4,7 +4,7 @@ You can also crop multiple images from gallery or camera.
 
 
 # Version
-1.4.4
+1.4.5
 
 # Installation
 
@@ -12,7 +12,7 @@ To use this library in your android project, just simply add the following depen
 
 ```java
 dependencies {
-    compile 'com.crop.multiple:multipleImagePickerLib:1.4.4'
+    compile 'com.crop.multiple:multipleImagePickerLib:1.4.5'
 }
 ```
 
@@ -22,12 +22,12 @@ This library uses the following third parties
 
 ```java
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.0.0'
-    compile 'com.android.support:design:25.0.0'
-    compile 'com.android.support:recyclerview-v7:25.0.0'
+    compile 'com.android.support:appcompat-v7:27.0.2'
+    compile 'com.android.support:design:27.0.2'
+    compile 'com.android.support:recyclerview-v7:27.0.2'
     compile files('libs/universal-image-loader-1.9.4.jar')
     compile 'com.facebook.fresco:fresco:0.14.1'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.github.bumptech.glide:glide:4.x'
 }
 ```
 

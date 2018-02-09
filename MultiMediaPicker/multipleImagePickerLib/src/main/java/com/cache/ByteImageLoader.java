@@ -8,11 +8,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.rahul.media.R;
-import com.rahul.media.utils.MediaUtility;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,6 +20,11 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.rahul.media.R;
+import com.rahul.media.utils.MediaUtility;
+
 public class ByteImageLoader {
 
     private final MemoryCache memoryCache = new MemoryCache();
@@ -34,7 +34,8 @@ public class ByteImageLoader {
     private FileCache fileCache;
 
     //Create Map (collection) to store image and image url in key value pair
-    private Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
+    private Map<ImageView, String> imageViews = Collections
+            .synchronizedMap(new WeakHashMap<ImageView, String>());
     private ExecutorService executorService;
 
     //handler to display images in UI thread
@@ -52,7 +53,6 @@ public class ByteImageLoader {
         // Creates a thread pool that reuses a fixed number of
         // threads operating off a shared unbounded queue.
         executorService = Executors.newFixedThreadPool(5);
-
     }
 
     // default image show in list (Before online image download)
@@ -69,8 +69,7 @@ public class ByteImageLoader {
             Log.i("ByteImageLoader", "Load from byte cache");
             Glide.with(imageView.getContext())
                     .load(imageByte)
-                    .centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                    .apply(new RequestOptions().centerCrop())
                     .into(imageView);
             // if image is stored in MemoryCache Map then
             // Show image in listview row
@@ -102,6 +101,7 @@ public class ByteImageLoader {
 
     //Task for the queue
     private class PhotoToLoad {
+
         String url;
         ImageView imageView;
 
@@ -112,6 +112,7 @@ public class ByteImageLoader {
     }
 
     private class PhotosLoader implements Runnable {
+
         PhotoToLoad photoToLoad;
 
         PhotosLoader(PhotoToLoad photoToLoad) {
@@ -122,8 +123,9 @@ public class ByteImageLoader {
         public void run() {
             try {
                 //Check if image already downloaded
-                if (imageViewReused(photoToLoad))
+                if (imageViewReused(photoToLoad)) {
                     return;
+                }
                 // download image from web url
 //                byte[] thumbnail = MediaUtility.getThumbnail(photoToLoad.url);
 
@@ -145,8 +147,9 @@ public class ByteImageLoader {
                     Bitmap bmp = getBitmap(photoToLoad.url);
                     // set image data in Memory Cache
                     bitmapMemoryCache.put(photoToLoad.url, bmp);
-                    if (imageViewReused(photoToLoad))
+                    if (imageViewReused(photoToLoad)) {
                         return;
+                    }
 
                     // Get bitmap to display
                     BitmapDisplayer bd = new BitmapDisplayer(bmp, photoToLoad);
@@ -156,8 +159,6 @@ public class ByteImageLoader {
                     // BitmapDisplayer run method will call
                     handler.post(bd);
                 }
-
-
             } catch (Throwable th) {
                 th.printStackTrace();
             }
@@ -222,8 +223,9 @@ public class ByteImageLoader {
             return bitmap;
         } catch (Throwable ex) {
             ex.printStackTrace();
-            if (ex instanceof OutOfMemoryError)
+            if (ex instanceof OutOfMemoryError) {
                 memoryCache.clear();
+            }
             return null;
         }
     }
@@ -248,8 +250,9 @@ public class ByteImageLoader {
             int width_tmp = o.outWidth, height_tmp = o.outHeight;
             int scale = 1;
             while (true) {
-                if (width_tmp / 2 < REQUIRED_SIZE || height_tmp / 2 < REQUIRED_SIZE)
+                if (width_tmp / 2 < REQUIRED_SIZE || height_tmp / 2 < REQUIRED_SIZE) {
                     break;
+                }
                 width_tmp /= 2;
                 height_tmp /= 2;
                 scale *= 2;
@@ -262,7 +265,6 @@ public class ByteImageLoader {
             Bitmap bitmap = BitmapFactory.decodeStream(stream2, null, o2);
             stream2.close();
             return bitmap;
-
         } catch (FileNotFoundException ignored) {
         } catch (IOException e) {
             e.printStackTrace();
@@ -314,7 +316,6 @@ public class ByteImageLoader {
             }
 
             return thumbnail;
-
         } catch (Throwable ex) {
             ex.printStackTrace();
             if (ex instanceof OutOfMemoryError) {
@@ -334,6 +335,7 @@ public class ByteImageLoader {
 
     //Used to display bitmap in the UI thread
     private class BitmapDisplayer implements Runnable {
+
         private Bitmap bitmap;
         byte[] byteBitmap;
         PhotoToLoad photoToLoad;
@@ -350,16 +352,16 @@ public class ByteImageLoader {
 
         @Override
         public void run() {
-            if (imageViewReused(photoToLoad))
+            if (imageViewReused(photoToLoad)) {
                 return;
+            }
 
             // Show bitmap on UI
             if (byteBitmap != null) {
                 Log.i("ByteImageLoader", "Load from byte");
                 Glide.with(photoToLoad.imageView.getContext())
                         .load(byteBitmap)
-                        .centerCrop()
-                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .apply(new RequestOptions().centerCrop())
                         .into(photoToLoad.imageView);
             } else if (bitmap != null) {
                 Log.i("ByteImageLoader", "Load from bitmap");
@@ -368,10 +370,7 @@ public class ByteImageLoader {
                 Log.i("ByteImageLoader", "Load from glide uri direct");
                 Glide.with(photoToLoad.imageView.getContext())
                         .load(Uri.parse("file://" + photoToLoad.url))
-                        .asBitmap()
-                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                        .override(200, 200) // resizes the image to these dimensions (in pixel). does not respect aspect ratio
-                        .centerCrop() // this cropping technique scales the image so that it fills the requested bounds and then crops the extra.
+                        .apply(new RequestOptions().centerCrop().override(200, 200))
                         .into(photoToLoad.imageView);
             }
         }
@@ -383,5 +382,4 @@ public class ByteImageLoader {
         bitmapMemoryCache.clear();
         fileCache.clear();
     }
-
 }

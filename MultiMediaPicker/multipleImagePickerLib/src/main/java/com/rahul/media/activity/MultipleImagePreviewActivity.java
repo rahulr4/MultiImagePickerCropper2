@@ -23,6 +23,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.bumptech.glide.Glide;
 import com.rahul.media.R;
 import com.rahul.media.adapters.ImageListRecycleAdapter;
@@ -34,16 +38,13 @@ import com.rahul.media.utils.MediaUtility;
 import com.rahul.media.utils.SquareImageView;
 import com.rahul.media.utils.ViewPagerSwipeLess;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import crop.Crop;
 
 /**
  * Created by rahul on 22/5/15.
  */
 public class MultipleImagePreviewActivity extends AppCompatActivity {
+
     private static final int PICK_IMAGE = 200;
     private AlertDialog alertDialog;
     private ViewPagerSwipeLess mPager;
@@ -91,7 +92,8 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
         mPager.setAdapter(adapter);
         mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onPageScrolled(int position, float positionOffset,
+                    int positionOffsetPixels) {
 
             }
 
@@ -108,7 +110,8 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
         mImageListAdapter = new ImageListRecycleAdapter(this, dataT);
 
         RecyclerView mRecycleView = (RecyclerView) findViewById(R.id.image_hlistview);
-        mRecycleView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        mRecycleView.setLayoutManager(
+                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mRecycleView.setAdapter(mImageListAdapter);
         mImageListAdapter.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -135,7 +138,8 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
 
     private void openGallery() {
         if (dataT.size() == pickCount) {
-            showAlertDialog(MultipleImagePreviewActivity.this, "You can select max " + pickCount + " images.");
+            showAlertDialog(MultipleImagePreviewActivity.this,
+                    "You can select max " + pickCount + " images.");
         } else {
             Intent i = new Intent(this, ImageAlbumListActivity.class);
             i.putExtra("pickCount", pickCount - dataT.size());
@@ -171,7 +175,8 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
                 item.sdcardPath = stringArrayList.get(i);
                 item.sdCardUri = Uri.parse(stringArrayList.get(i));
 
-                item.sdcardPath = BitmapDecoder.getBitmap(stringArrayList.get(i), MultipleImagePreviewActivity.this);
+                item.sdcardPath = BitmapDecoder
+                        .getBitmap(stringArrayList.get(i), MultipleImagePreviewActivity.this);
                 item.sdCardUri = (Uri.parse(item.sdcardPath));
 
                 dataT.put(item.sdcardPath, item);
@@ -208,7 +213,8 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
                 try {
                     Uri mTargetImageUri = (Uri) data.getExtras().get(MediaStore.EXTRA_OUTPUT);
                     if (mTargetImageUri != null) {
-                        String imagePath = mImageListAdapter.mItems.get(mPager.getCurrentItem()).sdcardPath;
+                        String imagePath = mImageListAdapter.mItems
+                                .get(mPager.getCurrentItem()).sdcardPath;
                         CustomGallery item = new CustomGallery();
                         item.sdcardPath = mTargetImageUri.getPath();
                         item.sdCardUri = mTargetImageUri;
@@ -220,8 +226,9 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
                     }
                 } catch (Exception e) {
                     String invalidImageText = (String) data.getExtras().get("invalid_image");
-                    if (invalidImageText != null)
+                    if (invalidImageText != null) {
                         showAlertDialog(MultipleImagePreviewActivity.this, invalidImageText);
+                    }
                 }
             }
         } else {
@@ -270,10 +277,10 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
         public Object instantiateItem(ViewGroup container, final int position) {
             View itemView = mLayoutInflater.inflate(R.layout.image_pager_item, container, false);
 
-            final SquareImageView imageView = (SquareImageView) itemView.findViewById(R.id.full_screen_image);
+            final SquareImageView imageView = (SquareImageView) itemView
+                    .findViewById(R.id.full_screen_image);
             Glide.with(imageView.getContext())
                     .load("file://" + dataT.get(position).sdcardPath)
-                    .asBitmap()
                     .into(imageView);
 
             container.addView(itemView);
@@ -331,12 +338,10 @@ public class MultipleImagePreviewActivity extends AppCompatActivity {
                                 withAspect(aspectX, aspectY).
                                 start(MultipleImagePreviewActivity.this);
                     }
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-
         }
         return super.onOptionsItemSelected(item);
     }

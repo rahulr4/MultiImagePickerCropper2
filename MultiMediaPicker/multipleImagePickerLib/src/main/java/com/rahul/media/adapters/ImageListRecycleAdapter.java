@@ -8,21 +8,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.rahul.media.R;
 import com.rahul.media.model.CustomGallery;
 import com.rahul.media.utils.MediaSingleTon;
 import com.rahul.media.utils.MediaUtility;
 import com.rahul.media.utils.SquareImageView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 /**
  * Adapter to show bottom strip view
  */
-public class ImageListRecycleAdapter extends RecyclerView.Adapter<ImageListRecycleAdapter.VerticalItemHolder> {
+public class ImageListRecycleAdapter
+        extends RecyclerView.Adapter<ImageListRecycleAdapter.VerticalItemHolder> {
 
     public ArrayList<CustomGallery> mItems;
 
@@ -33,7 +34,9 @@ public class ImageListRecycleAdapter extends RecyclerView.Adapter<ImageListRecyc
     }
 
     public void removeItem(int position) {
-        if (position >= mItems.size()) return;
+        if (position >= mItems.size()) {
+            return;
+        }
         mItems.remove(position);
         notifyItemRemoved(position);
     }
@@ -76,6 +79,7 @@ public class ImageListRecycleAdapter extends RecyclerView.Adapter<ImageListRecyc
     }
 
     class VerticalItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
         private SquareImageView imageView;
         private ImageListRecycleAdapter mAdapter;
 
@@ -98,9 +102,8 @@ public class ImageListRecycleAdapter extends RecyclerView.Adapter<ImageListRecyc
             if (imageByte != null) {
                 Glide.with(mContext)
                         .load(imageByte)
-                        .centerCrop()
-                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                        .override(200, 200)
+                        .apply(new RequestOptions().centerCrop()
+                                .override(200, 200))
                         .into(imageView);
             } else {
                 byte[] thumbnail = MediaUtility.getThumbnail(thumbPath);
@@ -108,23 +111,19 @@ public class ImageListRecycleAdapter extends RecyclerView.Adapter<ImageListRecyc
                     MediaSingleTon.getInstance().putImageByte(thumbPath, thumbnail);
                     Glide.with(mContext)
                             .load(thumbnail)
-                            .centerCrop()
-                            .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                            .override(200, 200)
+                            .apply(new RequestOptions().centerCrop()
+                                    .override(200, 200))
                             .into(imageView);
                 } else {
                     Glide.with(mContext)
                             .load(Uri.parse("file://" + thumbPath))
-                            .asBitmap()
-                            .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                            .override(200, 200) // resizes the image to these dimensions (in pixel). does not respect aspect ratio
-                            .centerCrop() // this cropping technique scales the image so that it fills the requested bounds and then crops the extra.
+                            .apply(new RequestOptions().centerCrop()
+                                    .override(200,
+                                            200))
                             .into(imageView);
-
                 }
             }
 //            imageView.setImageURI(Uri.parse("file://" + url));
         }
     }
-
 }

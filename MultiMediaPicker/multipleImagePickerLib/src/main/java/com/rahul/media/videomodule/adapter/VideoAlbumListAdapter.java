@@ -10,14 +10,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.Priority;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.rahul.media.R;
-import com.rahul.media.model.GalleryPhotoAlbum;
-
 import java.util.ArrayList;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.request.RequestOptions;
+import com.rahul.media.R;
+import com.rahul.media.model.GalleryPhotoAlbum;
 
 public abstract class VideoAlbumListAdapter
         extends RecyclerView.Adapter<VideoAlbumListAdapter.ViewHolder> {
@@ -60,19 +59,17 @@ public abstract class VideoAlbumListAdapter
 
         Glide.with(mContext)
                 .load(albumList.get(position).getData())
-                .asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .priority(Priority.HIGH)
-                .centerCrop()
-                .error(R.drawable.ic_empty_amoled)
-                .placeholder(R.drawable.ic_empty_amoled)
+                .apply(new RequestOptions().centerCrop().priority(Priority.HIGH)
+                        .error(R.drawable.ic_empty_amoled).placeholder(R.drawable.ic_empty_amoled))
                 .into(holder.imgAlbum);
 
         holder.areaAlbum.setTag(albumList.get(position));
         holder.txtAlbum.setText(albumList.get(position).getBucketName());
 
-        holder.txtAlbumCount.setText(Html.fromHtml("<b><font color='#03A9F4'>" + albumList.get(position).getTotalCount() + "</font></b>" + "<font " +
-                "color='#FFFFFF'> Media </font>"));
+        holder.txtAlbumCount.setText(Html.fromHtml(
+                "<b><font color='#03A9F4'>" + albumList.get(position).getTotalCount()
+                        + "</font></b>" + "<font " +
+                        "color='#FFFFFF'> Media </font>"));
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
